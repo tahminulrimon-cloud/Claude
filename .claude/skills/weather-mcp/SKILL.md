@@ -1,28 +1,39 @@
 ---
 name: weather-mcp
-description: Patterns for modifying or extending the weather MCP server in weather.py. Use when adding tools, changing API parameters, or updating weather data formatting.
+description: Reference for modifying or extending the weather MCP server. Use when adding tools, changing API parameters, updating weather formatting, or debugging the server in weather.py.
+allowed-tools: Read Edit Bash(uv *)
 ---
 
-## Adding a new tool
+## Current server state
 
-1. Define an async function to fetch data
-2. Register it in `list_tools()` with name, description, and inputSchema
-3. Handle it in `call_tool()` with the matching `name ==` branch
+!`cat weather.py`
 
-## Weather codes
+## Architecture
 
-WMO weather codes are mapped in `WMO_CODES` dict at the top of `weather.py`. Add entries there for any new codes.
+The server has three layers you edit when adding a tool:
 
-## API parameters
+1. **Fetch function** — async function using `httpx.AsyncClient` that calls Open-Meteo
+2. **`list_tools()`** — registers the tool with name, description, and inputSchema
+3. **`call_tool()`** — dispatches on `name ==` and formats the result as `TextContent`
 
-- Temperature unit: `celsius` (change to `fahrenheit` in params if needed)
-- Wind speed unit: `mph`
-- Open-Meteo docs: https://open-meteo.com/en/docs
+## Key constants
 
-## Testing locally
+- `GEOCODING_URL` — resolves a city name to lat/lon/timezone
+- `WEATHER_URL` — Open-Meteo forecast endpoint
+- `WMO_CODES` — maps WMO weather code integers to human-readable strings
+
+## Units in use
+
+- Temperature: `celsius`
+- Wind speed: `mph`
+- Precipitation: `mm`
+- Pressure: `hPa`
+- Visibility: `m`
+
+## Testing
 
 ```bash
 uv run weather.py
 ```
 
-The server reads from stdin and writes to stdout (MCP stdio transport). Test via Claude Desktop or an MCP client.
+The server communicates over stdio (MCP protocol). Test through Claude Desktop or an MCP client — not directly in a terminal since it expects binary MCP frames.
