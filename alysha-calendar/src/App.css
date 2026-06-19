@@ -37,7 +37,7 @@
 /* ── App shell ── */
 .app {
   min-height: 100vh;
-  font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+  font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   color: #2d2d2d;
   display: flex;
   flex-direction: column;
