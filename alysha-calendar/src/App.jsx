@@ -6,11 +6,11 @@ import GrowthTimeline from "./components/GrowthTimeline";
 import "./App.css";
 
 const FILTERS = [
-  { key: "all",    label: "All Moments" },
-  { key: "birth",  label: "Birth Day" },
-  { key: "week1",  label: "First Week" },
-  { key: "week2",  label: "Week 2" },
-  { key: "month1", label: "1 Month+" },
+  { key: "all",      label: "All Moments" },
+  { key: "newborn",  label: "Newborn" },
+  { key: "baby",     label: "Baby" },
+  { key: "toddler",  label: "Toddler" },
+  { key: "bigkid",   label: "Big Girl" },
 ];
 
 export default function App() {
@@ -37,12 +37,12 @@ export default function App() {
   const [activeEntry, setActiveEntry] = useState(null);
 
   const filteredEntries = entries.filter((e) => {
-    if (filter === "all")    return true;
+    if (filter === "all")     return true;
     const d = e.age_in_days ?? 0;
-    if (filter === "birth")  return d === 0;
-    if (filter === "week1")  return d > 0 && d <= 7;
-    if (filter === "week2")  return d > 7 && d <= 14;
-    if (filter === "month1") return d > 14;
+    if (filter === "newborn") return d <= 90;
+    if (filter === "baby")    return d > 90 && d <= 365;
+    if (filter === "toddler") return d > 365 && d <= 1095;
+    if (filter === "bigkid")  return d > 1095;
     return true;
   });
 
