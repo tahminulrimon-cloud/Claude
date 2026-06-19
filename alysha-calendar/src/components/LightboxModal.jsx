@@ -22,7 +22,7 @@ export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev,
       <div className="lightbox-modal" onClick={(e) => e.stopPropagation()}>
         <button className="lightbox-close" onClick={onClose} aria-label="Close">✕</button>
 
-        <div className="lightbox-photo-area">
+        <div className="lightbox-photo-area" data-age={entry.age}>
           {entry.photo && !imgError ? (
             <img
               src={entry.photo}
