@@ -138,7 +138,7 @@ export default function App() {
         ) : filteredEntries.length === 0 ? (
           <div className="empty-state"><span>🌷</span><p>No moments in this range yet.</p></div>
         ) : (
-          <div className="photo-grid">
+          <div className="photo-grid" key={filter}>
             {filteredEntries.map((entry) => (
               <PhotoCard
                 key={entry.id}

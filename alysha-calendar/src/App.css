@@ -51,13 +51,23 @@
 
 /* ── Header ── */
 .app-header {
-  background: linear-gradient(135deg, var(--s-primary) 0%, var(--s-mid) 55%, var(--s-accent) 100%);
+  background: linear-gradient(135deg,
+    var(--s-primary), var(--s-mid), var(--s-accent),
+    var(--s-mid), var(--s-primary)
+  );
+  background-size: 300% 300%;
+  animation: aurora 9s ease infinite;
   padding: 44px 32px 32px;
   text-align: center;
   color: #fff;
   position: relative;
   overflow: hidden;
-  transition: background 0.7s ease;
+}
+
+@keyframes aurora {
+  0%   { background-position: 0%   50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0%   50%; }
 }
 
 /* Light bloom overlay */
@@ -125,11 +135,13 @@
 }
 
 .app-title {
-  font-size: clamp(30px, 5.5vw, 48px);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(30px, 5.5vw, 52px);
   font-weight: 900;
   margin: 0;
   letter-spacing: -0.5px;
-  text-shadow: 0 3px 12px rgba(0,0,0,0.2);
+  text-shadow: 0 3px 16px rgba(0,0,0,0.22);
 }
 
 .app-subtitle {
@@ -265,12 +277,27 @@
 }
 
 .chapter-title {
-  font-size: clamp(17px, 3vw, 24px);
-  font-weight: 900;
-  color: var(--s-primary);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-style: italic;
+  font-size: clamp(17px, 3vw, 26px);
+  font-weight: 700;
   margin: 0 0 4px;
-  letter-spacing: -0.3px;
-  transition: color 0.6s ease;
+  letter-spacing: -0.2px;
+  background: linear-gradient(90deg,
+    var(--s-primary) 0%, var(--s-mid) 35%,
+    var(--s-accent)  50%, var(--s-mid) 65%,
+    var(--s-primary) 100%
+  );
+  background-size: 200% auto;
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  animation: shimmer-text 3.5s linear infinite;
+}
+
+@keyframes shimmer-text {
+  from { background-position: 0%   center; }
+  to   { background-position: 200% center; }
 }
 
 .chapter-sub {
@@ -294,6 +321,12 @@
   max-width: 1240px;
   margin: 0 auto;
   align-items: start;
+  animation: gridFadeIn 0.45s ease;
+}
+
+@keyframes gridFadeIn {
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 /* ── Drive notice ── */

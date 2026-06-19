@@ -18,7 +18,11 @@ export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev,
   if (!entry) return null;
 
   return (
-    <div className="lightbox-backdrop" onClick={onClose}>
+    <div
+      className="lightbox-backdrop"
+      style={entry.photo && !imgError ? { '--photo': `url("${entry.photo}")` } : {}}
+      onClick={onClose}
+    >
       <div className="lightbox-modal" onClick={(e) => e.stopPropagation()}>
         <button className="lightbox-close" onClick={onClose} aria-label="Close">✕</button>
 

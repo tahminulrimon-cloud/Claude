@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import "./PhotoCard.css";
 
 const SEASON_GRADIENTS = {
@@ -45,6 +45,23 @@ export default function PhotoCard({ entry, index, isActive, onClick }) {
     return () => observer.disconnect();
   }, []);
 
+  const handleMouseMove = useCallback((e) => {
+    const card = e.currentTarget;
+    const rect = card.getBoundingClientRect();
+    const relX = (e.clientX - rect.left) / rect.width;
+    const relY = (e.clientY - rect.top)  / rect.height;
+    card.style.setProperty('--rx', `${(relY - 0.5) * -18}deg`);
+    card.style.setProperty('--ry', `${(relX - 0.5) *  18}deg`);
+    card.style.setProperty('--mx', `${relX * 100}%`);
+    card.style.setProperty('--my', `${relY * 100}%`);
+  }, []);
+
+  const handleMouseLeave = useCallback((e) => {
+    const card = e.currentTarget;
+    card.style.setProperty('--rx', '0deg');
+    card.style.setProperty('--ry', '0deg');
+  }, []);
+
   const season   = getSeason(entry.age_in_days ?? 0);
   const gradient = SEASON_GRADIENTS[season][index % 2];
   const tilt     = TILTS[index % TILTS.length];
@@ -64,11 +81,15 @@ export default function PhotoCard({ entry, index, isActive, onClick }) {
         className={`polaroid-card ${isActive ? "active" : ""}`}
         style={{ "--tilt": `${tilt}deg` }}
         onClick={() => onClick(entry)}
+        onMouseMove={handleMouseMove}
+        onMouseLeave={handleMouseLeave}
         role="button"
         tabIndex={0}
         onKeyDown={(e) => e.key === "Enter" && onClick(entry)}
         aria-label={`${entry.label} — ${entry.caption}`}
       >
+        <div className="card-shine" />
+
         {/* Photo area */}
         <div className="polaroid-photo-area">
           <div className="age-watermark">{entry.age}</div>
