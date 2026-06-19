@@ -3,6 +3,7 @@ import { getEntries } from "./services/api";
 import PhotoCard from "./components/PhotoCard";
 import LightboxModal from "./components/LightboxModal";
 import GrowthTimeline from "./components/GrowthTimeline";
+import KidsView from "./components/KidsView";
 import "./App.css";
 
 const FILTERS = [
@@ -43,6 +44,9 @@ export default function App() {
 
   const [filter, setFilter]           = useState("all");
   const [activeEntry, setActiveEntry] = useState(null);
+  const [kidsMode, setKidsMode]       = useState(false);
+
+  const kidsEntries = entries.filter(e => e.photo);
 
   const currentSeason = FILTERS.find(f => f.key === filter)?.season ?? "all";
   const chapter       = CHAPTERS[filter];
@@ -77,6 +81,12 @@ export default function App() {
 
   return (
     <div className="app" data-season={currentSeason}>
+      {kidsMode && (
+        <KidsView
+          entries={kidsEntries}
+          onExit={() => setKidsMode(false)}
+        />
+      )}
       <header className="app-header">
         <div className="header-content">
           <div className="header-flowers">🌸</div>
@@ -174,6 +184,16 @@ export default function App() {
           hasPrev={activeIndex > 0}
           hasNext={activeIndex < filteredEntries.length - 1}
         />
+      )}
+
+      {kidsEntries.length > 0 && (
+        <button
+          className="kids-mode-btn"
+          onClick={() => setKidsMode(true)}
+          aria-label="Open Alysha's View"
+        >
+          🌟 Alysha's View
+        </button>
       )}
     </div>
   );
