@@ -6,17 +6,25 @@ import GrowthTimeline from "./components/GrowthTimeline";
 import "./App.css";
 
 const FILTERS = [
-  { key: "all",      label: "All Moments" },
-  { key: "newborn",  label: "Newborn" },
-  { key: "baby",     label: "Baby" },
-  { key: "toddler",  label: "Toddler" },
-  { key: "bigkid",   label: "Big Girl" },
+  { key: "all",      label: "All Moments",  icon: "🌿", season: "all"    },
+  { key: "newborn",  label: "Newborn",       icon: "🌸", season: "spring" },
+  { key: "baby",     label: "Baby",          icon: "☀️", season: "summer" },
+  { key: "toddler",  label: "Toddler",       icon: "🍂", season: "autumn" },
+  { key: "bigkid",   label: "Big Girl",      icon: "✨", season: "winter" },
 ];
 
+const CHAPTERS = {
+  all:     { title: "Alysha's Complete Story",     sub: "Every precious moment, from first breath to today" },
+  newborn: { title: "Chapter I · The Arrival",      sub: "0 – 3 months  ·  Spring of life" },
+  baby:    { title: "Chapter II · First Blooms",    sub: "3 months – 1 year  ·  Summer of discovery" },
+  toddler: { title: "Chapter III · Little Wonder",  sub: "1 – 3 years  ·  Autumn of adventure" },
+  bigkid:  { title: "Chapter IV · Shining Bright",  sub: "3 years and beyond  ·  Her own season" },
+};
+
 export default function App() {
-  const [entries, setEntries]       = useState([]);
+  const [entries, setEntries]         = useState([]);
   const [dataLoading, setDataLoading] = useState(true);
-  const [dataError, setDataError]   = useState(null);
+  const [dataError, setDataError]     = useState(null);
 
   const fetchEntries = useCallback(async () => {
     setDataLoading(true);
@@ -35,6 +43,9 @@ export default function App() {
 
   const [filter, setFilter]           = useState("all");
   const [activeEntry, setActiveEntry] = useState(null);
+
+  const currentSeason = FILTERS.find(f => f.key === filter)?.season ?? "all";
+  const chapter       = CHAPTERS[filter];
 
   const filteredEntries = entries.filter((e) => {
     if (filter === "all")     return true;
@@ -65,7 +76,7 @@ export default function App() {
   const photosCount = entries.filter((e) => e.photo).length;
 
   return (
-    <div className="app">
+    <div className="app" data-season={currentSeason}>
       <header className="app-header">
         <div className="header-content">
           <div className="header-flowers">🌸</div>
@@ -102,11 +113,17 @@ export default function App() {
           <button
             key={f.key}
             className={`filter-btn ${filter === f.key ? "active" : ""}`}
+            data-season={f.season}
             onClick={() => setFilter(f.key)}
           >
-            {f.label}
+            {f.icon} {f.label}
           </button>
         ))}
+      </div>
+
+      <div className="chapter-heading">
+        <h2 className="chapter-title">{chapter.title}</h2>
+        <p className="chapter-sub">{chapter.sub}</p>
       </div>
 
       <main className="photo-grid-section">

@@ -1,19 +1,33 @@
 import { useState, useEffect, useRef } from "react";
 import "./PhotoCard.css";
 
-const CARD_GRADIENTS = [
-  "linear-gradient(145deg, #fff0f4 0%, #ffdde8 100%)",
-  "linear-gradient(145deg, #fff8ed 0%, #ffe9c0 100%)",
-  "linear-gradient(145deg, #eefff5 0%, #ccf5e0 100%)",
-  "linear-gradient(145deg, #eef3ff 0%, #d5e3ff 100%)",
-  "linear-gradient(145deg, #f8eeff 0%, #e8d0ff 100%)",
-  "linear-gradient(145deg, #fffbee 0%, #fff0b3 100%)",
-  "linear-gradient(145deg, #edfbff 0%, #c8efff 100%)",
-  "linear-gradient(145deg, #fff0eb 0%, #ffd5c4 100%)",
-];
+const SEASON_GRADIENTS = {
+  spring: [
+    "linear-gradient(145deg, #fff0f4 0%, #ffdde8 100%)",
+    "linear-gradient(145deg, #fff4f7 0%, #ffe5ef 100%)",
+  ],
+  summer: [
+    "linear-gradient(145deg, #eefff5 0%, #c8f5e0 100%)",
+    "linear-gradient(145deg, #f2fff7 0%, #d5f5e8 100%)",
+  ],
+  autumn: [
+    "linear-gradient(145deg, #fff8ed 0%, #ffe9c0 100%)",
+    "linear-gradient(145deg, #fffbf2 0%, #ffecd0 100%)",
+  ],
+  winter: [
+    "linear-gradient(145deg, #eef3ff 0%, #d5e3ff 100%)",
+    "linear-gradient(145deg, #f2f5ff 0%, #dde8ff 100%)",
+  ],
+};
 
-// Subtle alternating tilts for the polaroid cards
 const TILTS = [-2.8, 1.6, -1.4, 2.4, -2.0, 1.2, -2.5, 1.8];
+
+function getSeason(days) {
+  if (days <= 90)   return "spring";
+  if (days <= 365)  return "summer";
+  if (days <= 1095) return "autumn";
+  return "winter";
+}
 
 export default function PhotoCard({ entry, index, isActive, onClick }) {
   const [imgError, setImgError] = useState(false);
@@ -31,7 +45,8 @@ export default function PhotoCard({ entry, index, isActive, onClick }) {
     return () => observer.disconnect();
   }, []);
 
-  const gradient = CARD_GRADIENTS[index % CARD_GRADIENTS.length];
+  const season   = getSeason(entry.age_in_days ?? 0);
+  const gradient = SEASON_GRADIENTS[season][index % 2];
   const tilt     = TILTS[index % TILTS.length];
   const showPlaceholder = !entry.photo || imgError;
 
@@ -39,6 +54,7 @@ export default function PhotoCard({ entry, index, isActive, onClick }) {
     <div
       ref={wrapperRef}
       className={`polaroid-wrapper ${revealed ? "revealed" : ""}`}
+      data-season={season}
       style={{
         background: gradient,
         transitionDelay: `${(index % 4) * 0.09}s`,
