@@ -8,6 +8,45 @@
   flex-direction: column;
 }
 
+/* ── Admin toggle in header ── */
+.admin-toggle-btn {
+  margin-left: 16px;
+  padding: 6px 14px;
+  background: rgba(255,255,255,0.2);
+  border: 1.5px solid rgba(255,255,255,0.5);
+  border-radius: 20px; color: #fff;
+  font-size: 12px; font-weight: 700;
+  cursor: pointer; transition: background 0.2s;
+  font-family: inherit;
+}
+
+.admin-toggle-btn:hover { background: rgba(255,255,255,0.35); }
+
+/* ── Loading / error states ── */
+.spinner {
+  display: inline-block;
+  width: 28px; height: 28px;
+  border: 3px solid #fde8ef;
+  border-top-color: #ec648c;
+  border-radius: 50%;
+  animation: spin 0.7s linear infinite;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.empty-state.error span { font-size: 32px; }
+
+.retry-btn {
+  margin-top: 8px; padding: 8px 20px;
+  background: #ec648c; color: #fff;
+  border: none; border-radius: 10px;
+  font-size: 13px; font-weight: 700;
+  cursor: pointer; font-family: inherit;
+}
+
+.retry-btn:hover { opacity: 0.85; }
+
+
 /* ── Header ── */
 .app-header {
   background: linear-gradient(135deg, #ec648c 0%, #f5a623 100%);
