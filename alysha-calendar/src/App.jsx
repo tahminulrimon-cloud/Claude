@@ -1,11 +1,8 @@
 import { useState, useCallback, useEffect } from "react";
 import { getEntries } from "./services/api";
-import { useAuth } from "./contexts/AuthContext";
 import PhotoCard from "./components/PhotoCard";
 import LightboxModal from "./components/LightboxModal";
 import GrowthTimeline from "./components/GrowthTimeline";
-import LoginModal from "./components/LoginModal";
-import AdminPanel from "./components/AdminPanel";
 import "./App.css";
 
 const FILTERS = [
@@ -17,20 +14,18 @@ const FILTERS = [
 ];
 
 export default function App() {
-  const { isAdmin, loading: authLoading } = useAuth();
-
-  // ── Data ──────────────────────────────────────────────────
-  const [entries, setEntries] = useState([]);
+  const [entries, setEntries]       = useState([]);
   const [dataLoading, setDataLoading] = useState(true);
-  const [dataError, setDataError] = useState(null);
+  const [dataError, setDataError]   = useState(null);
 
   const fetchEntries = useCallback(async () => {
+    setDataLoading(true);
     try {
       const data = await getEntries();
       setEntries(data);
       setDataError(null);
     } catch {
-      setDataError("Could not load photos. Is the server running?");
+      setDataError("Could not load photos. Please try again.");
     } finally {
       setDataLoading(false);
     }
@@ -38,23 +33,9 @@ export default function App() {
 
   useEffect(() => { fetchEntries(); }, [fetchEntries]);
 
-  // ── UI state ──────────────────────────────────────────────
   const [filter, setFilter]           = useState("all");
   const [activeEntry, setActiveEntry] = useState(null);
-  const [showLogin, setShowLogin]     = useState(false);
-  const [showAdmin, setShowAdmin]     = useState(false);
-  // Secret: click footer text 5 times to reveal admin login
-  const [footerClicks, setFooterClicks] = useState(0);
 
-  useEffect(() => {
-    if (footerClicks >= 5 && !isAdmin) { setShowLogin(true); setFooterClicks(0); }
-  }, [footerClicks, isAdmin]);
-
-  useEffect(() => {
-    if (isAdmin) setShowLogin(false);
-  }, [isAdmin]);
-
-  // ── Filtering ─────────────────────────────────────────────
   const filteredEntries = entries.filter((e) => {
     if (filter === "all")    return true;
     const d = e.age_in_days ?? 0;
@@ -65,15 +46,17 @@ export default function App() {
     return true;
   });
 
-  // ── Lightbox ──────────────────────────────────────────────
-  const openModal = useCallback((entry) => setActiveEntry(entry), []);
+  const openModal  = useCallback((entry) => setActiveEntry(entry), []);
   const closeModal = useCallback(() => setActiveEntry(null), []);
+
   const activeIndex = activeEntry
     ? filteredEntries.findIndex((e) => e.id === activeEntry.id)
     : -1;
+
   const goPrev = useCallback(() => {
     if (activeIndex > 0) setActiveEntry(filteredEntries[activeIndex - 1]);
   }, [activeIndex, filteredEntries]);
+
   const goNext = useCallback(() => {
     if (activeIndex < filteredEntries.length - 1)
       setActiveEntry(filteredEntries[activeIndex + 1]);
@@ -81,11 +64,8 @@ export default function App() {
 
   const photosCount = entries.filter((e) => e.photo).length;
 
-  if (authLoading) return null;
-
   return (
     <div className="app">
-      {/* ── Header ── */}
       <header className="app-header">
         <div className="header-content">
           <div className="header-flowers">🌸</div>
@@ -110,24 +90,13 @@ export default function App() {
             <span className="stat-num">{entries.length > 0 ? Math.max(...entries.map(e => e.age_in_days)) : 0}</span>
             <span className="stat-label">Days old</span>
           </div>
-
-          {isAdmin && (
-            <button
-              className="admin-toggle-btn"
-              onClick={() => setShowAdmin((v) => !v)}
-            >
-              {showAdmin ? "Close Panel" : "🛠 Admin"}
-            </button>
-          )}
         </div>
       </header>
 
-      {/* ── Timeline bar ── */}
       {entries.length > 0 && (
         <GrowthTimeline entries={entries} activeId={activeEntry?.id} onSelect={openModal} />
       )}
 
-      {/* ── Filters ── */}
       <div className="filter-bar">
         {FILTERS.map((f) => (
           <button
@@ -140,7 +109,6 @@ export default function App() {
         ))}
       </div>
 
-      {/* ── Grid ── */}
       <main className="photo-grid-section">
         {dataLoading ? (
           <div className="empty-state"><span className="spinner" />Loading…</div>
@@ -167,23 +135,19 @@ export default function App() {
         )}
       </main>
 
-      {/* ── Drive notice ── */}
       <div className="upload-hint">
         <div className="hint-box">
           <span>☁️</span>
           <div>
             <strong>Photos from Google Drive</strong> — open in a browser signed into Google.
-            {isAdmin && <> Manage entries via the <strong>Admin panel</strong>.</>}
           </div>
         </div>
       </div>
 
-      {/* ── Footer (secret admin trigger) ── */}
-      <footer className="app-footer" onClick={() => setFooterClicks((n) => n + 1)}>
+      <footer className="app-footer">
         Made with ❤️ for Alysha — every moment treasured
       </footer>
 
-      {/* ── Overlays ── */}
       {activeEntry && (
         <LightboxModal
           entry={activeEntry}
@@ -192,18 +156,6 @@ export default function App() {
           onNext={goNext}
           hasPrev={activeIndex > 0}
           hasNext={activeIndex < filteredEntries.length - 1}
-        />
-      )}
-
-      {showLogin && !isAdmin && (
-        <LoginModal onClose={() => setShowLogin(false)} />
-      )}
-
-      {showAdmin && isAdmin && (
-        <AdminPanel
-          entries={entries}
-          onRefresh={fetchEntries}
-          onClose={() => setShowAdmin(false)}
         />
       )}
     </div>
