@@ -10,20 +10,20 @@ export default function App() {
   const [filter, setFilter] = useState("all");
 
   const filters = [
-    { key: "all",     label: "All Moments" },
-    { key: "baby",    label: "Baby (0–6m)" },
-    { key: "infant",  label: "Infant (6m–1y)" },
-    { key: "toddler", label: "Toddler (1–3y)" },
-    { key: "kid",     label: "Child (3y+)" },
+    { key: "all",    label: "All Moments" },
+    { key: "birth",  label: "Birth Day" },
+    { key: "week1",  label: "First Week" },
+    { key: "week2",  label: "Week 2" },
+    { key: "month1", label: "1 Month+" },
   ];
 
   const filteredEntries = timelineEntries.filter((e) => {
-    if (filter === "all") return true;
-    const months = parseAgeMonths(e.age);
-    if (filter === "baby")    return months < 6;
-    if (filter === "infant")  return months >= 6 && months < 12;
-    if (filter === "toddler") return months >= 12 && months < 36;
-    if (filter === "kid")     return months >= 36;
+    if (filter === "all")    return true;
+    const d = e.ageInDays ?? 0;
+    if (filter === "birth")  return d === 0;
+    if (filter === "week1")  return d > 0 && d <= 7;
+    if (filter === "week2")  return d > 7 && d <= 14;
+    if (filter === "month1") return d > 14;
     return true;
   });
 
@@ -54,7 +54,7 @@ export default function App() {
           <div className="header-text">
             <h1 className="app-title">Alysha's Journey</h1>
             <p className="app-subtitle">
-              A beautiful calendar of growth — from tiny to tall 🌱
+              Born 25 April 2022 — a calendar of her earliest days 🌱
             </p>
           </div>
           <div className="header-flowers">🌸</div>
@@ -119,15 +119,15 @@ export default function App() {
         )}
       </main>
 
-      {/* Upload hint */}
+      {/* Drive notice */}
       <div className="upload-hint">
         <div className="hint-box">
-          <span>📂</span>
+          <span>☁️</span>
           <div>
-            <strong>Adding Photos:</strong> Place your photos in{" "}
-            <code>public/photos/</code> and update the <code>photo</code> field
-            in <code>src/data/timelineData.js</code> — e.g.{" "}
-            <code>{`photo: "/photos/alysha-01.jpg"`}</code>
+            <strong>Photos from Google Drive</strong> — loaded directly from
+            your Drive folder. Make sure you are signed into Google in this
+            browser so the images appear. To add more dates, add an entry in{" "}
+            <code>src/data/timelineData.js</code>.
           </div>
         </div>
       </div>
@@ -152,10 +152,3 @@ export default function App() {
   );
 }
 
-function parseAgeMonths(ageStr) {
-  if (ageStr.includes("year")) {
-    const y = parseInt(ageStr);
-    return y * 12;
-  }
-  return parseInt(ageStr) || 0;
-}
