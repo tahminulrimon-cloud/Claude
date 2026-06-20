@@ -119,6 +119,8 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 15%;
+  image-orientation: from-image;
   display: block;
   transition: transform 0.45s ease;
 }
