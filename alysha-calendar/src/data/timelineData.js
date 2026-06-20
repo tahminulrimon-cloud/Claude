@@ -27,6 +27,7 @@ export const timelineEntries = [
     caption: "Every tiny moment is a treasure",
     milestone: "Hospital days",
     ageInDays: 2,
+    rotation: 180,
   },
   {
     id: 3,

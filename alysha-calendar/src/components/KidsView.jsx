@@ -91,6 +91,7 @@ export default function KidsView({ entries, onExit }) {
             className="kids-photo"
             src={entry.photo}
             alt={entry.label}
+            style={entry.rotation ? { transform: `rotate(${entry.rotation}deg)` } : undefined}
             onError={() => setImgError(true)}
           />
         ) : (

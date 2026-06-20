@@ -32,6 +32,7 @@ export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev,
               src={entry.photo}
               alt={entry.label}
               className="lightbox-photo"
+              style={entry.rotation ? { transform: `rotate(${entry.rotation}deg)` } : undefined}
               onError={() => setImgError(true)}
             />
           ) : (

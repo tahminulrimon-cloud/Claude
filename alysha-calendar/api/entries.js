@@ -17,6 +17,7 @@ export default function handler(req, res) {
     caption: e.caption,
     milestone: e.milestone,
     age_in_days: e.ageInDays,
+    rotation: e.rotation ?? 0,
     sort_order: i,
     created_at: '2022-04-25T00:00:00.000Z',
     updated_at: '2022-04-25T00:00:00.000Z',

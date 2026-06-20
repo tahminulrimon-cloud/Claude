@@ -101,6 +101,7 @@ export default function PhotoCard({ entry, index, isActive, onClick }) {
               src={entry.photo}
               alt={entry.label}
               className="card-photo"
+              style={entry.rotation ? { transform: `rotate(${entry.rotation}deg)` } : undefined}
               onError={() => setImgError(true)}
             />
           )}
