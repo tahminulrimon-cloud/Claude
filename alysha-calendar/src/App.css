@@ -308,7 +308,7 @@
   letter-spacing: 0.2px;
 }
 
-/* ── Masonry-aligned grid ── */
+/* ── Photo grid section ── */
 .photo-grid-section {
   padding: 20px 28px 40px;
   flex: 1;
@@ -318,15 +318,139 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(230px, 1fr));
   gap: 4px;
-  max-width: 1240px;
-  margin: 0 auto;
   align-items: start;
-  animation: gridFadeIn 0.45s ease;
+  animation: gridFadeIn 0.35s ease;
 }
 
 @keyframes gridFadeIn {
-  from { opacity: 0; transform: translateY(12px); }
+  from { opacity: 0; transform: translateY(10px); }
   to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Year folder structure ── */
+.year-folders {
+  max-width: 1240px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  animation: gridFadeIn 0.45s ease;
+}
+
+.year-folder {
+  border-radius: 18px;
+  border: 1.5px solid rgba(214, 50, 94, 0.12);
+  background: rgba(255,255,255,0.6);
+  backdrop-filter: blur(10px);
+  overflow: hidden;
+  transition: border-color 0.2s, box-shadow 0.2s;
+}
+
+.year-folder.open {
+  border-color: rgba(214, 50, 94, 0.22);
+  box-shadow: 0 4px 24px rgba(214, 50, 94, 0.08);
+}
+
+.year-header {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 24px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  text-align: left;
+  transition: background 0.18s;
+  border-radius: 18px;
+}
+
+.year-header:hover {
+  background: rgba(214, 50, 94, 0.05);
+}
+
+.year-folder-icon {
+  font-size: 22px;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+.year-name {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 22px;
+  font-weight: 800;
+  font-style: italic;
+  color: var(--s-primary);
+  letter-spacing: -0.3px;
+  flex: 1;
+}
+
+.year-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: #bbb;
+  text-transform: uppercase;
+  letter-spacing: 0.6px;
+  background: rgba(214, 50, 94, 0.07);
+  padding: 4px 10px;
+  border-radius: 20px;
+}
+
+.year-chevron {
+  font-size: 14px;
+  color: var(--s-primary);
+  opacity: 0.6;
+  transition: transform 0.2s;
+  flex-shrink: 0;
+}
+
+.year-folder.open .year-chevron {
+  transform: rotate(0deg);
+}
+
+.year-content {
+  padding: 0 16px 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  animation: gridFadeIn 0.3s ease;
+}
+
+/* ── Month section inside a year ── */
+.month-section {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.month-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 8px;
+  border-bottom: 1.5px solid rgba(214, 50, 94, 0.1);
+}
+
+.month-icon {
+  font-size: 15px;
+}
+
+.month-name {
+  font-family: 'Caveat', cursive;
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--s-mid);
+  letter-spacing: 0.3px;
+  flex: 1;
+}
+
+.month-count {
+  font-size: 11px;
+  font-weight: 600;
+  color: #ccc;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 /* ── Drive notice ── */
@@ -414,7 +538,10 @@
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 4px;
   }
-  .photo-grid-section { padding: 14px 14px 28px; }
+  .photo-grid-section { padding: 14px 10px 28px; }
   .filter-bar { padding: 18px 14px 6px; gap: 8px; }
   .filter-btn { padding: 7px 14px; font-size: 12px; }
+  .year-header { padding: 12px 16px; }
+  .year-name { font-size: 18px; }
+  .year-content { padding: 0 8px 12px; gap: 16px; }
 }

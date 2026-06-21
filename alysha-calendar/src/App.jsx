@@ -22,6 +22,28 @@ const CHAPTERS = {
   bigkid:  { title: "Chapter IV · Shining Bright",  sub: "3 years and beyond  ·  Her own season" },
 };
 
+const MONTH_ORDER = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+function groupByYearMonth(entries) {
+  const byYear = {};
+  for (const entry of entries) {
+    const parts = entry.date.split(" ");
+    const year  = parts[parts.length - 1];
+    const month = parts[parts.length - 2];
+    if (!byYear[year]) byYear[year] = {};
+    if (!byYear[year][month]) byYear[year][month] = [];
+    byYear[year][month].push(entry);
+  }
+  return Object.keys(byYear)
+    .sort((a, b) => Number(a) - Number(b))
+    .map(year => ({
+      year,
+      months: MONTH_ORDER
+        .filter(m => byYear[year][m])
+        .map(month => ({ month, entries: byYear[year][month] })),
+    }));
+}
+
 export default function App() {
   const [entries, setEntries]         = useState([]);
   const [dataLoading, setDataLoading] = useState(true);
@@ -45,6 +67,22 @@ export default function App() {
   const [filter, setFilter]           = useState("all");
   const [activeEntry, setActiveEntry] = useState(null);
   const [kidsMode, setKidsMode]       = useState(false);
+  const [openYears, setOpenYears]     = useState(new Set());
+
+  useEffect(() => {
+    if (entries.length > 0) {
+      const years = new Set(entries.map(e => e.date.split(" ").at(-1)));
+      setOpenYears(years);
+    }
+  }, [entries]);
+
+  const toggleYear = useCallback((year) => {
+    setOpenYears(prev => {
+      const next = new Set(prev);
+      if (next.has(year)) next.delete(year); else next.add(year);
+      return next;
+    });
+  }, []);
 
   const kidsEntries = entries.filter(e => e.photo);
 
@@ -78,6 +116,7 @@ export default function App() {
   }, [activeIndex, filteredEntries]);
 
   const photosCount = entries.filter((e) => e.photo).length;
+  const grouped     = groupByYearMonth(filteredEntries);
 
   return (
     <div className="app" data-season={currentSeason}>
@@ -148,16 +187,50 @@ export default function App() {
         ) : filteredEntries.length === 0 ? (
           <div className="empty-state"><span>🌷</span><p>No moments in this range yet.</p></div>
         ) : (
-          <div className="photo-grid" key={filter}>
-            {filteredEntries.map((entry) => (
-              <PhotoCard
-                key={entry.id}
-                entry={entry}
-                index={entries.indexOf(entry)}
-                isActive={activeEntry?.id === entry.id}
-                onClick={openModal}
-              />
-            ))}
+          <div className="year-folders" key={filter}>
+            {grouped.map(({ year, months }) => {
+              const isOpen    = openYears.has(year);
+              const yearCount = months.reduce((s, m) => s + m.entries.length, 0);
+              return (
+                <div key={year} className={`year-folder ${isOpen ? "open" : ""}`}>
+                  <button
+                    className="year-header"
+                    onClick={() => toggleYear(year)}
+                    aria-expanded={isOpen}
+                  >
+                    <span className="year-folder-icon">{isOpen ? "📂" : "📁"}</span>
+                    <span className="year-name">{year}</span>
+                    <span className="year-count">{yearCount} {yearCount === 1 ? "photo" : "photos"}</span>
+                    <span className="year-chevron">{isOpen ? "▾" : "▸"}</span>
+                  </button>
+
+                  {isOpen && (
+                    <div className="year-content">
+                      {months.map(({ month, entries: monthEntries }) => (
+                        <div key={month} className="month-section">
+                          <div className="month-header">
+                            <span className="month-icon">📅</span>
+                            <span className="month-name">{month}</span>
+                            <span className="month-count">{monthEntries.length} {monthEntries.length === 1 ? "photo" : "photos"}</span>
+                          </div>
+                          <div className="photo-grid">
+                            {monthEntries.map((entry) => (
+                              <PhotoCard
+                                key={entry.id}
+                                entry={entry}
+                                index={entries.indexOf(entry)}
+                                isActive={activeEntry?.id === entry.id}
+                                onClick={openModal}
+                              />
+                            ))}
+                          </div>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              );
+            })}
           </div>
         )}
       </main>
