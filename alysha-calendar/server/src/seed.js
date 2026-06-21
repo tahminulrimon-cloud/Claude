@@ -6,7 +6,6 @@ const db = require("./db");
 const gdrive = (id) => `https://drive.google.com/thumbnail?id=${id}&sz=w800`;
 
 const ENTRIES = [
-  { label: "Birth Day", age: "Day 0", date: "25 April 2022", photo: gdrive("1xJUA_bpR-WKPsUGkRrNpuebfqcW_oawl"), caption: "Welcome to the world, little Alysha! 🌸", milestone: "First breath of life", ageInDays: 0, location: "হাজারীবাগ, ঢাকা" },
 { label: "3 Wks", age: "3 weeks", date: "13 May 2022", photo: gdrive("1wp7d6llb-djdyQUi7R_VKEKxbzwrEvnL"), caption: "Learning what this beautiful world is all about", milestone: "Newborn wonder", ageInDays: 18 },
   { label: "4 Wks", age: "4 weeks", date: "23 May 2022", photo: gdrive("1ut_4h0u2e5br64XaEs-LWN_rDY8gT1Yd"), caption: "Learning what this beautiful world is all about", milestone: "Newborn wonder", ageInDays: 28 },
   { label: "1 Mo", age: "~1 months", date: "4 June 2022", photo: gdrive("1y52hNTE0OEVxP9a6n1IyuarjLZSnDkjv"), caption: "That smile makes every heart melt 💕", milestone: "Social smiling", ageInDays: 40 },
