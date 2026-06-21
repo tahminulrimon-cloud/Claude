@@ -194,3 +194,20 @@
   letter-spacing: 0.5px;
   text-transform: uppercase;
 }
+
+.polaroid-location {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-top: 5px;
+}
+.polaroid-location .location-pin {
+  font-size: 10px;
+  line-height: 1;
+}
+.polaroid-location .location-text {
+  font-size: 10px;
+  color: #a09098;
+  font-weight: 500;
+  line-height: 1.3;
+}

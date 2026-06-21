@@ -52,6 +52,12 @@ export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev,
             <span>{entry.milestone}</span>
           </div>
           <div className="lightbox-date">{entry.date}</div>
+          {entry.location && (
+            <div className="lightbox-location">
+              <span className="location-pin">📍</span>
+              <span>{entry.location}</span>
+            </div>
+          )}
         </div>
 
         <div className="lightbox-nav">

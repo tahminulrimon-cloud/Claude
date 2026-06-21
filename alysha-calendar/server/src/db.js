@@ -32,6 +32,7 @@ db.exec(`
     milestone    TEXT,
     age_in_days  INTEGER NOT NULL DEFAULT 0,
     sort_order   INTEGER NOT NULL DEFAULT 0,
+    location     TEXT,
     created_at   TEXT NOT NULL DEFAULT (datetime('now')),
     updated_at   TEXT NOT NULL DEFAULT (datetime('now'))
   );
@@ -42,5 +43,11 @@ db.exec(`
     UPDATE entries SET updated_at = datetime('now') WHERE id = NEW.id;
   END;
 `);
+
+// Migration: add location column if it doesn't exist yet
+const existingCols = db.pragma("table_info(entries)").map(c => c.name);
+if (!existingCols.includes("location")) {
+  db.exec("ALTER TABLE entries ADD COLUMN location TEXT");
+}
 
 module.exports = db;
