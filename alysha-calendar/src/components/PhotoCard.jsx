@@ -92,8 +92,6 @@ export default function PhotoCard({ entry, index, isActive, onClick }) {
 
         {/* Photo area */}
         <div className="polaroid-photo-area">
-          <div className="age-watermark">{entry.age}</div>
-
           {showPlaceholder ? (
             <div className="photo-placeholder">📷</div>
           ) : (
