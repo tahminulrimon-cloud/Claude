@@ -67,6 +67,7 @@ export default function App() {
   const [filter, setFilter]           = useState("all");
   const [activeEntry, setActiveEntry] = useState(null);
   const [kidsMode, setKidsMode]       = useState(false);
+  const [kpopMode, setKpopMode]       = useState(false);
   const [openYears, setOpenYears]     = useState(new Set());
 
   useEffect(() => {
@@ -119,7 +120,7 @@ export default function App() {
   const grouped     = groupByYearMonth(filteredEntries);
 
   return (
-    <div className="app" data-season={currentSeason}>
+    <div className={`app${kpopMode ? " kpop-demons" : ""}`} data-season={currentSeason}>
       {kidsMode && (
         <KidsView
           entries={kidsEntries}
@@ -268,6 +269,15 @@ export default function App() {
           🌟 Alysha's View
         </button>
       )}
+
+      <button
+        className={`kpop-toggle-btn${kpopMode ? " active" : ""}`}
+        onClick={() => setKpopMode(v => !v)}
+        aria-label="Toggle K-Pop Demons theme"
+        title={kpopMode ? "Exit K-Pop Demons" : "K-Pop Demons mode"}
+      >
+        {kpopMode ? "🌸 Exit Demons" : "😈 K-Pop Demons"}
+      </button>
     </div>
   );
 }
