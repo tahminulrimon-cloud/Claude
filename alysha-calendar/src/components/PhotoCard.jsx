@@ -113,7 +113,7 @@ export default function PhotoCard({ entry, index, isActive, onClick }) {
         <div className="polaroid-strip">
           <h3 className="polaroid-label">{entry.label}</h3>
           <p className="polaroid-caption">{entry.caption}</p>
-          <div className="polaroid-date">{entry.date}</div>
+          {!entry.date_unknown && <div className="polaroid-date">{entry.date}</div>}
           {entry.location && (
             <div className="polaroid-location">
               <span className="location-pin">📍</span>

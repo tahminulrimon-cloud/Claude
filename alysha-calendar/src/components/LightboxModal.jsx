@@ -97,7 +97,7 @@ export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev,
             <span className="milestone-icon">⭐</span>
             <span>{entry.milestone}</span>
           </div>
-          <div className="lightbox-date">{entry.date}</div>
+          {!entry.date_unknown && <div className="lightbox-date">{entry.date}</div>}
           {entry.location && (
             <div className="lightbox-location">
               <span className="location-pin">📍</span>

@@ -8,19 +8,21 @@ import OnThisDay from "./components/OnThisDay";
 import "./App.css";
 
 const FILTERS = [
-  { key: "all",      label: "All Moments",  icon: "🌿", season: "all"    },
-  { key: "newborn",  label: "Newborn",       icon: "🌸", season: "spring" },
-  { key: "baby",     label: "Baby",          icon: "☀️", season: "summer" },
-  { key: "toddler",  label: "Toddler",       icon: "🍂", season: "autumn" },
-  { key: "bigkid",   label: "Big Girl",      icon: "✨", season: "winter" },
+  { key: "all",     label: "All Moments", icon: "🌿", season: "all"    },
+  { key: "undated", label: "Early Days",  icon: "🍼", season: "spring" },
+  { key: "newborn", label: "Newborn",     icon: "🌸", season: "spring" },
+  { key: "baby",    label: "Baby",        icon: "☀️", season: "summer" },
+  { key: "toddler", label: "Toddler",     icon: "🍂", season: "autumn" },
+  { key: "bigkid",  label: "Big Girl",    icon: "✨", season: "winter" },
 ];
 
 const CHAPTERS = {
-  all:     { title: "Alysha's Complete Story",     sub: "Every precious moment, from first breath to today" },
-  newborn: { title: "Chapter I · The Arrival",      sub: "0 – 3 months  ·  Spring of life" },
-  baby:    { title: "Chapter II · First Blooms",    sub: "3 months – 1 year  ·  Summer of discovery" },
-  toddler: { title: "Chapter III · Little Wonder",  sub: "1 – 3 years  ·  Autumn of adventure" },
-  bigkid:  { title: "Chapter IV · Shining Bright",  sub: "3 years and beyond  ·  Her own season" },
+  all:     { title: "Alysha's Complete Story",        sub: "Every precious moment, from first breath to today" },
+  undated: { title: "Early Days",                     sub: "First moments · Exact dates to be confirmed" },
+  newborn: { title: "Chapter I · The Arrival",        sub: "0 – 3 months  ·  Spring of life" },
+  baby:    { title: "Chapter II · First Blooms",      sub: "3 months – 1 year  ·  Summer of discovery" },
+  toddler: { title: "Chapter III · Little Wonder",    sub: "1 – 3 years  ·  Autumn of adventure" },
+  bigkid:  { title: "Chapter IV · Shining Bright",   sub: "3 years and beyond  ·  Her own season" },
 };
 
 const MONTH_ORDER = ["January","February","March","April","May","June","July","August","September","October","November","December"];
@@ -92,6 +94,8 @@ export default function App() {
   const chapter       = CHAPTERS[filter];
 
   const filteredEntries = entries.filter((e) => {
+    if (filter === "undated") return !!e.date_unknown;
+    if (e.date_unknown) return false; // hide from all other tabs
     if (filter === "all")     return true;
     const d = e.age_in_days ?? 0;
     if (filter === "newborn") return d <= 90;

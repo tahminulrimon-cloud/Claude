@@ -17,6 +17,7 @@ export const timelineEntries = [
     caption: "Welcome to the world, little Alysha! 🌸",
     milestone: "First breath of life",
     ageInDays: 0,
+    dateUnknown: true,
   },
   {
     id: 144,
@@ -38,6 +39,7 @@ export const timelineEntries = [
     milestone: "Hospital days",
     ageInDays: 2,
     rotation: 180,
+    dateUnknown: true,
   },
   {
     id: 145,
