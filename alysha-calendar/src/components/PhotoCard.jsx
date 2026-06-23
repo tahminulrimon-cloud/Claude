@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useCallback } from "react";
+import MoodBadge from "./MoodBadge";
 import "./PhotoCard.css";
 
 const SEASON_GRADIENTS = {
@@ -107,6 +108,12 @@ export default function PhotoCard({ entry, index, isActive, onClick }) {
           <div className="photo-overlay">
             <span className="overlay-milestone">{entry.milestone}</span>
           </div>
+
+          {entry.photo && !imgError && (
+            <div className="mood-badge-corner">
+              <MoodBadge entry={entry} size="sm" />
+            </div>
+          )}
         </div>
 
         {/* Polaroid bottom strip */}

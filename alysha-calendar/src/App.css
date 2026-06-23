@@ -270,6 +270,51 @@
   transition: all 0.22s ease, background 0.5s ease, box-shadow 0.5s ease;
 }
 
+/* ── Mood filter bar ── */
+.mood-filter-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+  padding: 4px 20px 10px;
+}
+
+.mood-filter-label {
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #bbb;
+  margin-right: 2px;
+}
+
+.mood-filter-btn {
+  padding: 5px 13px;
+  border-radius: 999px;
+  border: 1.5px solid #e8e0e8;
+  background: #fafafa;
+  font-size: 12px;
+  font-weight: 600;
+  color: #aaa;
+  cursor: pointer;
+  transition: all 0.18s ease;
+}
+
+.mood-filter-btn:hover {
+  border-color: var(--s-primary);
+  color: var(--s-primary);
+  transform: translateY(-1px);
+}
+
+.mood-filter-btn.active {
+  background: linear-gradient(135deg, var(--s-primary), var(--s-mid));
+  border-color: transparent;
+  color: #fff;
+  box-shadow: 0 3px 12px var(--s-glow);
+  transform: translateY(-1px);
+}
+
 /* ── Chapter heading ── */
 .chapter-heading {
   text-align: center;

@@ -8,6 +8,11 @@ const api = axios.create({
 
 export const getEntries = () => api.get("/entries").then((r) => r.data.entries);
 
+export const analyzeMood = (photo) =>
+  api
+    .post("/analyze-mood", { photo }, { timeout: 20000 })
+    .then((r) => r.data.mood);
+
 export const generateCaption = (entry) =>
   api
     .post("/generate-caption", {

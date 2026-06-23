@@ -140,6 +140,13 @@
   gap: 7px;
 }
 
+.lightbox-age-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 2px;
+}
+
 .lightbox-age-badge {
   display: inline-block;
   font-size: 10px;

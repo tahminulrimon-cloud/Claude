@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { generateCaption } from "../services/api";
+import MoodBadge from "./MoodBadge";
 import "./LightboxModal.css";
 
 export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev, hasNext }) {
@@ -67,7 +68,12 @@ export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev,
         </div>
 
         <div className="lightbox-info">
-          <div className="lightbox-age-badge">{entry.age}</div>
+          <div className="lightbox-age-row">
+            <div className="lightbox-age-badge">{entry.age}</div>
+            {entry.photo && !imgError && (
+              <MoodBadge entry={entry} size="md" />
+            )}
+          </div>
           <h2 className="lightbox-label">{entry.label}</h2>
           <p className={`lightbox-caption${aiBusy ? " ai-loading" : ""}`}>
             {caption || <span className="caption-empty">No caption yet…</span>}
