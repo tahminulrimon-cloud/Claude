@@ -1,11 +1,34 @@
 import { useEffect, useState } from "react";
+import { generateCaption } from "../services/api";
 import "./LightboxModal.css";
 
 export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev, hasNext }) {
   const [imgError, setImgError] = useState(false);
+  const [caption, setCaption] = useState(entry?.caption ?? "");
+  const [aiBusy, setAiBusy] = useState(false);
+  const [aiError, setAiError] = useState(null);
+
+  const handleGenerate = async () => {
+    if (!entry?.photo || aiBusy) return;
+    setAiBusy(true);
+    setAiError(null);
+    try {
+      const next = await generateCaption(entry);
+      if (next) setCaption(next);
+    } catch (err) {
+      setAiError(
+        err?.response?.data?.error ?? "Could not generate a caption. Please try again."
+      );
+    } finally {
+      setAiBusy(false);
+    }
+  };
 
   useEffect(() => {
     setImgError(false);
+    setCaption(entry?.caption ?? "");
+    setAiError(null);
+    setAiBusy(false);
     const handleKey = (e) => {
       if (e.key === "Escape") onClose();
       if (e.key === "ArrowLeft" && hasPrev) onPrev();
@@ -46,7 +69,30 @@ export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev,
         <div className="lightbox-info">
           <div className="lightbox-age-badge">{entry.age}</div>
           <h2 className="lightbox-label">{entry.label}</h2>
-          <p className="lightbox-caption">{entry.caption}</p>
+          <p className={`lightbox-caption${aiBusy ? " ai-loading" : ""}`}>
+            {caption || <span className="caption-empty">No caption yet…</span>}
+          </p>
+          <div className="lightbox-ai-row">
+            <button
+              className="ai-caption-btn"
+              onClick={handleGenerate}
+              disabled={aiBusy || !entry.photo || imgError}
+              title={
+                entry.photo
+                  ? "Generate a caption with Claude vision"
+                  : "A photo is needed to generate a caption"
+              }
+            >
+              {aiBusy ? (
+                <><span className="ai-spinner" /> Writing…</>
+              ) : caption ? (
+                <>✨ Regenerate caption</>
+              ) : (
+                <>✨ Generate caption</>
+              )}
+            </button>
+            {aiError && <span className="ai-caption-error">{aiError}</span>}
+          </div>
           <div className="lightbox-milestone">
             <span className="milestone-icon">⭐</span>
             <span>{entry.milestone}</span>
