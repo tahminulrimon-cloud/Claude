@@ -4,6 +4,7 @@ import PhotoCard from "./components/PhotoCard";
 import LightboxModal from "./components/LightboxModal";
 import GrowthTimeline from "./components/GrowthTimeline";
 import KidsView from "./components/KidsView";
+import OnThisDay from "./components/OnThisDay";
 import "./App.css";
 
 const FILTERS = [
@@ -156,6 +157,10 @@ export default function App() {
 
       {entries.length > 0 && (
         <GrowthTimeline entries={entries} activeId={activeEntry?.id} onSelect={openModal} />
+      )}
+
+      {entries.length > 0 && (
+        <OnThisDay entries={entries} onOpen={openModal} />
       )}
 
       <div className="filter-bar">
