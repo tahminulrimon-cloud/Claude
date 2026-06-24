@@ -6,10 +6,10 @@
   padding: 16px 20px 16px 18px;
   border-radius: 20px;
   background: linear-gradient(120deg, rgba(255,255,255,0.9) 0%, rgba(255,240,250,0.92) 100%);
-  border: 1.5px solid rgba(214, 50, 94, 0.18);
+  border: 1px solid rgba(255,255,255,0.25);
   box-shadow:
-    0 4px 24px rgba(214, 50, 94, 0.08),
-    0 1px 4px rgba(0,0,0,0.04);
+    0 8px 32px rgba(0,0,0,0.12),
+    inset 0 1px 0 rgba(255,255,255,0.45);
   cursor: pointer;
   max-width: 1240px;
   margin-inline: auto;
@@ -17,7 +17,8 @@
   position: relative;
   overflow: hidden;
   transition: box-shadow 0.22s ease, transform 0.22s ease;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
   animation: otdSlideIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -123,6 +124,7 @@
   object-position: center 15%;
   display: block;
   transition: transform 0.4s ease;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.5);
 }
 
 .otd-banner:hover .otd-photo {

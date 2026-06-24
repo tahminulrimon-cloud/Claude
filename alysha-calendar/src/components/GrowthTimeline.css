@@ -1,6 +1,11 @@
 .growth-timeline {
   padding: 40px 52px 16px;
   position: relative;
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  background: rgba(255,255,255,0.35);
+  border-bottom: 1px solid rgba(255,255,255,0.25);
+  box-shadow: 0 2px 16px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.6);
 }
 
 .timeline-track {
@@ -74,7 +79,7 @@
   background: #fff;
   border: 3px solid #d6325e;
   transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
-  box-shadow: 0 2px 8px rgba(214, 50, 94, 0.22);
+  box-shadow: 0 2px 8px rgba(214, 50, 94, 0.22), 0 1px 6px rgba(0,0,0,0.2), inset 0 1px 0 rgba(255,255,255,0.5);
 }
 
 /* Season-specific dot colours */
