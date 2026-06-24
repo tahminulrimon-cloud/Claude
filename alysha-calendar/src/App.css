@@ -751,3 +751,10 @@
   .year-name { font-size: 18px; }
   .year-content { padding: 0 8px 12px; gap: 16px; }
 }
+
+/* ── Albums section ── */
+.albums-section { padding: 0 20px 8px; }
+.albums-grid { display: flex; flex-wrap: wrap; gap: 20px; padding: 0 0 12px; }
+.chapter-heading { padding: 12px 20px 4px; }
+.chapter-title { margin: 0 0 4px; font-family: "Playfair Display", Georgia, serif; font-size: 22px; font-weight: 700; color: #2d2d2d; }
+.chapter-sub { margin: 0; font-size: 13px; color: #888; }

@@ -7,6 +7,7 @@ import KidsView from "./components/KidsView";
 import PhotoStrip from "./components/PhotoStrip";
 import OnThisDay from "./components/OnThisDay";
 import { MOOD_META, getCachedMood } from "./components/MoodBadge";
+import AlbumCard from "./components/AlbumCard";
 import "./App.css";
 
 const FILTERS = [
@@ -200,6 +201,21 @@ export default function App() {
       {entries.length > 0 && (
         <OnThisDay entries={entries} onOpen={openModal} />
       )}
+
+      {/* Albums section */}
+      <section className="albums-section">
+        <div className="chapter-heading">
+          <h2 className="chapter-title">Albums</h2>
+          <p className="chapter-sub">Curated collections from special journeys</p>
+        </div>
+        <div className="albums-grid">
+          <AlbumCard
+            name="Alysha in Singapore"
+            location="Singapore"
+            photoCount={0}
+          />
+        </div>
+      </section>
 
       <div className="filter-bar">
         {FILTERS.map((f) => (

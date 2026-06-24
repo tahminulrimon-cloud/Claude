@@ -14,7 +14,7 @@
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.105.0",
-    "axios": "^1.18.0",
+    "axios": "^1.18.1",
     "bcryptjs": "^3.0.3",
     "jsonwebtoken": "^9.0.3",
     "react": "^19.2.6",
