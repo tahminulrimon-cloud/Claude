@@ -8,6 +8,8 @@ import PhotoStrip from "./components/PhotoStrip";
 import OnThisDay from "./components/OnThisDay";
 import { MOOD_META, getCachedMood } from "./components/MoodBadge";
 import AlbumCard from "./components/AlbumCard";
+import AlbumView from "./components/AlbumView";
+import { singaporePhotos } from "./data/singaporeAlbum";
 import "./App.css";
 
 const FILTERS = [
@@ -79,8 +81,9 @@ export default function App() {
   const [filter, setFilter]           = useState("all");
   const [moodFilter, setMoodFilter]   = useState(null);
   const [activeEntry, setActiveEntry] = useState(null);
-  const [kidsMode, setKidsMode]       = useState(false);
-  const [kpopMode, setKpopMode]       = useState(false);
+  const [kidsMode, setKidsMode]             = useState(false);
+  const [kpopMode, setKpopMode]             = useState(false);
+  const [singaporeOpen, setSingaporeOpen]   = useState(false);
   const [openYears, setOpenYears]     = useState(new Set());
 
   useEffect(() => {
@@ -212,7 +215,9 @@ export default function App() {
           <AlbumCard
             name="Alysha in Singapore"
             location="Singapore"
-            photoCount={0}
+            photoCount={singaporePhotos.length}
+            coverPhoto={singaporePhotos[3].photo}
+            onClick={() => setSingaporeOpen(true)}
           />
         </div>
       </section>
@@ -337,6 +342,14 @@ export default function App() {
           onNext={goNext}
           hasPrev={activeIndex > 0}
           hasNext={activeIndex < filteredEntries.length - 1}
+        />
+      )}
+
+      {singaporeOpen && (
+        <AlbumView
+          photos={singaporePhotos}
+          title="Alysha in Singapore"
+          onClose={() => setSingaporeOpen(false)}
         />
       )}
 
