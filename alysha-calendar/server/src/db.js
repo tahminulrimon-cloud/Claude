@@ -49,5 +49,8 @@ const existingCols = db.pragma("table_info(entries)").map(c => c.name);
 if (!existingCols.includes("location")) {
   db.exec("ALTER TABLE entries ADD COLUMN location TEXT");
 }
+if (!existingCols.includes("featured")) {
+  db.exec("ALTER TABLE entries ADD COLUMN featured INTEGER NOT NULL DEFAULT 0");
+}
 
 module.exports = db;

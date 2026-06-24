@@ -30,7 +30,7 @@ function getSeason(days) {
   return "winter";
 }
 
-export default function PhotoCard({ entry, index, isActive, onClick }) {
+export default function PhotoCard({ entry, index, isActive, onClick, onToggleFeatured }) {
   const [imgError, setImgError] = useState(false);
   const [revealed, setRevealed]  = useState(false);
   const wrapperRef = useRef(null);
@@ -90,6 +90,18 @@ export default function PhotoCard({ entry, index, isActive, onClick }) {
         aria-label={`${entry.label} — ${entry.caption}`}
       >
         <div className="card-shine" />
+
+        {/* Featured star toggle */}
+        {onToggleFeatured && (
+          <button
+            className={`featured-star-btn${entry.featured ? " starred" : ""}`}
+            onClick={(e) => { e.stopPropagation(); onToggleFeatured(entry.id, !entry.featured); }}
+            aria-label={entry.featured ? "Remove from strip" : "Add to strip"}
+            title={entry.featured ? "Remove from highlight strip" : "Add to highlight strip"}
+          >
+            {entry.featured ? "★" : "☆"}
+          </button>
+        )}
 
         {/* Photo area */}
         <div className="polaroid-photo-area">

@@ -91,6 +91,7 @@ router.put(
     body("photo").optional({ nullable: true }),
     body("age_in_days").optional().isInt({ min: 0 }),
     body("sort_order").optional().isInt({ min: 0 }),
+    body("featured").optional().isInt({ min: 0, max: 1 }),
   ],
   validate,
   (req, res, next) => {
@@ -101,11 +102,11 @@ router.put(
       const updated = { ...existing, ...req.body };
       db.prepare(
         `UPDATE entries SET label=?, age=?, date=?, photo=?, caption=?, milestone=?,
-         age_in_days=?, sort_order=? WHERE id=?`
+         age_in_days=?, sort_order=?, featured=? WHERE id=?`
       ).run(
         updated.label, updated.age, updated.date, updated.photo,
         updated.caption, updated.milestone, updated.age_in_days,
-        updated.sort_order, req.params.id
+        updated.sort_order, updated.featured ?? 0, req.params.id
       );
 
       const entry = db.prepare("SELECT * FROM entries WHERE id = ?").get(req.params.id);

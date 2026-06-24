@@ -1,9 +1,10 @@
 import { useState, useCallback, useEffect } from "react";
-import { getEntries } from "./services/api";
+import { getEntries, updateEntry } from "./services/api";
 import PhotoCard from "./components/PhotoCard";
 import LightboxModal from "./components/LightboxModal";
 import GrowthTimeline from "./components/GrowthTimeline";
 import KidsView from "./components/KidsView";
+import PhotoStrip from "./components/PhotoStrip";
 import OnThisDay from "./components/OnThisDay";
 import { MOOD_META, getCachedMood } from "./components/MoodBadge";
 import "./App.css";
@@ -112,6 +113,15 @@ export default function App() {
     return true;
   });
 
+  const handleToggleFeatured = useCallback(async (id, value) => {
+    try {
+      await updateEntry(id, { featured: value ? 1 : 0 });
+      setEntries(prev => prev.map(e => e.id === id ? { ...e, featured: value ? 1 : 0 } : e));
+    } catch {
+      // silently ignore if not authenticated
+    }
+  }, []);
+
   const openModal  = useCallback((entry) => setActiveEntry(entry), []);
   const closeModal = useCallback(() => setActiveEntry(null), []);
 
@@ -128,8 +138,9 @@ export default function App() {
       setActiveEntry(filteredEntries[activeIndex + 1]);
   }, [activeIndex, filteredEntries]);
 
-  const photosCount = entries.filter((e) => e.photo).length;
-  const grouped     = groupByYearMonth(filteredEntries);
+  const photosCount    = entries.filter((e) => e.photo).length;
+  const featuredEntries = entries.filter((e) => e.featured);
+  const grouped        = groupByYearMonth(filteredEntries);
 
   return (
     <div className={`app${kpopMode ? " kpop-demons" : ""}`} data-season={currentSeason}>
@@ -165,6 +176,10 @@ export default function App() {
           </div>
         </div>
       </header>
+
+      {featuredEntries.length > 0 && (
+        <PhotoStrip entries={featuredEntries} onOpenLightbox={openModal} />
+      )}
 
       {entries.length > 0 && (
         <GrowthTimeline entries={entries} activeId={activeEntry?.id} onSelect={openModal} />
@@ -258,6 +273,7 @@ export default function App() {
                                 index={entries.indexOf(entry)}
                                 isActive={activeEntry?.id === entry.id}
                                 onClick={openModal}
+                                onToggleFeatured={handleToggleFeatured}
                               />
                             ))}
                           </div>
