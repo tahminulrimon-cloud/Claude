@@ -1,28 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { analyzeMood } from "../services/api";
+import { MOOD_META, getCachedMood, setCachedMood } from "../data/moodMeta";
 import "./MoodBadge.css";
 
-export const MOOD_META = {
-  happy:    { emoji: "😊", label: "Happy"   },
-  playful:  { emoji: "😄", label: "Playful" },
-  curious:  { emoji: "🤔", label: "Curious" },
-  sleepy:   { emoji: "😴", label: "Sleepy"  },
-  peaceful: { emoji: "😌", label: "Peaceful"},
-  crying:   { emoji: "😢", label: "Crying"  },
-};
-
-function cacheKey(id) { return `alysha-mood-${id}`; }
-
-export function getCachedMood(id) {
-  try { return localStorage.getItem(cacheKey(id)) || null; } catch { return null; }
-}
-
-function setCachedMood(id, mood) {
-  try { localStorage.setItem(cacheKey(id), mood); } catch {}
-}
-
 export default function MoodBadge({ entry, size = "sm" }) {
-  const [mood, setMood]     = useState(() => getCachedMood(entry.id));
+  const [mood, setMood]       = useState(() => getCachedMood(entry.id));
   const [loading, setLoading] = useState(false);
   const triggered = useRef(false);
   const ref = useRef(null);
@@ -40,7 +22,7 @@ export default function MoodBadge({ entry, size = "sm" }) {
         setLoading(true);
         analyzeMood(entry.photo)
           .then((m) => { setMood(m); setCachedMood(entry.id, m); })
-          .catch(() => {})
+          .catch(() => { /* ignore */ })
           .finally(() => setLoading(false));
       },
       { threshold: 0.1 }

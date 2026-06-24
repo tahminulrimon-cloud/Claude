@@ -26,10 +26,6 @@ export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev,
   };
 
   useEffect(() => {
-    setImgError(false);
-    setCaption(entry?.caption ?? "");
-    setAiError(null);
-    setAiBusy(false);
     const handleKey = (e) => {
       if (e.key === "Escape") onClose();
       if (e.key === "ArrowLeft" && hasPrev) onPrev();
@@ -37,7 +33,18 @@ export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev,
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [entry, onClose, onPrev, onNext, hasPrev, hasNext]);
+  }, [onClose, onPrev, onNext, hasPrev, hasNext]);
+
+  const entryId = entry?.id;
+  useEffect(() => {
+    Promise.resolve().then(() => {
+      setImgError(false);
+      setCaption(entry?.caption ?? "");
+      setAiError(null);
+      setAiBusy(false);
+    });
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [entryId]);
 
   if (!entry) return null;
 

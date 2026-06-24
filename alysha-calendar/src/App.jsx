@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useMemo } from "react";
 import { getEntries, updateEntry } from "./services/api";
 import PhotoCard from "./components/PhotoCard";
 import LightboxModal from "./components/LightboxModal";
@@ -6,7 +6,7 @@ import GrowthTimeline from "./components/GrowthTimeline";
 import KidsView from "./components/KidsView";
 import PhotoStrip from "./components/PhotoStrip";
 import OnThisDay from "./components/OnThisDay";
-import { MOOD_META, getCachedMood } from "./components/MoodBadge";
+import { MOOD_META, getCachedMood } from "./data/moodMeta";
 import AlbumCard from "./components/AlbumCard";
 import AlbumView from "./components/AlbumView";
 import { singaporePhotos } from "./data/singaporeAlbum";
@@ -76,7 +76,8 @@ export default function App() {
     }
   }, []);
 
-  useEffect(() => { fetchEntries(); }, [fetchEntries]);
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { void fetchEntries(); }, [fetchEntries]);
 
   const [filter, setFilter]           = useState("all");
   const [moodFilter, setMoodFilter]   = useState(null);
@@ -84,17 +85,18 @@ export default function App() {
   const [kidsMode, setKidsMode]             = useState(false);
   const [kpopMode, setKpopMode]             = useState(false);
   const [singaporeOpen, setSingaporeOpen]   = useState(false);
-  const [openYears, setOpenYears]     = useState(new Set());
-
-  useEffect(() => {
-    if (entries.length > 0) {
-      const years = new Set(entries.map(e => e.date.split(" ").at(-1)));
-      setOpenYears(years);
-    }
-  }, [entries]);
+  const allYears = useMemo(
+    () => new Set(entries.map(e => e.date.split(" ").at(-1))),
+    [entries]
+  );
+  const [collapsedYears, setCollapsedYears] = useState(new Set());
+  const openYears = useMemo(
+    () => new Set([...allYears].filter(y => !collapsedYears.has(y))),
+    [allYears, collapsedYears]
+  );
 
   const toggleYear = useCallback((year) => {
-    setOpenYears(prev => {
+    setCollapsedYears(prev => {
       const next = new Set(prev);
       if (next.has(year)) next.delete(year); else next.add(year);
       return next;
