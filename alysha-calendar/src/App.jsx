@@ -54,11 +54,17 @@ export default function App() {
   const [dataLoading, setDataLoading] = useState(true);
   const [dataError, setDataError]     = useState(null);
 
+  const getFeaturedIds = () => {
+    try { return new Set(JSON.parse(localStorage.getItem("featured_ids") || "[]")); }
+    catch { return new Set(); }
+  };
+
   const fetchEntries = useCallback(async () => {
     setDataLoading(true);
     try {
       const data = await getEntries();
-      setEntries(data);
+      const featuredIds = getFeaturedIds();
+      setEntries(data.map(e => ({ ...e, featured: featuredIds.has(e.id) ? 1 : (e.featured ?? 0) })));
       setDataError(null);
     } catch {
       setDataError("Could not load photos. Please try again.");
@@ -114,12 +120,18 @@ export default function App() {
   });
 
   const handleToggleFeatured = useCallback(async (id, value) => {
+    // Update UI immediately
+    setEntries(prev => prev.map(e => e.id === id ? { ...e, featured: value ? 1 : 0 } : e));
+
+    // Persist to localStorage (works on Vercel + local)
     try {
-      await updateEntry(id, { featured: value ? 1 : 0 });
-      setEntries(prev => prev.map(e => e.id === id ? { ...e, featured: value ? 1 : 0 } : e));
-    } catch {
-      // silently ignore if not authenticated
-    }
+      const ids = getFeaturedIds();
+      value ? ids.add(id) : ids.delete(id);
+      localStorage.setItem("featured_ids", JSON.stringify([...ids]));
+    } catch { /* ignore */ }
+
+    // Also try syncing to the API if available
+    try { await updateEntry(id, { featured: value ? 1 : 0 }); } catch { /* not available on Vercel */ }
   }, []);
 
   const openModal  = useCallback((entry) => setActiveEntry(entry), []);

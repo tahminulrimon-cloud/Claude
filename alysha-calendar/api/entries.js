@@ -20,6 +20,7 @@ export default function handler(req, res) {
     rotation: e.rotation ?? 0,
     date_unknown: e.dateUnknown ?? false,
     sort_order: i,
+    featured: 0,
     created_at: '2022-04-25T00:00:00.000Z',
     updated_at: '2022-04-25T00:00:00.000Z',
   }));
