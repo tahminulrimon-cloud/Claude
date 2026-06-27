@@ -6,7 +6,6 @@ import GrowthTimeline from "./components/GrowthTimeline";
 import KidsView from "./components/KidsView";
 import PhotoStrip from "./components/PhotoStrip";
 import OnThisDay from "./components/OnThisDay";
-import { MOOD_META, getCachedMood } from "./data/moodMeta";
 import AlbumCard from "./components/AlbumCard";
 import AlbumView from "./components/AlbumView";
 import { singaporePhotos } from "./data/singaporeAlbum";
@@ -80,7 +79,6 @@ export default function App() {
   useEffect(() => { void fetchEntries(); }, [fetchEntries]);
 
   const [filter, setFilter]           = useState("all");
-  const [moodFilter, setMoodFilter]   = useState(null);
   const [activeEntry, setActiveEntry] = useState(null);
   const [kidsMode, setKidsMode]             = useState(false);
   const [kpopMode, setKpopMode]             = useState(false);
@@ -117,10 +115,6 @@ export default function App() {
       if (filter === "baby"    && !(d > 90 && d <= 365))    return false;
       if (filter === "toddler" && !(d > 365 && d <= 1095))  return false;
       if (filter === "bigkid"  && !(d > 1095))              return false;
-    }
-    if (moodFilter) {
-      const cached = getCachedMood(e.id);
-      if (!cached || cached !== moodFilter) return false;
     }
     return true;
   });
@@ -237,27 +231,7 @@ export default function App() {
         ))}
       </div>
 
-      <div className="mood-filter-bar">
-        <span className="mood-filter-label">Mood</span>
-        <button
-          className={`mood-filter-btn${moodFilter === null ? " active" : ""}`}
-          onClick={() => setMoodFilter(null)}
-        >
-          All
-        </button>
-        {Object.entries(MOOD_META).map(([key, { emoji, label }]) => (
-          <button
-            key={key}
-            className={`mood-filter-btn${moodFilter === key ? " active" : ""}`}
-            title={label}
-            onClick={() => setMoodFilter(moodFilter === key ? null : key)}
-          >
-            {emoji} {label}
-          </button>
-        ))}
-      </div>
-
-      <div className="chapter-heading">
+<div className="chapter-heading">
         <h2 className="chapter-title">{chapter.title}</h2>
         <p className="chapter-sub">{chapter.sub}</p>
       </div>
