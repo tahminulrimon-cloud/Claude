@@ -1,4 +1,4 @@
-const gdrive = (id) => `https://drive.google.com/thumbnail?id=${id}&sz=w800`;
+const gdrive = (id) => `https://lh3.googleusercontent.com/d/${id}=w800`;
 
 export const singaporePhotos = [
   { id: 'sg-1',  photo: gdrive('12v1cWkmEPIN0cxaHpfvwGeUEcUIOhNVL'), label: 'Museum of Ice Cream' },

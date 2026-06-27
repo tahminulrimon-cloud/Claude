@@ -5,7 +5,7 @@
 // Non-IMG photos: family/WhatsApp shared moments, dates approximate
 
 const gdrive = (id) =>
-  `https://drive.google.com/thumbnail?id=${id}&sz=w800`;
+  `https://lh3.googleusercontent.com/d/${id}=w800`;
 
 export const timelineEntries = [
   {
