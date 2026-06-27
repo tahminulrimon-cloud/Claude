@@ -2,6 +2,29 @@ import { useState, useEffect, useCallback } from 'react';
 import LightboxModal from './LightboxModal';
 import './AlbumView.css';
 
+function AlbumThumb({ photo, onClick }) {
+  const [failed, setFailed] = useState(false);
+  return (
+    <button className="album-thumb" onClick={onClick} aria-label={photo.label}>
+      {failed ? (
+        <div className="album-thumb-placeholder">
+          <span>🌸</span>
+          <p>{photo.label}</p>
+        </div>
+      ) : (
+        <img
+          src={photo.photo}
+          alt={photo.label}
+          className="album-thumb-img"
+          loading="lazy"
+          onError={() => setFailed(true)}
+        />
+      )}
+      <div className="album-thumb-label">{photo.label}</div>
+    </button>
+  );
+}
+
 export default function AlbumView({ photos, title, onClose }) {
   const [activePhoto, setActivePhoto] = useState(null);
 
@@ -50,20 +73,11 @@ export default function AlbumView({ photos, title, onClose }) {
 
         <div className="album-view-grid">
           {photos.map((photo) => (
-            <button
+            <AlbumThumb
               key={photo.id}
-              className="album-thumb"
+              photo={photo}
               onClick={() => setActivePhoto(photo)}
-              aria-label={photo.label}
-            >
-              <img
-                src={photo.photo}
-                alt={photo.label}
-                className="album-thumb-img"
-                loading="lazy"
-              />
-              <div className="album-thumb-label">{photo.label}</div>
-            </button>
+            />
           ))}
         </div>
       </div>

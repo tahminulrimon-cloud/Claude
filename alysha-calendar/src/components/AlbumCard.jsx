@@ -1,12 +1,19 @@
+import { useState } from "react";
 import "./AlbumCard.css";
 
 export default function AlbumCard({ name, location, photoCount, coverPhoto, onClick }) {
-  const hasPhoto = Boolean(coverPhoto);
+  const [imgFailed, setImgFailed] = useState(false);
+  const showPhoto = Boolean(coverPhoto) && !imgFailed;
 
   return (
-    <div className={`album-card${hasPhoto ? " album-card--photo" : ""}`} onClick={onClick}>
-      {hasPhoto ? (
-        <img className="album-card__cover" src={coverPhoto} alt={name} />
+    <div className={`album-card${showPhoto ? " album-card--photo" : ""}`} onClick={onClick}>
+      {showPhoto ? (
+        <img
+          className="album-card__cover"
+          src={coverPhoto}
+          alt={name}
+          onError={() => setImgFailed(true)}
+        />
       ) : (
         <div className="album-card__gradient">
           <span className="album-card__emoji album-card__emoji--tl">🌆</span>
