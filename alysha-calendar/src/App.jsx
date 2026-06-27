@@ -212,7 +212,7 @@ export default function App() {
             name="Alysha in Singapore"
             location="Singapore"
             photoCount={singaporePhotos.length}
-            coverPhoto={singaporePhotos[3].photo}
+            coverPhoto="/singapore-cover.jpg"
             onClick={() => setSingaporeOpen(true)}
           />
         </div>
