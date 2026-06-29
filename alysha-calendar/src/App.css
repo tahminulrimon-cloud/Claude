@@ -61,45 +61,62 @@
   --s-mid:      #e8612a;
   --s-accent:   #f5a800;
   --s-glow:     rgba(214, 50, 94, 0.32);
-  --s-bg-a:     rgba(255, 200, 220, 0.35);
-  --s-bg-b:     rgba(255, 224, 170, 0.30);
+  --s-bg-a:     rgba(255, 200, 220, 0.45);
+  --s-bg-b:     rgba(255, 224, 170, 0.38);
   --s-bg-c:     rgba(200, 220, 255, 0.20);
-  --s-base:     #fef6f0;
+  /* Radial bg stops */
+  --s-rad-a:    rgba(255, 190, 215, 0.55);
+  --s-rad-b:    rgba(255, 228, 200, 0.40);
+  --s-rad-c:    #fdf4f7;
 }
 
 .app[data-season="spring"] {
   --s-primary: #d6325e; --s-mid: #f06292; --s-accent: #ff8a80;
   --s-glow:    rgba(214, 50, 94, 0.32);
-  --s-bg-a:    rgba(255, 190, 215, 0.38); --s-bg-b: rgba(255, 210, 230, 0.28);
+  --s-bg-a:    rgba(255, 160, 200, 0.50); --s-bg-b: rgba(255, 210, 230, 0.38);
+  --s-rad-a:   rgba(255, 160, 200, 0.60);
+  --s-rad-b:   rgba(255, 210, 230, 0.38);
+  --s-rad-c:   #fdf2f6;
 }
 .app[data-season="summer"] {
   --s-primary: #1a9e5e; --s-mid: #26b07a; --s-accent: #8bc34a;
   --s-glow:    rgba(26, 158, 94, 0.30);
-  --s-bg-a:    rgba(150, 240, 190, 0.35); --s-bg-b: rgba(190, 255, 215, 0.28);
-  --s-base:    #f0fef6;
+  --s-bg-a:    rgba(120, 225, 170, 0.48); --s-bg-b: rgba(180, 255, 210, 0.38);
+  --s-rad-a:   rgba(120, 225, 170, 0.55);
+  --s-rad-b:   rgba(190, 255, 220, 0.38);
+  --s-rad-c:   #f2fdf6;
 }
 .app[data-season="autumn"] {
   --s-primary: #cc5000; --s-mid: #e07020; --s-accent: #f5a800;
   --s-glow:    rgba(204, 80, 0, 0.30);
-  --s-bg-a:    rgba(255, 195, 130, 0.38); --s-bg-b: rgba(255, 220, 165, 0.28);
-  --s-base:    #fef8f0;
+  --s-bg-a:    rgba(255, 175, 90, 0.52); --s-bg-b: rgba(255, 220, 155, 0.38);
+  --s-rad-a:   rgba(255, 175, 90, 0.58);
+  --s-rad-b:   rgba(255, 225, 165, 0.40);
+  --s-rad-c:   #fdf8f0;
 }
 .app[data-season="winter"] {
   --s-primary: #5465d0; --s-mid: #7680e0; --s-accent: #c090e8;
   --s-glow:    rgba(84, 101, 208, 0.30);
-  --s-bg-a:    rgba(185, 200, 255, 0.35); --s-bg-b: rgba(215, 195, 255, 0.28);
-  --s-base:    #f5f0fe;
+  --s-bg-a:    rgba(160, 180, 255, 0.48); --s-bg-b: rgba(210, 195, 255, 0.38);
+  --s-rad-a:   rgba(160, 180, 255, 0.55);
+  --s-rad-b:   rgba(210, 195, 255, 0.40);
+  --s-rad-c:   #f4f2fe;
 }
 
-/* ── App shell — animated mesh background ── */
+/* ── App shell — living radial gradient background ── */
 .app {
   min-height: 100vh;
   font-family: 'Inter', 'Segoe UI', system-ui, -apple-system, sans-serif;
   color: #2d2d2d;
   display: flex;
   flex-direction: column;
-  background: var(--s-base, #fef6f0);
-  transition: background 0.7s ease;
+  background:
+    radial-gradient(ellipse 80% 55% at 20% 10%,  var(--s-rad-a) 0%, transparent 70%),
+    radial-gradient(ellipse 70% 50% at 80% 90%,  var(--s-rad-b) 0%, transparent 65%),
+    radial-gradient(ellipse 55% 40% at 60% 40%,  var(--s-rad-b) 0%, transparent 60%),
+    var(--s-rad-c, #fdf4f7);
+  transition:
+    background 0.9s cubic-bezier(0.4, 0, 0.2, 1);
   position: relative;
   overflow-x: hidden;
 }
