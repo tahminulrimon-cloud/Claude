@@ -1,9 +1,10 @@
 /* ── Scroll-reveal pastel wrapper ── */
 .polaroid-wrapper {
-  padding: 22px 18px 26px;
-  border-radius: 28px;
+  padding: 10px 10px 12px;
+  border-radius: 18px;
   display: flex;
   justify-content: center;
+  align-items: stretch;
   perspective: 900px;
   opacity: 0;
   transform: translateY(52px);
@@ -11,6 +12,8 @@
   backdrop-filter: blur(14px);
   -webkit-backdrop-filter: blur(14px);
   border: 1px solid rgba(255,255,255,0.3);
+  height: 100%;
+  box-sizing: border-box;
 }
 
 .polaroid-wrapper.revealed {
@@ -22,7 +25,9 @@
 .polaroid-card {
   background: #fff;
   width: 100%;
-  max-width: 270px;
+  max-width: none;
+  display: flex;
+  flex-direction: column;
   cursor: pointer;
   transform:
     rotate(var(--tilt, 0deg))
@@ -97,9 +102,10 @@
 .polaroid-photo-area {
   position: relative;
   width: 100%;
-  aspect-ratio: 1 / 1;
+  flex: 1;
+  min-height: 0;
   overflow: hidden;
-  padding: 10px 10px 0;
+  padding: 8px 8px 0;
   background: #fff;
 }
 
