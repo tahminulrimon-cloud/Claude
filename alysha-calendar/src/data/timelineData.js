@@ -66,7 +66,7 @@ export const timelineEntries = [
     label: "Day 5",
     age: "Day 5",
     date: "30 April 2022",
-    photo: gdrive("1hNeJ__WMiMseGTLGYyU3eShIm0EraGc2"),
+    photo: null,
     caption: "Every tiny moment is a treasure",
     milestone: "Hospital days",
     ageInDays: 5,
