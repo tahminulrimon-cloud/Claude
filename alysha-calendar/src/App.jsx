@@ -9,6 +9,7 @@ import OnThisDay from "./components/OnThisDay";
 import AlbumCard from "./components/AlbumCard";
 import AlbumView from "./components/AlbumView";
 import SlideshowMode from "./components/SlideshowMode";
+import MapView from "./components/MapView";
 import { singaporePhotos } from "./data/singaporeAlbum";
 import "./App.css";
 
@@ -84,6 +85,7 @@ export default function App() {
   const [activeEntry, setActiveEntry] = useState(null);
   const [kidsMode, setKidsMode]             = useState(false);
   const [singaporeOpen, setSingaporeOpen]   = useState(false);
+  const [mapOpen, setMapOpen]               = useState(false);
   const [slideshowMode, setSlideshowMode]  = useState(false);
   const [recapEntries, setRecapEntries]    = useState(null);
   const allYears = useMemo(
@@ -225,6 +227,9 @@ export default function App() {
             onClick={() => setSingaporeOpen(true)}
           />
         </div>
+        <button className="map-open-btn" onClick={() => setMapOpen(true)}>
+          🗺️ Explore Singapore on the map
+        </button>
       </section>
 
       <div className="search-bar">
@@ -361,6 +366,14 @@ export default function App() {
           photos={singaporePhotos}
           title="Alysha in Singapore"
           onClose={() => setSingaporeOpen(false)}
+        />
+      )}
+
+      {mapOpen && (
+        <MapView
+          photos={singaporePhotos}
+          title="Alysha in Singapore"
+          onClose={() => setMapOpen(false)}
         />
       )}
 
