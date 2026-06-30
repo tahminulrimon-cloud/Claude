@@ -1,0 +1,73 @@
+.dashboard {
+  width: 100%;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.dashboard-header {
+  padding: 40px 20px;
+  text-align: center;
+  color: white;
+}
+
+.dashboard-header h1 {
+  margin: 0;
+  font-size: 48px;
+  font-weight: bold;
+}
+
+.dashboard-header p {
+  margin: 10px 0 0 0;
+  font-size: 18px;
+  opacity: 0.9;
+}
+
+.map-container {
+  height: 500px;
+  margin: 20px;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+}
+
+.countries-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: 20px;
+  padding: 40px 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.country-card {
+  background: white;
+  border-radius: 12px;
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.country-card:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+}
+
+.country-card-content h3 {
+  margin: 0 0 12px 0;
+  font-size: 24px;
+  color: #333;
+}
+
+.country-card-content .dates {
+  margin: 8px 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.country-card-content .reason {
+  margin: 8px 0 0 0;
+  color: #999;
+  font-size: 13px;
+  font-style: italic;
+}
