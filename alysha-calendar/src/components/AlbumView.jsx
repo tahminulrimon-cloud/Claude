@@ -5,7 +5,6 @@ import './AlbumView.css';
 export default function AlbumView({ country, album, onBack }) {
   const [photos, setPhotos] = useState([]);
   const [selectedPhotoIndex, setSelectedPhotoIndex] = useState(null);
-  const [photoCaption, setPhotoCaption] = useState('');
 
   useEffect(() => {
     getPhotosByAlbum(album.id).then(setPhotos);

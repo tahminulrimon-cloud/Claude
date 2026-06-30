@@ -7,31 +7,39 @@ import AlbumView from './components/AlbumView.jsx';
 import './App.css';
 
 export default function App() {
-  const [dbReady, setDbReady] = useState(false);
   const [view, setView] = useState('dashboard');
-  const [countries, setCountries] = useState([]);
+  const [countries, setCountries] = useState(
+    travelHistory.map((t, i) => ({ id: `${i}`, ...t }))
+  );
   const [selectedCountry, setSelectedCountry] = useState(null);
   const [selectedAlbum, setSelectedAlbum] = useState(null);
 
   useEffect(() => {
-    initDB().then(async () => {
-      const existingCountries = await getCountries();
-      if (existingCountries.length === 0) {
-        for (const travel of travelHistory) {
-          await addCountry(travel);
-        }
-        const newCountries = await getCountries();
-        setCountries(newCountries);
-      } else {
-        setCountries(existingCountries);
-      }
-      setDbReady(true);
-    });
-  }, []);
+    let isMounted = true;
 
-  if (!dbReady) {
-    return <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', fontSize: '18px' }}>Loading...</div>;
-  }
+    (async () => {
+      try {
+        await initDB();
+        const existingCountries = await getCountries();
+        if (existingCountries.length === 0) {
+          for (const travel of travelHistory) {
+            await addCountry(travel);
+          }
+          const newCountries = await getCountries();
+          if (isMounted) setCountries(newCountries);
+        } else if (isMounted) {
+          setCountries(existingCountries);
+        }
+      } catch (err) {
+        console.error('DB init error:', err);
+        if (isMounted) setCountries(travelHistory.map((t, i) => ({ id: `${i}`, ...t })));
+      }
+    })();
+
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const handleCountryClick = (country) => {
     setSelectedCountry(country);
