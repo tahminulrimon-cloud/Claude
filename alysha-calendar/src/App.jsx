@@ -8,6 +8,7 @@ import PhotoStrip from "./components/PhotoStrip";
 import OnThisDay from "./components/OnThisDay";
 import AlbumCard from "./components/AlbumCard";
 import AlbumView from "./components/AlbumView";
+import SlideshowMode from "./components/SlideshowMode";
 import { singaporePhotos } from "./data/singaporeAlbum";
 import "./App.css";
 
@@ -82,6 +83,7 @@ export default function App() {
   const [activeEntry, setActiveEntry] = useState(null);
   const [kidsMode, setKidsMode]             = useState(false);
   const [singaporeOpen, setSingaporeOpen]   = useState(false);
+  const [slideshowMode, setSlideshowMode]  = useState(false);
   const allYears = useMemo(
     () => new Set(entries.map(e => e.date.split(" ").at(-1))),
     [entries]
@@ -328,14 +330,30 @@ export default function App() {
         />
       )}
 
+      {slideshowMode && (
+        <SlideshowMode
+          entries={entries}
+          onExit={() => setSlideshowMode(false)}
+        />
+      )}
+
       {kidsEntries.length > 0 && (
-        <button
-          className="kids-mode-btn"
-          onClick={() => setKidsMode(true)}
-          aria-label="Open Alysha's View"
-        >
-          🌟 Alysha's View
-        </button>
+        <div className="floating-btns">
+          <button
+            className="slideshow-trigger-btn"
+            onClick={() => setSlideshowMode(true)}
+            aria-label="Start slideshow"
+          >
+            ▶ Slideshow
+          </button>
+          <button
+            className="kids-mode-btn"
+            onClick={() => setKidsMode(true)}
+            aria-label="Open Alysha's View"
+          >
+            🌟 Alysha's View
+          </button>
+        </div>
       )}
 
     </div>
