@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
-import { initDB, getCountries, addCountry } from './services/db.js';
+import { initDB, getCountries, addCountry, getAlbumsByCountry, addAlbum, addPhoto } from './services/db.js';
 import { travelHistory } from './data/travelData.js';
+import { belgiumAlbums } from './data/belgiumSeed.js';
 import Dashboard from './components/Dashboard.jsx';
 import CountryDetail from './components/CountryDetail.jsx';
 import AlbumView from './components/AlbumView.jsx';
@@ -20,15 +21,39 @@ export default function App() {
     (async () => {
       try {
         await initDB();
-        const existingCountries = await getCountries();
-        if (existingCountries.length === 0) {
+        let allCountries = await getCountries();
+
+        if (allCountries.length === 0) {
           for (const travel of travelHistory) {
             await addCountry(travel);
           }
-          const newCountries = await getCountries();
-          if (isMounted) setCountries(newCountries);
-        } else if (isMounted) {
-          setCountries(existingCountries);
+          allCountries = await getCountries();
+        }
+
+        if (isMounted) setCountries(allCountries);
+
+        const belgium = allCountries.find(c => c.name === 'Belgium');
+        if (belgium) {
+          const existingAlbums = await getAlbumsByCountry(belgium.id);
+          if (existingAlbums.length === 0) {
+            for (const albumDef of belgiumAlbums) {
+              const albumId = await addAlbum({
+                countryId: belgium.id,
+                name: albumDef.name,
+                description: albumDef.description,
+                createdAt: new Date().toISOString(),
+              });
+              for (const photo of albumDef.photos) {
+                await addPhoto({
+                  albumId,
+                  countryId: belgium.id,
+                  image: photo.image,
+                  caption: photo.caption,
+                  uploadedAt: new Date().toISOString(),
+                });
+              }
+            }
+          }
         }
       } catch (err) {
         console.error('DB init error:', err);

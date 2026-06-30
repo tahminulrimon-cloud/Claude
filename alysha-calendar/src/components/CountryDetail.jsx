@@ -1,15 +1,24 @@
 import { useState, useEffect } from 'react';
-import { getAlbumsByCountry, addAlbum } from '../services/db.js';
+import { getAlbumsByCountry, addAlbum, getPhotosByAlbum } from '../services/db.js';
 import './CountryDetail.css';
 
 export default function CountryDetail({ country, onBack, onAlbumClick }) {
   const [albums, setAlbums] = useState([]);
+  const [albumCovers, setAlbumCovers] = useState({});
   const [showNewAlbumForm, setShowNewAlbumForm] = useState(false);
   const [newAlbumName, setNewAlbumName] = useState('');
   const [newAlbumDescription, setNewAlbumDescription] = useState('');
 
   useEffect(() => {
-    getAlbumsByCountry(country.id).then(setAlbums);
+    getAlbumsByCountry(country.id).then(async (loadedAlbums) => {
+      setAlbums(loadedAlbums);
+      const covers = {};
+      for (const album of loadedAlbums) {
+        const photos = await getPhotosByAlbum(album.id);
+        if (photos.length > 0) covers[album.id] = photos[0].image;
+      }
+      setAlbumCovers(covers);
+    });
   }, [country.id]);
 
   const handleCreateAlbum = async (e) => {
@@ -99,7 +108,15 @@ export default function CountryDetail({ country, onBack, onAlbumClick }) {
                 className="album-card"
                 onClick={() => onAlbumClick(country, album)}
               >
-                <div className="album-placeholder">📷</div>
+                {albumCovers[album.id] ? (
+                  <img
+                    src={albumCovers[album.id]}
+                    alt={album.name}
+                    className="album-cover"
+                  />
+                ) : (
+                  <div className="album-placeholder">📷</div>
+                )}
                 <div className="album-info">
                   <h3>{album.name}</h3>
                   {album.description && <p>{album.description}</p>}
