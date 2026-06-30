@@ -57,85 +57,77 @@ export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev,
       <div className="lightbox-modal" onClick={(e) => e.stopPropagation()}>
         <button className="lightbox-close" onClick={onClose} aria-label="Close">✕</button>
 
-        <div className="lightbox-photo-area" data-age={entry.age}>
-          {entry.photo && !imgError ? (
-            <img
-              src={entry.photo}
-              alt={entry.label}
-              className="lightbox-photo"
-              style={entry.rotation ? { transform: `rotate(${entry.rotation}deg)` } : undefined}
-              onError={() => setImgError(true)}
-            />
-          ) : (
-            <div className="lightbox-placeholder">
-              <span>📷</span>
-              <p>Photo coming soon</p>
-            </div>
-          )}
-        </div>
-
-        <div className="lightbox-info">
-          <div className="lightbox-age-row">
-            <div className="lightbox-age-badge">{entry.age}</div>
-            {entry.photo && !imgError && (
-              <MoodBadge entry={entry} size="md" />
+        <div className="lightbox-body">
+          {/* ── Large photo column ── */}
+          <div className="lightbox-photo-area" data-age={entry.age}>
+            {entry.photo && !imgError ? (
+              <img
+                src={entry.photo}
+                alt={entry.label}
+                className="lightbox-photo"
+                style={entry.rotation ? { transform: `rotate(${entry.rotation}deg)` } : undefined}
+                onError={() => setImgError(true)}
+              />
+            ) : (
+              <div className="lightbox-placeholder">
+                <span>📷</span>
+                <p>Photo coming soon</p>
+              </div>
             )}
           </div>
-          <h2 className="lightbox-label">{entry.label}</h2>
-          <p className={`lightbox-caption${aiBusy ? " ai-loading" : ""}`}>
-            {caption || <span className="caption-empty">No caption yet…</span>}
-          </p>
-          <div className="lightbox-ai-row">
-            <button
-              className="ai-caption-btn"
-              onClick={handleGenerate}
-              disabled={aiBusy || !entry.photo || imgError}
-              title={
-                entry.photo
-                  ? "Generate a caption with Claude vision"
-                  : "A photo is needed to generate a caption"
-              }
-            >
-              {aiBusy ? (
-                <><span className="ai-spinner" /> Writing…</>
-              ) : caption ? (
-                <>✨ Regenerate caption</>
-              ) : (
-                <>✨ Generate caption</>
-              )}
-            </button>
-            {aiError && <span className="ai-caption-error">{aiError}</span>}
-          </div>
-          <div className="lightbox-milestone">
-            <span className="milestone-icon">⭐</span>
-            <span>{entry.milestone}</span>
-          </div>
-          {!entry.date_unknown && <div className="lightbox-date">{entry.date}</div>}
-          {entry.location && (
-            <div className="lightbox-location">
-              <span className="location-pin">📍</span>
-              <span>{entry.location}</span>
-            </div>
-          )}
-        </div>
 
-        <div className="lightbox-nav">
-          <button
-            className="nav-btn"
-            onClick={onPrev}
-            disabled={!hasPrev}
-            aria-label="Previous"
-          >
-            ← Prev
-          </button>
-          <button
-            className="nav-btn"
-            onClick={onNext}
-            disabled={!hasNext}
-            aria-label="Next"
-          >
-            Next →
-          </button>
+          {/* ── Info + nav column ── */}
+          <div className="lightbox-side">
+            <div className="lightbox-info">
+              <div className="lightbox-age-row">
+                <div className="lightbox-age-badge">{entry.age}</div>
+                {entry.photo && !imgError && (
+                  <MoodBadge entry={entry} size="md" />
+                )}
+              </div>
+              <h2 className="lightbox-label">{entry.label}</h2>
+              <p className={`lightbox-caption${aiBusy ? " ai-loading" : ""}`}>
+                {caption || <span className="caption-empty">No caption yet…</span>}
+              </p>
+              <div className="lightbox-ai-row">
+                <button
+                  className="ai-caption-btn"
+                  onClick={handleGenerate}
+                  disabled={aiBusy || !entry.photo || imgError}
+                  title={
+                    entry.photo
+                      ? "Generate a caption with Claude vision"
+                      : "A photo is needed to generate a caption"
+                  }
+                >
+                  {aiBusy ? (
+                    <><span className="ai-spinner" /> Writing…</>
+                  ) : caption ? (
+                    <>✨ Regenerate caption</>
+                  ) : (
+                    <>✨ Generate caption</>
+                  )}
+                </button>
+                {aiError && <span className="ai-caption-error">{aiError}</span>}
+              </div>
+              <div className="lightbox-milestone">
+                <span className="milestone-icon">⭐</span>
+                <span>{entry.milestone}</span>
+              </div>
+              {!entry.date_unknown && <div className="lightbox-date">{entry.date}</div>}
+              {entry.location && (
+                <div className="lightbox-location">
+                  <span className="location-pin">📍</span>
+                  <span>{entry.location}</span>
+                </div>
+              )}
+            </div>
+
+            <div className="lightbox-nav">
+              <button className="nav-btn" onClick={onPrev} disabled={!hasPrev} aria-label="Previous">← Prev</button>
+              <button className="nav-btn" onClick={onNext} disabled={!hasNext} aria-label="Next">Next →</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>

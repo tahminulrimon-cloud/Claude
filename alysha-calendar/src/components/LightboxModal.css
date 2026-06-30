@@ -33,21 +33,37 @@
 /* Golden Hour film frame border */
 .lightbox-modal {
   background: #1a1018;
-  border-radius: 28px;
-  max-width: 540px;
-  width: 100%;
+  border-radius: 24px;
+  max-width: 1020px;
+  width: calc(100vw - 32px);
   overflow: hidden;
   position: relative;
   z-index: 1;
-  animation: slideUp 0.28s cubic-bezier(0.34, 1.4, 0.64, 1);
+  animation: slideUp 0.3s cubic-bezier(0.34, 1.4, 0.64, 1);
   box-shadow:
     0 32px 80px rgba(0,0,0,0.7),
     0 0 0 1px rgba(245, 168, 0, 0.22),
-    0 0 50px rgba(160, 90, 0, 0.07) inset,
     inset 0 1px 0 rgba(255,255,255,0.35);
   backdrop-filter: blur(28px);
   -webkit-backdrop-filter: blur(28px);
   border: 1px solid rgba(255,255,255,0.18);
+}
+
+/* Two-column body: photo left, info right */
+.lightbox-body {
+  display: flex;
+  flex-direction: row;
+  min-height: 0;
+}
+
+.lightbox-side {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 300px;
+  flex-shrink: 0;
+  border-left: 1px solid rgba(255,255,255,0.08);
+  overflow-y: auto;
 }
 
 @keyframes slideUp {
@@ -73,11 +89,11 @@
 }
 .lightbox-close:hover { background: rgba(255,255,255,0.22); }
 
-/* Photo */
+/* Photo — fills the left column */
 .lightbox-photo-area {
-  width: 100%;
-  max-height: 62vh;
-  min-height: 180px;
+  flex: 1;
+  min-width: 0;
+  height: min(88vh, 680px);
   background: #0e080c;
   overflow: hidden;
   position: relative;
@@ -114,10 +130,8 @@
 }
 
 .lightbox-photo {
-  max-width: 100%;
-  max-height: 62vh;
-  width: auto;
-  height: auto;
+  width: 100%;
+  height: 100%;
   object-fit: contain;
   image-orientation: from-image;
   display: block;
@@ -309,4 +323,23 @@
 
 @keyframes aiSpin {
   to { transform: rotate(360deg); }
+}
+
+/* Mobile: single column, photo on top */
+@media (max-width: 680px) {
+  .lightbox-backdrop { padding: 0; align-items: flex-end; }
+  .lightbox-modal {
+    width: 100%;
+    max-width: 100%;
+    border-radius: 20px 20px 0 0;
+  }
+  .lightbox-body { flex-direction: column; }
+  .lightbox-photo-area {
+    height: min(55vw, 320px);
+  }
+  .lightbox-side {
+    width: 100%;
+    border-left: none;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
 }
