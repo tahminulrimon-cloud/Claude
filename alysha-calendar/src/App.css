@@ -342,13 +342,80 @@
 }
 .retry-btn:hover { opacity: 0.85; }
 
+/* ── Search bar ── */
+.search-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  max-width: 520px;
+  margin: 28px auto 0;
+  padding: 0 18px;
+  background: rgba(255,255,255,0.62);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 0.5px solid rgba(255,255,255,0.5);
+  border-radius: 16px;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.8),
+    0 4px 24px rgba(0,0,0,0.06);
+  transition: box-shadow 0.25s ease, border-color 0.25s ease;
+}
+
+.search-bar:focus-within {
+  border-color: rgba(214, 50, 94, 0.35);
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,0.8),
+    0 6px 28px rgba(214, 50, 94, 0.12);
+}
+
+.search-icon {
+  font-size: 14px;
+  opacity: 0.5;
+  flex-shrink: 0;
+}
+
+.search-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  background: none;
+  padding: 14px 0;
+  font-family: inherit;
+  font-size: 14px;
+  color: #3a3038;
+  letter-spacing: 0.1px;
+}
+
+.search-input::placeholder {
+  color: rgba(80, 60, 70, 0.4);
+  font-weight: 500;
+}
+
+.search-clear {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: none;
+  background: rgba(0,0,0,0.08);
+  color: rgba(60, 40, 50, 0.6);
+  font-size: 11px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.18s ease;
+}
+
+.search-clear:hover { background: rgba(0,0,0,0.16); }
+
 /* ── Filter bar — floating glass capsules ── */
 .filter-bar {
   display: flex;
   gap: 8px;
   justify-content: center;
   flex-wrap: wrap;
-  padding: 24px 20px 8px;
+  padding: 20px 20px 8px;
 }
 
 .filter-btn {
@@ -496,8 +563,15 @@
     inset 0 1px 0 rgba(255,255,255,0.55);
 }
 
+.year-header-row {
+  display: flex;
+  align-items: flex-end;
+  position: relative;
+  z-index: 1;
+}
+
 .year-header {
-  width: 100%;
+  flex: 1;
   display: flex;
   align-items: flex-end;
   gap: 16px;
@@ -508,14 +582,40 @@
   font-family: inherit;
   text-align: left;
   transition: background 0.2s;
-  border-radius: 20px;
-  position: relative;
-  z-index: 1;
+  border-radius: 20px 0 0 20px;
 }
 
 .year-header:hover {
   background: rgba(214, 50, 94, 0.04);
 }
+
+/* Year recap slideshow button */
+.year-recap-btn {
+  flex-shrink: 0;
+  margin: 0 24px 18px 0;
+  padding: 9px 18px;
+  border-radius: 24px;
+  border: 0.5px solid rgba(255,255,255,0.3);
+  background: linear-gradient(135deg, var(--s-primary), var(--s-mid));
+  color: #fff;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  cursor: pointer;
+  font-family: inherit;
+  white-space: nowrap;
+  box-shadow: 0 4px 16px var(--s-glow), inset 0 1px 0 rgba(255,255,255,0.4);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, opacity 0.2s ease;
+  opacity: 0.92;
+}
+
+.year-recap-btn:hover {
+  transform: translateY(-2px) scale(1.04);
+  opacity: 1;
+  box-shadow: 0 8px 24px var(--s-glow), inset 0 1px 0 rgba(255,255,255,0.5);
+}
+
+.year-recap-btn:active { transform: scale(0.97); }
 
 .year-folder-icon {
   display: none; /* replaced by editorial year number */

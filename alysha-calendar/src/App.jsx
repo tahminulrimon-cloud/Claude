@@ -80,10 +80,12 @@ export default function App() {
   useEffect(() => { void fetchEntries(); }, [fetchEntries]);
 
   const [filter, setFilter]           = useState("all");
+  const [search, setSearch]           = useState("");
   const [activeEntry, setActiveEntry] = useState(null);
   const [kidsMode, setKidsMode]             = useState(false);
   const [singaporeOpen, setSingaporeOpen]   = useState(false);
   const [slideshowMode, setSlideshowMode]  = useState(false);
+  const [recapEntries, setRecapEntries]    = useState(null);
   const allYears = useMemo(
     () => new Set(entries.map(e => e.date.split(" ").at(-1))),
     [entries]
@@ -107,7 +109,13 @@ export default function App() {
   const currentSeason = FILTERS.find(f => f.key === filter)?.season ?? "all";
   const chapter       = CHAPTERS[filter];
 
+  const query = search.trim().toLowerCase();
   const filteredEntries = entries.filter((e) => {
+    if (query) {
+      const haystack = [e.label, e.caption, e.milestone, e.location, e.date]
+        .filter(Boolean).join(" ").toLowerCase();
+      if (!haystack.includes(query)) return false;
+    }
     if (filter === "undated") return !!e.date_unknown;
     if (e.date_unknown) return false;
     if (filter !== "all") {
@@ -219,6 +227,21 @@ export default function App() {
         </div>
       </section>
 
+      <div className="search-bar">
+        <span className="search-icon">🔍</span>
+        <input
+          type="text"
+          className="search-input"
+          placeholder="Search moments, milestones, places…"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          aria-label="Search photos"
+        />
+        {search && (
+          <button className="search-clear" onClick={() => setSearch("")} aria-label="Clear search">✕</button>
+        )}
+      </div>
+
       <div className="filter-bar">
         {FILTERS.map((f) => (
           <button
@@ -233,8 +256,8 @@ export default function App() {
       </div>
 
 <div className="chapter-heading">
-        <h2 className="chapter-title">{chapter.title}</h2>
-        <p className="chapter-sub">{chapter.sub}</p>
+        <h2 className="chapter-title">{query ? `Results for “${search.trim()}”` : chapter.title}</h2>
+        <p className="chapter-sub">{query ? `${filteredEntries.length} ${filteredEntries.length === 1 ? "moment" : "moments"} found` : chapter.sub}</p>
       </div>
 
       <main className="photo-grid-section">
@@ -247,7 +270,10 @@ export default function App() {
             <button className="retry-btn" onClick={fetchEntries}>Retry</button>
           </div>
         ) : filteredEntries.length === 0 ? (
-          <div className="empty-state"><span>🌷</span><p>No moments in this range yet.</p></div>
+          <div className="empty-state">
+            <span>{query ? "🔍" : "🌷"}</span>
+            <p>{query ? `No moments match “${search.trim()}”.` : "No moments in this range yet."}</p>
+          </div>
         ) : (
           <div className="year-folders" key={filter}>
             {grouped.map(({ year, months }) => {
@@ -255,16 +281,29 @@ export default function App() {
               const yearCount = months.reduce((s, m) => s + m.entries.length, 0);
               return (
                 <div key={year} className={`year-folder ${isOpen ? "open" : ""}`}>
-                  <button
-                    className="year-header"
-                    onClick={() => toggleYear(year)}
-                    aria-expanded={isOpen}
-                  >
-                    <span className="year-folder-icon">{isOpen ? "📂" : "📁"}</span>
-                    <span className="year-name">{year}</span>
-                    <span className="year-count">{yearCount} {yearCount === 1 ? "photo" : "photos"}</span>
-                    <span className="year-chevron">{isOpen ? "▾" : "▸"}</span>
-                  </button>
+                  <div className="year-header-row">
+                    <button
+                      className="year-header"
+                      onClick={() => toggleYear(year)}
+                      aria-expanded={isOpen}
+                    >
+                      <span className="year-name">{year}</span>
+                      <span className="year-count">{yearCount} {yearCount === 1 ? "photo" : "photos"}</span>
+                      <span className="year-chevron">{isOpen ? "▾" : "▸"}</span>
+                    </button>
+                    {months.some(m => m.entries.some(e => e.photo)) && (
+                      <button
+                        className="year-recap-btn"
+                        onClick={() => setRecapEntries(
+                          months.flatMap(m => m.entries).filter(e => e.photo)
+                        )}
+                        aria-label={`Play ${year} recap`}
+                        title={`Play ${year} recap slideshow`}
+                      >
+                        ▶ Recap
+                      </button>
+                    )}
+                  </div>
 
                   {isOpen && (
                     <div className="year-content">
@@ -329,6 +368,13 @@ export default function App() {
         <SlideshowMode
           entries={entries}
           onExit={() => setSlideshowMode(false)}
+        />
+      )}
+
+      {recapEntries && (
+        <SlideshowMode
+          entries={recapEntries}
+          onExit={() => setRecapEntries(null)}
         />
       )}
 
