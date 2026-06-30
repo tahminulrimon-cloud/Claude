@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
 import { getEntries, updateEntry } from "./services/api";
-import PhotoCard from "./components/PhotoCard";
+import JustifiedGrid from "./components/JustifiedGrid";
 import LightboxModal from "./components/LightboxModal";
 import GrowthTimeline from "./components/GrowthTimeline";
 import KidsView from "./components/KidsView";
@@ -275,18 +275,13 @@ export default function App() {
                             <span className="month-name">{month}</span>
                             <span className="month-count">{monthEntries.length} {monthEntries.length === 1 ? "photo" : "photos"}</span>
                           </div>
-                          <div className="photo-grid">
-                            {monthEntries.map((entry) => (
-                              <PhotoCard
-                                key={entry.id}
-                                entry={entry}
-                                index={entries.indexOf(entry)}
-                                isActive={activeEntry?.id === entry.id}
-                                onClick={openModal}
-                                onToggleFeatured={handleToggleFeatured}
-                              />
-                            ))}
-                          </div>
+                          <JustifiedGrid
+                            entries={monthEntries}
+                            activeId={activeEntry?.id}
+                            onClick={openModal}
+                            onToggleFeatured={handleToggleFeatured}
+                          />
+
                         </div>
                       ))}
                     </div>
