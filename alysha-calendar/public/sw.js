@@ -1,7 +1,6 @@
-const CACHE = 'alysha-v1';
+const CACHE = 'alysha-v2';
 
 const PRECACHE = [
-  '/',
   '/manifest.json',
   '/icons/icon-192.png',
   '/icons/icon-512.png',
@@ -25,16 +24,29 @@ self.addEventListener('fetch', (e) => {
   const { request } = e;
   const url = new URL(request.url);
 
-  // Pass through non-GET, cross-origin, and Google Drive requests uncached
   if (request.method !== 'GET') return;
   if (url.origin !== self.location.origin && !url.hostname.endsWith('fonts.gstatic.com')) return;
 
+  // Network-first for page navigations / HTML — always pull the freshest app
+  // shell (and therefore the latest code bundle). Falls back to cache offline.
+  if (request.mode === 'navigate' || request.destination === 'document') {
+    e.respondWith(
+      fetch(request)
+        .then((response) => {
+          const clone = response.clone();
+          caches.open(CACHE).then((c) => c.put(request, clone));
+          return response;
+        })
+        .catch(() => caches.match(request).then((c) => c || caches.match('/')))
+    );
+    return;
+  }
+
+  // Cache-first for everything else (hashed assets are safe: new hash = new URL)
   e.respondWith(
     caches.match(request).then((cached) => {
       if (cached) return cached;
-
       return fetch(request).then((response) => {
-        // Only cache same-origin assets and Google Fonts
         if (
           response.ok &&
           (url.origin === self.location.origin || url.hostname.endsWith('fonts.gstatic.com'))
