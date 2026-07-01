@@ -1,0 +1,220 @@
+.album-view-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 400;
+  background: rgba(8, 8, 18, 0.78);
+  backdrop-filter: blur(28px);
+  -webkit-backdrop-filter: blur(28px);
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  overflow-y: auto;
+  padding: 20px 12px 40px;
+}
+
+.album-view-panel {
+  width: 100%;
+  max-width: 1300px;
+  background: rgba(255, 255, 255, 0.10);
+  border: 0.5px solid rgba(255, 255, 255, 0.22);
+  border-radius: 20px;
+  box-shadow:
+    0 12px 60px rgba(0, 0, 0, 0.45),
+    inset 0 1px 0 rgba(255, 255, 255, 0.5),
+    inset 0 -1px 0 rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(32px);
+  -webkit-backdrop-filter: blur(32px);
+  overflow: hidden;
+  position: relative;
+}
+
+.album-view-panel::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(255,255,255,0.10) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
+  border-radius: inherit;
+}
+
+/* ── Header ── */
+.album-view-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 18px 22px 16px;
+  border-bottom: 0.5px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.06);
+  position: relative;
+  z-index: 1;
+}
+
+.album-view-title-block {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.album-view-flag {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.album-view-title {
+  font-size: 20px;
+  font-weight: 800;
+  color: #fff;
+  margin: 0;
+  letter-spacing: -0.3px;
+  text-shadow: 0 1px 6px rgba(0,0,0,0.3);
+}
+
+.album-view-count {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.6);
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 20px;
+  padding: 3px 10px;
+}
+
+.album-view-close {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  color: #fff;
+  font-size: 22px;
+  line-height: 1;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  transition: background 0.2s ease, transform 0.2s ease;
+  padding: 0;
+}
+
+.album-view-close:hover {
+  background: rgba(255, 255, 255, 0.3);
+  transform: scale(1.12);
+}
+
+/* ── Photo grid ── */
+.album-view-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 10px;
+  padding: 14px;
+  position: relative;
+  z-index: 1;
+}
+
+/* ── Individual thumb card ── */
+.album-thumb {
+  position: relative;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  border-radius: 10px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.06);
+  aspect-ratio: 1 / 1;
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.25),
+    inset 0 1px 0 rgba(255,255,255,0.12);
+  outline: none;
+}
+
+.album-thumb::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, rgba(255,255,255,0.08) 0%, transparent 55%);
+  z-index: 2;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.25s ease;
+}
+
+.album-thumb:hover {
+  transform: scale(1.03);
+  box-shadow:
+    0 10px 32px rgba(0,0,0,0.45),
+    0 2px 8px rgba(0,0,0,0.3),
+    inset 0 1px 0 rgba(255,255,255,0.35);
+  z-index: 2;
+}
+
+.album-thumb:hover::before {
+  opacity: 1;
+}
+
+.album-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 15%;
+  display: block;
+  image-orientation: from-image;
+  transition: transform 0.38s ease;
+}
+
+.album-thumb:hover .album-thumb-img {
+  transform: scale(1.06);
+}
+
+.album-thumb-label {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 28px 12px 10px;
+  background: linear-gradient(transparent, rgba(0,0,0,0.65));
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+  text-align: center;
+  opacity: 0;
+  transition: opacity 0.22s ease;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  z-index: 3;
+  letter-spacing: 0.2px;
+  text-shadow: 0 1px 4px rgba(0,0,0,0.5);
+}
+
+.album-thumb:hover .album-thumb-label {
+  opacity: 1;
+}
+
+.album-thumb-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: rgba(255,255,255,0.06);
+  color: rgba(255,255,255,0.5);
+}
+
+.album-thumb-placeholder span {
+  font-size: 32px;
+  opacity: 0.5;
+}
+
+.album-thumb-placeholder p {
+  font-size: 11px;
+  font-weight: 600;
+  text-align: center;
+  padding: 0 8px;
+  line-height: 1.3;
+}

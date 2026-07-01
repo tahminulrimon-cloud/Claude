@@ -1,0 +1,96 @@
+.photo-strip-outer {
+  width: 100%;
+  overflow: hidden;
+  padding: 20px 0 16px;
+  background: rgba(255, 255, 255, 0.38);
+  border-bottom: 1px solid rgba(255,255,255,0.3);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  box-shadow: 0 4px 30px rgba(0,0,0,0.08), inset 0 1px 0 rgba(255,255,255,0.7);
+}
+
+.photo-strip-track {
+  display: flex;
+  gap: 18px;
+  width: max-content;
+  animation: strip-scroll var(--strip-duration, 35s) linear infinite;
+  will-change: transform;
+}
+
+.photo-strip-outer:hover .photo-strip-track {
+  animation-play-state: paused;
+}
+
+@keyframes strip-scroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+/* ── Individual polaroid card in strip ── */
+.strip-card {
+  flex-shrink: 0;
+  width: 140px;
+  background: #fff;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  border-radius: 3px;
+  transform: rotate(var(--strip-tilt, 0deg));
+  box-shadow:
+    0 2px 8px rgba(0, 0, 0, 0.1),
+    0 6px 20px rgba(0, 0, 0, 0.08),
+    inset 0 1px 0 rgba(255,255,255,0.9);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+.strip-card:hover,
+.strip-card:focus-visible {
+  transform: rotate(0deg) scale(1.08);
+  box-shadow:
+    0 6px 20px rgba(0, 0, 0, 0.18),
+    0 16px 40px rgba(0, 0, 0, 0.14),
+    inset 0 1px 0 rgba(255,255,255,1);
+  z-index: 5;
+}
+
+.strip-photo-area {
+  width: 140px;
+  height: 140px;
+  overflow: hidden;
+  padding: 8px 8px 0;
+  background: #fff;
+}
+
+.strip-photo {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center 15%;
+  display: block;
+  image-orientation: from-image;
+}
+
+.strip-placeholder {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+  background: linear-gradient(145deg, #f0f0f0, #e0e0e0);
+  opacity: 0.6;
+}
+
+.strip-label {
+  padding: 7px 8px 9px;
+  font-size: 11px;
+  font-weight: 700;
+  color: #333;
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font-family: 'Inter', system-ui, sans-serif;
+  letter-spacing: -0.1px;
+}
