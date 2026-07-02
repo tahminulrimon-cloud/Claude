@@ -34,6 +34,7 @@ export async function writeDeletedIds(ids) {
       authorization: `Bearer ${token}`,
       'x-add-random-suffix': '0',
       'x-allow-overwrite': '1',
+      'x-vercel-blob-access': 'private',
       'content-type': 'application/json',
     },
     body: JSON.stringify(ids),
