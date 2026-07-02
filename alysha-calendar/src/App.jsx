@@ -63,12 +63,22 @@ export default function App() {
     catch { return new Set(); }
   };
 
+  const getHiddenIds = () => {
+    try { return new Set(JSON.parse(localStorage.getItem("hidden_ids") || "[]")); }
+    catch { return new Set(); }
+  };
+
   const fetchEntries = useCallback(async () => {
     setDataLoading(true);
     try {
       const data = await getEntries();
       const featuredIds = getFeaturedIds();
-      setEntries(data.map(e => ({ ...e, featured: featuredIds.has(e.id) ? 1 : (e.featured ?? 0) })));
+      const hiddenIds   = getHiddenIds();
+      setEntries(
+        data
+          .filter(e => !hiddenIds.has(e.id))
+          .map(e => ({ ...e, featured: featuredIds.has(e.id) ? 1 : (e.featured ?? 0) }))
+      );
       setDataError(null);
     } catch {
       setDataError("Could not load photos. Please try again.");
@@ -147,6 +157,16 @@ export default function App() {
 
   const openModal  = useCallback((entry) => setActiveEntry(entry), []);
   const closeModal = useCallback(() => setActiveEntry(null), []);
+
+  const handleDelete = useCallback((id) => {
+    try {
+      const ids = getHiddenIds();
+      ids.add(id);
+      localStorage.setItem("hidden_ids", JSON.stringify([...ids]));
+    } catch { /* ignore */ }
+    setEntries(prev => prev.filter(e => e.id !== id));
+    setActiveEntry(null);
+  }, []);
 
   const activeIndex = activeEntry
     ? filteredEntries.findIndex((e) => e.id === activeEntry.id)
@@ -358,6 +378,7 @@ export default function App() {
           onNext={goNext}
           hasPrev={activeIndex > 0}
           hasNext={activeIndex < filteredEntries.length - 1}
+          onDelete={handleDelete}
         />
       )}
 

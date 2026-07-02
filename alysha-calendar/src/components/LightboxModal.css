@@ -260,6 +260,81 @@
   cursor: not-allowed;
 }
 
+/* ── Delete photo ── */
+.lightbox-delete-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  margin-top: 14px;
+  padding-top: 14px;
+  border-top: 0.5px solid rgba(255,255,255,0.1);
+}
+
+.lightbox-delete-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.2px;
+  color: rgba(255, 130, 150, 0.85);
+  border: 0.5px solid rgba(255, 100, 130, 0.35);
+  border-radius: 999px;
+  cursor: pointer;
+  background: rgba(214, 50, 94, 0.10);
+  transition: background 0.18s ease, color 0.18s ease, border-color 0.18s ease;
+  font-family: inherit;
+}
+
+.lightbox-delete-btn:hover {
+  background: rgba(214, 50, 94, 0.22);
+  color: #ff92a8;
+  border-color: rgba(255, 100, 130, 0.55);
+}
+
+.delete-confirm-text {
+  font-size: 12px;
+  font-weight: 600;
+  color: rgba(255,255,255,0.75);
+  width: 100%;
+}
+
+.delete-confirm-btn {
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 800;
+  color: #fff;
+  border: none;
+  border-radius: 999px;
+  cursor: pointer;
+  background: linear-gradient(135deg, #e0335c, #b3244a);
+  box-shadow: 0 4px 14px rgba(214, 50, 94, 0.4);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  font-family: inherit;
+}
+
+.delete-confirm-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 18px rgba(214, 50, 94, 0.55);
+}
+
+.delete-cancel-btn {
+  padding: 8px 16px;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(255,255,255,0.7);
+  border: 0.5px solid rgba(255,255,255,0.25);
+  border-radius: 999px;
+  cursor: pointer;
+  background: rgba(255,255,255,0.10);
+  transition: background 0.15s ease;
+  font-family: inherit;
+}
+
+.delete-cancel-btn:hover { background: rgba(255,255,255,0.2); }
+
 /* Mobile: single column, photo on top */
 @media (max-width: 680px) {
   .lightbox-backdrop { padding: 0; align-items: flex-end; }

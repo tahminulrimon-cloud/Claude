@@ -3,8 +3,9 @@ import MoodBadge from "./MoodBadge";
 import { displayDate, displayAge } from "../utils/dates";
 import "./LightboxModal.css";
 
-export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev, hasNext }) {
+export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev, hasNext, onDelete }) {
   const [imgError, setImgError] = useState(false);
+  const [confirmingDelete, setConfirmingDelete] = useState(false);
   const caption = entry?.caption ?? "";
 
   useEffect(() => {
@@ -19,7 +20,10 @@ export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev,
 
   const entryId = entry?.id;
   useEffect(() => {
-    Promise.resolve().then(() => setImgError(false));
+    Promise.resolve().then(() => {
+      setImgError(false);
+      setConfirmingDelete(false);
+    });
   }, [entryId]);
 
   if (!entry) return null;
@@ -72,6 +76,36 @@ export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev,
                 <div className="lightbox-location">
                   <span className="location-pin">📍</span>
                   <span>{entry.location}</span>
+                </div>
+              )}
+
+              {onDelete && (
+                <div className="lightbox-delete-row">
+                  {confirmingDelete ? (
+                    <>
+                      <span className="delete-confirm-text">Remove this photo from the app?</span>
+                      <button
+                        className="delete-confirm-btn"
+                        onClick={() => onDelete(entry.id)}
+                      >
+                        Yes, remove
+                      </button>
+                      <button
+                        className="delete-cancel-btn"
+                        onClick={() => setConfirmingDelete(false)}
+                      >
+                        Cancel
+                      </button>
+                    </>
+                  ) : (
+                    <button
+                      className="lightbox-delete-btn"
+                      onClick={() => setConfirmingDelete(true)}
+                      title="Remove this photo from the app"
+                    >
+                      🗑 Remove photo
+                    </button>
+                  )}
                 </div>
               )}
             </div>
