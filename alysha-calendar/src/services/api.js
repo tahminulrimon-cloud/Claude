@@ -16,4 +16,7 @@ export const analyzeMood = (photo) =>
     .post("/analyze-mood", { photo }, { timeout: 20000 })
     .then((r) => r.data.mood);
 
+export const deletePhoto = (id, key) =>
+  api.post("/delete-photo", { id, key }).then((r) => r.data);
+
 export default api;

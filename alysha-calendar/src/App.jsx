@@ -1,5 +1,5 @@
 import { useState, useCallback, useEffect, useMemo } from "react";
-import { getEntries, updateEntry } from "./services/api";
+import { getEntries, updateEntry, deletePhoto } from "./services/api";
 import JustifiedGrid from "./components/JustifiedGrid";
 import LightboxModal from "./components/LightboxModal";
 import GrowthTimeline from "./components/GrowthTimeline";
@@ -158,14 +158,28 @@ export default function App() {
   const openModal  = useCallback((entry) => setActiveEntry(entry), []);
   const closeModal = useCallback(() => setActiveEntry(null), []);
 
-  const handleDelete = useCallback((id) => {
+  const handleDelete = useCallback(async (id) => {
+    let key = "";
+    try { key = localStorage.getItem("admin_delete_key") || ""; } catch { /* ignore */ }
+    if (!key) {
+      key = window.prompt("Enter the admin key to remove this photo for everyone:") ?? "";
+      if (!key.trim()) return;
+      key = key.trim();
+    }
+
     try {
-      const ids = getHiddenIds();
-      ids.add(id);
-      localStorage.setItem("hidden_ids", JSON.stringify([...ids]));
-    } catch { /* ignore */ }
-    setEntries(prev => prev.filter(e => e.id !== id));
-    setActiveEntry(null);
+      await deletePhoto(id, key);
+      try { localStorage.setItem("admin_delete_key", key); } catch { /* ignore */ }
+      setEntries(prev => prev.filter(e => e.id !== id));
+      setActiveEntry(null);
+    } catch (err) {
+      if (err?.response?.status === 401) {
+        try { localStorage.removeItem("admin_delete_key"); } catch { /* ignore */ }
+        window.alert("Wrong admin key — the photo was not removed.");
+      } else {
+        window.alert("Could not remove the photo right now. Please try again.");
+      }
+    }
   }, []);
 
   const activeIndex = activeEntry

@@ -1,6 +1,7 @@
 import { timelineEntries } from '../src/data/timelineData.js';
+import { readDeletedIds } from './_deletedStore.js';
 
-export default function handler(req, res) {
+export default async function handler(req, res) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET, OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Authorization, Content-Type');
@@ -8,7 +9,9 @@ export default function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'GET') return res.status(405).json({ error: 'Method not allowed' });
 
-  const entries = timelineEntries.map((e, i) => ({
+  const deleted = new Set(await readDeletedIds());
+
+  const entries = timelineEntries.filter(e => !deleted.has(String(e.id))).map((e, i) => ({
     id: String(e.id),
     label: e.label,
     age: e.age,
