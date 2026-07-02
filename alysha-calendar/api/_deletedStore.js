@@ -14,8 +14,10 @@ export async function readDeletedIds() {
     if (!list.ok) return [];
     const { blobs } = await list.json();
     if (!blobs?.length) return [];
-    const dl = await fetch(blobs[0].url, {
-      headers: { authorization: `Bearer ${token}` },
+    // Cache-bust: blob URLs are CDN-cached, which would resurrect photos
+    // for a while after a delete.
+    const dl = await fetch(`${blobs[0].url}?t=${Date.now()}`, {
+      headers: { authorization: `Bearer ${token}`, 'cache-control': 'no-cache' },
     });
     if (!dl.ok) return [];
     const ids = await dl.json();
