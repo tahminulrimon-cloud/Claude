@@ -1,8 +1,9 @@
-import { useState, useEffect, useCallback, useRef } from 'react';
+import { useState, useEffect, useCallback, useMemo, useRef } from 'react';
+import { displayDate } from '../utils/dates';
 import './SlideshowMode.css';
 
 export default function SlideshowMode({ entries, onExit }) {
-  const photos = entries.filter(e => e.photo);
+  const photos = useMemo(() => entries.filter(e => e.photo), [entries]);
   const [index, setIndex] = useState(0);
   const [paused, setPaused] = useState(false);
   const [fadingOut, setFadingOut] = useState(false);
@@ -64,7 +65,7 @@ export default function SlideshowMode({ entries, onExit }) {
       <div className="slideshow-info">
         <div className="slideshow-caption">
           <span className="slideshow-label">{current.label}</span>
-          {current.date && <span className="slideshow-date">{current.date}</span>}
+          {displayDate(current) && <span className="slideshow-date">{displayDate(current)}</span>}
         </div>
         <div className="slideshow-counter">
           {index + 1} / {photos.length}

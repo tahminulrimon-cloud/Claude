@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import MoodBadge from "./MoodBadge";
+import { displayDate, displayAge } from "../utils/dates";
 import "./LightboxModal.css";
 
 export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev, hasNext }) {
@@ -34,7 +35,7 @@ export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev,
 
         <div className="lightbox-body">
           {/* ── Large photo column ── */}
-          <div className="lightbox-photo-area" data-age={entry.age}>
+          <div className="lightbox-photo-area" data-age={displayAge(entry)}>
             {entry.photo && !imgError ? (
               <img
                 src={entry.photo}
@@ -55,7 +56,7 @@ export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev,
           <div className="lightbox-side">
             <div className="lightbox-info">
               <div className="lightbox-age-row">
-                <div className="lightbox-age-badge">{entry.age}</div>
+                {displayAge(entry) && <div className="lightbox-age-badge">{displayAge(entry)}</div>}
                 {entry.photo && !imgError && (
                   <MoodBadge entry={entry} size="md" />
                 )}
@@ -66,7 +67,7 @@ export default function LightboxModal({ entry, onClose, onPrev, onNext, hasPrev,
                 <span className="milestone-icon">⭐</span>
                 <span>{entry.milestone}</span>
               </div>
-              {!entry.date_unknown && <div className="lightbox-date">{entry.date}</div>}
+              {displayDate(entry) && <div className="lightbox-date">{displayDate(entry)}</div>}
               {entry.location && (
                 <div className="lightbox-location">
                   <span className="location-pin">📍</span>

@@ -1,3 +1,6 @@
+// Express identifies error middleware by its 4-arg signature; `next` must
+// stay declared even though it's unused.
+// eslint-disable-next-line no-unused-vars
 module.exports = function errorHandler(err, req, res, next) {
   const status = err.status || 500;
   const message = err.message || "Internal Server Error";

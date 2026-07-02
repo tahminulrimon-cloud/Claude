@@ -19,6 +19,8 @@ export default function OnThisDay({ entries, onOpen }) {
     const today = { day: now.getDate(), month: now.getMonth() };
 
     const matches = entries.filter(e => {
+      // Estimated dates can't back an "on this day" claim — exact dates only
+      if (e.date_approx || e.date_unknown) return false;
       const { day, month, year } = parseEntryDate(e.date);
       return day === today.day && month === today.month && year < now.getFullYear();
     });

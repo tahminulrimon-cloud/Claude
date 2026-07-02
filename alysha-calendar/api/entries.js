@@ -19,6 +19,9 @@ export default function handler(req, res) {
     age_in_days: e.ageInDays,
     rotation: e.rotation ?? 0,
     date_unknown: e.dateUnknown ?? false,
+    // All timeline dates are estimated from camera-roll position unless an
+    // entry is explicitly marked dateExact — never present a guess as fact.
+    date_approx: !(e.dateExact ?? false),
     sort_order: i,
     featured: 0,
     created_at: '2022-04-25T00:00:00.000Z',

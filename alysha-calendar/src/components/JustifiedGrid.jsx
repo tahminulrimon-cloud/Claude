@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from "react";
+import { displayDate } from "../utils/dates";
 import "./JustifiedGrid.css";
 
 const TARGET_ROW_HEIGHT = 240;
@@ -137,8 +138,8 @@ export default function JustifiedGrid({ entries, activeId, onClick, onToggleFeat
               <div className="jg-overlay">
                 <div className="jg-meta">
                   <span className="jg-label">{entry.label}</span>
-                  {entry.date && !entry.date_unknown && (
-                    <span className="jg-date">{entry.date}</span>
+                  {displayDate(entry) && (
+                    <span className="jg-date">{displayDate(entry)}</span>
                   )}
                 </div>
               </div>

@@ -341,7 +341,7 @@ export default function App() {
         <div className="hint-box">
           <span>☁️</span>
           <div>
-            <strong>Photos from Google Drive</strong> — open in a browser signed into Google.
+            <strong>About dates</strong> — dates marked ≈ are estimates from photo order, shown by month. Exact days will appear as they're confirmed.
           </div>
         </div>
       </div>
