@@ -58,6 +58,32 @@ c5.metric("Tire Size", vehicle["tire_size"])
 
 st.divider()
 
+# ---------- Owner & Registration ----------
+st.subheader("📋 Owner & Registration")
+
+r1, r2, r3 = st.columns(3)
+with r1:
+    st.markdown("**Owner**")
+    st.write(vehicle["owner_name"] or "—")
+    st.write(vehicle["owner_phone"] or "—")
+    st.caption(vehicle["owner_address"] or "—")
+with r2:
+    st.markdown("**Registration**")
+    st.write(f"Registered: {vehicle['registration_date'] or '—'}")
+    st.write(f"Class: {vehicle['vehicle_class'] or '—'}")
+    st.write(f"Wheelbase: {vehicle['wheel_base_mm']} mm" if vehicle["wheel_base_mm"] else "Wheelbase: —")
+with r3:
+    st.markdown("**Purchase / Import**")
+    st.write(f"Importer: {vehicle['importer_name'] or '—'}")
+    st.write(
+        f"Registration Fee: ৳{vehicle['registration_fee']:,.0f}"
+        if vehicle["registration_fee"]
+        else "Registration Fee: —"
+    )
+    st.write(f"Purchase Date: {vehicle['purchase_date'] or '—'}")
+
+st.divider()
+
 # ---------- Upcoming Maintenance ----------
 st.subheader("🔴 Upcoming Maintenance")
 

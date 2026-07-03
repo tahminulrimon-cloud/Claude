@@ -23,7 +23,15 @@ def init_db():
             tire_size TEXT,
             seats INTEGER,
             color TEXT,
-            purchase_date TEXT
+            purchase_date TEXT,
+            registration_date TEXT,
+            vehicle_class TEXT,
+            wheel_base_mm INTEGER,
+            registration_fee REAL,
+            importer_name TEXT,
+            owner_name TEXT,
+            owner_phone TEXT,
+            owner_address TEXT
         );
 
         CREATE TABLE IF NOT EXISTS logs (
@@ -72,14 +80,32 @@ def init_db():
         """
     )
 
+    # Migrate older databases that predate the owner/registration columns.
+    existing_cols = {row[1] for row in cur.execute("PRAGMA table_info(vehicles)")}
+    new_cols = {
+        "registration_date": "TEXT",
+        "vehicle_class": "TEXT",
+        "wheel_base_mm": "INTEGER",
+        "registration_fee": "REAL",
+        "importer_name": "TEXT",
+        "owner_name": "TEXT",
+        "owner_phone": "TEXT",
+        "owner_address": "TEXT",
+    }
+    for col, col_type in new_cols.items():
+        if col not in existing_cols:
+            cur.execute(f"ALTER TABLE vehicles ADD COLUMN {col} {col_type}")
+
     cur.execute("SELECT COUNT(*) FROM vehicles")
     if cur.fetchone()[0] == 0:
         cur.execute(
             """
             INSERT INTO vehicles
                 (make, model, year, vin_chassis, engine_no, license_plate,
-                 fuel_type, engine_cc, tire_size, seats, color, purchase_date)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                 fuel_type, engine_cc, tire_size, seats, color, purchase_date,
+                 registration_date, vehicle_class, wheel_base_mm, registration_fee,
+                 importer_name, owner_name, owner_phone, owner_address)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
             """,
             (
                 "Toyota",
@@ -94,6 +120,14 @@ def init_db():
                 5,
                 "White",
                 "2025-03-01",
+                "2025-03-05",
+                "Motor Car (Large)",
+                2600,
+                126534,
+                "Urban Auto Imports",
+                "Md. Tahminul Islam",
+                "01673255155",
+                "Mukut Mahal, Flat-6B, (Lift-5), Mir Bari Road, 17/6, Darussalam, Dhaka-1216, Mirpur, Dhaka, Bangladesh",
             ),
         )
         vehicle_id = cur.lastrowid
