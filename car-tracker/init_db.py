@@ -169,16 +169,20 @@ def init_db():
                 (vehicle_id, "Tax Token", "2025-03-05", "2026-03-04", 5802, "25-26 Tax Token"),
                 (vehicle_id, "Fitness Certificate", "2025-03-05", "2026-03-05", 1892, "25-26 Fitness Certificate"),
                 (vehicle_id, "Insurance", "2025-03-05", "2026-02-04", 60758, "Islami Commercial Insurance - Comprehensive"),
+                (vehicle_id, "Tax Token", "2026-03-05", "2027-03-04", 5802, "26-27 Tax Token (paid 2026-03-09)"),
             ],
         )
 
-        # Initial mileage log point
-        cur.execute(
+        # Mileage log points
+        cur.executemany(
             """
             INSERT INTO logs (vehicle_id, log_date, mileage_km, fuel_efficiency_kmpl, note)
             VALUES (?, ?, ?, ?, ?)
             """,
-            (vehicle_id, "2025-11-23", 40890, None, "Seed reading at 2nd oil change"),
+            [
+                (vehicle_id, "2025-11-23", 40890, None, "Seed reading at 2nd oil change"),
+                (vehicle_id, "2026-07-04", 41500, None, "Odometer confirmed at oil change follow-up"),
+            ],
         )
 
     conn.commit()
