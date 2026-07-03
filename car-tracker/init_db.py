@@ -127,7 +127,7 @@ def init_db():
                 (
                     vehicle_id,
                     "2026-07-01",
-                    None,
+                    41500,
                     5000,
                     "Engine Oil (0W-20 Toyota Hybrid), Oil Filter, Air Filter, AC Filter",
                     "New Anwara Motors, Mohakhali",
@@ -137,15 +137,13 @@ def init_db():
         )
 
         # Maintenance schedule rules, seeded from latest oil change
-        # NOTE: last_done_mileage still reflects the 2025-11-23 reading — the
-        # 2026-07-01 receipt didn't record odometer; update once available.
         cur.execute(
             """
             INSERT INTO maintenance_schedule
                 (vehicle_id, category, interval_km, interval_months, last_done_date, last_done_mileage)
             VALUES (?, ?, ?, ?, ?, ?)
             """,
-            (vehicle_id, "Oil Change", 5000, 6, "2026-07-01", 40890),
+            (vehicle_id, "Oil Change", 5000, 6, "2026-07-01", 41500),
         )
         cur.executemany(
             """
