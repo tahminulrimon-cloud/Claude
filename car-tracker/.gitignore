@@ -1,0 +1,6 @@
+.venv/
+__pycache__/
+*.pyc
+car_tracker.db
+streamlit.log
+.streamlit/
