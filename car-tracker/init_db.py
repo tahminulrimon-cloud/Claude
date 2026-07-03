@@ -204,6 +204,24 @@ def init_db():
                 (vehicle_id, "Fitness Certificate", "2025-03-05", "2026-03-05", 1892, "25-26 Fitness Certificate"),
                 (vehicle_id, "Insurance", "2025-03-05", "2026-02-04", 60758, "Islami Commercial Insurance - Comprehensive"),
                 (vehicle_id, "Tax Token", "2026-03-05", "2027-03-04", 5802, "26-27 Tax Token (paid 2026-03-09)"),
+                (
+                    vehicle_id,
+                    "Fitness Certificate",
+                    "2026-03-08",
+                    "2028-03-05",
+                    4397,
+                    "2-year renewal (26-27 & 27-28): main fee Tk.2,352 + 2nd year Tk.920 + "
+                    "Financial Assistance Fund Tk.575 + late fee Tk.58 + supplementary duty Tk.492 "
+                    "(Txn 2603081341762, paid 2026-03-08)",
+                ),
+                (
+                    vehicle_id,
+                    "Advance Income Tax",
+                    "2026-03-08",
+                    "2027-03-04",
+                    25000,
+                    "FY 2025-26 AIT, aligned with 26-27 Tax Token cycle (Txn 2603081341762, paid 2026-03-08)",
+                ),
             ],
         )
 

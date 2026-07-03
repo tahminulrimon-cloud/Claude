@@ -253,7 +253,8 @@ with tab_maint:
 with tab_renewal:
     with st.form("renewal_form", clear_on_submit=True):
         renewal_type = st.selectbox(
-            "Type", ["Tax Token", "Fitness Certificate", "Insurance", "Registration"]
+            "Type",
+            ["Tax Token", "Fitness Certificate", "Insurance", "Registration", "Advance Income Tax"],
         )
         issued_date = st.date_input("Issued Date", value=date.today())
         expiry_date = st.date_input("Expiry Date", value=date.today())
