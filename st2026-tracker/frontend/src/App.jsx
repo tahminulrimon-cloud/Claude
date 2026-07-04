@@ -9,7 +9,8 @@ export default function App() {
   const [exercise, setExercise] = useState(null)
   const [items, setItems] = useState([])
   const [view, setView] = useState('timeline')
-  const [error, setError] = useState(null)
+  const [loadError, setLoadError] = useState(null)
+  const [actionError, setActionError] = useState(null)
 
   useEffect(() => {
     fetchTimeline()
@@ -17,19 +18,20 @@ export default function App() {
         setExercise(data.exercise)
         setItems(data.items)
       })
-      .catch((err) => setError(err.message))
+      .catch((err) => setLoadError(err.message))
   }, [])
 
   const handleToggle = useCallback((id, done) => {
+    setActionError(null)
     setItems((prev) => prev.map((item) => (item.id === id ? { ...item, done } : item)))
     updateItem(id, { done }).catch(() => {
       setItems((prev) => prev.map((item) => (item.id === id ? { ...item, done: !done } : item)))
-      setError('Failed to save change - is the backend running?')
+      setActionError('Failed to save change - is the backend running?')
     })
   }, [])
 
-  if (error) {
-    return <div className="app-error">{error}</div>
+  if (loadError) {
+    return <div className="app-error">{loadError}</div>
   }
 
   if (!exercise) {
@@ -44,6 +46,13 @@ export default function App() {
         <h1>ST-2026 Tracker</h1>
         <span className="app-progress">{doneCount}/{items.length} items complete</span>
       </header>
+
+      {actionError && (
+        <div className="app-banner" role="alert">
+          {actionError}
+          <button onClick={() => setActionError(null)} aria-label="Dismiss">&times;</button>
+        </div>
+      )}
 
       <Countdown exercise={exercise} />
 
