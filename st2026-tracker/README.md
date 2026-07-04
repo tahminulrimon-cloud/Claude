@@ -26,3 +26,9 @@ npm run dev   # http://localhost:5173
 
 - `GET /api/timeline` - exercise metadata + all timeline items
 - `PATCH /api/timeline/items/:id` - update `{ done, notes }` on one item
+
+## Offline support
+
+The frontend is a PWA: the app shell (HTML/JS/CSS/icons) is precached by a service worker, and the last-fetched timeline data is cached too, so the app still loads and is fully browsable with no network. Checkbox toggles made while offline are saved locally and update the UI immediately; they queue in the browser and sync to the backend automatically the next time the app detects a connection. Note this only makes the frontend installable/offline-capable — the Express backend still needs to be reachable on your network for changes to actually persist server-side.
+
+To test the service worker in dev mode (`npm run dev`), it's enabled via `devOptions`. For a more production-like check, use `npm run build && npm run preview`.

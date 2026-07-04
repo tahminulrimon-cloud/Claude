@@ -64,14 +64,38 @@
   padding: 0.6rem 1rem;
   margin-bottom: 1rem;
   border-radius: 8px;
+  font-size: 0.85rem;
+  background: #eff6ff;
+  color: #1d4ed8;
+  border: 1px solid #bfdbfe;
+}
+
+.app-banner.offline {
+  background: #fffbeb;
+  color: #92400e;
+  border-color: #fde68a;
+}
+
+.app-banner.error {
   background: #fef2f2;
   color: #991b1b;
-  border: 1px solid #fecaca;
-  font-size: 0.85rem;
+  border-color: #fecaca;
 }
 
 @media (prefers-color-scheme: dark) {
   .app-banner {
+    background: #1e2a4a;
+    color: #93c5fd;
+    border-color: #1e40af;
+  }
+
+  .app-banner.offline {
+    background: #3f2f10;
+    color: #fcd34d;
+    border-color: #78350f;
+  }
+
+  .app-banner.error {
     background: #3f1d1d;
     color: #fca5a5;
     border-color: #7f1d1d;
