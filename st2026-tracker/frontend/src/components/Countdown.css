@@ -1,0 +1,49 @@
+.countdown {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  padding: 1.25rem 1.5rem;
+  border-radius: 12px;
+  background: linear-gradient(135deg, #1f2937, #374151);
+  color: #f4f5f7;
+  margin-bottom: 1.5rem;
+}
+
+.countdown-exercise {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.countdown-exercise strong {
+  font-size: 1.15rem;
+  letter-spacing: 0.03em;
+}
+
+.countdown-exercise span {
+  font-size: 0.85rem;
+  opacity: 0.75;
+}
+
+.countdown-number {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  min-width: 130px;
+}
+
+.countdown-days {
+  font-size: 2.25rem;
+  font-weight: 700;
+  line-height: 1;
+  color: #facc15;
+}
+
+.countdown-label {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  opacity: 0.8;
+}
