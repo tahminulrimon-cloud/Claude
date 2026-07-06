@@ -28,8 +28,9 @@ button{font-family:inherit;cursor:pointer;border:none;background:none;color:inhe
 .btn{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border-radius:4px;font-size:13px;font-weight:500;border:1px solid var(--rule);background:#fff;}.btn:hover{background:var(--paper-dark);}
 .btn-primary{background:var(--olive);color:#fff;border-color:var(--olive-dark);}.btn-primary:hover{background:var(--olive-dark);}
 .btn-sm{padding:4px 8px;font-size:11px;}
-.tab-nav{display:flex;gap:4px;padding:0 8px 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;}
+.tab-nav{display:flex;gap:4px;padding:8px 8px;overflow-x:auto;-webkit-overflow-scrolling:touch;}
 .tab-nav::-webkit-scrollbar{height:3px;}.tab-nav::-webkit-scrollbar-thumb{background:var(--rule);border-radius:2px;}
+.tab-nav-wrap{position:sticky;top:0;z-index:20;background:rgba(251,249,242,.7);backdrop-filter:blur(14px) saturate(160%);-webkit-backdrop-filter:blur(14px) saturate(160%);border-bottom:1px solid rgba(199,188,156,.55);box-shadow:0 4px 18px rgba(33,38,31,.10);}
 .tab{padding:8px 14px;font-size:12px;font-weight:500;border-radius:4px 4px 0 0;border-bottom:2px solid transparent;white-space:nowrap;color:var(--ink-soft);}
 .tab.active{background:var(--olive);color:#fff;border-bottom-color:var(--olive-dark);}.tab:not(.active):hover{background:var(--paper-dark);}
 .ord-marker{display:inline-flex;align-items:center;justify-content:center;min-width:28px;height:22px;border-radius:3px;padding:0 6px;font-weight:600;font-family:ui-monospace,monospace;font-size:10px;color:#fff;}
@@ -194,7 +195,8 @@ const shell=el(`<div>
 <div class="container" style="padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
 <div><div class="mono text-olive-dark tracking-widest" style="font-size:22px;font-weight:700">THE RAVAGERS</div></div>
 </div>
-<nav class="container"><div class="tab-nav" id="tn"></div></nav></header>
+</header>
+<div class="tab-nav-wrap"><nav class="container"><div class="tab-nav" id="tn"></div></nav></div>
 <main id="main" style="padding-bottom:32px"></main></div>`);
 R.appendChild(shell);
 const tabs=[{id:"overview",l:"📋 Overview"},{id:"map",l:"🗺️ Map"},{id:"timeline",l:"🕐 Timeline"},{id:"comms",l:"📡 Comms & Rules"},{id:"dailyops",l:"🎯 Daily Ops"},{id:"codirectives",l:"⚡ CO's Directives"}];
