@@ -53,15 +53,18 @@ input[type="text"]{font-family:ui-monospace,monospace;font-size:11px;border:none
 .hide-mobile{display:block;}@media(max-width:640px){.hide-mobile{display:none;}}
 .warn-box{background:#FFF3CD;border:1px solid #FFE69C;border-radius:4px;padding:10px 14px;font-size:12px;color:#664D03;}
 .directive-box{background:#E8F5E9;border:1px solid #A5D6A7;border-radius:4px;padding:10px 14px;font-size:12px;color:#1B5E20;}
-.comms-hero{background:linear-gradient(135deg,var(--olive) 0%,var(--olive-dark) 100%);color:#fff;border-radius:6px;padding:20px 22px;margin-bottom:16px;box-shadow:0 2px 10px rgba(43,58,29,.25);}
-.comms-hero h2{margin:0 0 4px;font-size:20px;font-weight:700;}
-.comms-hero p{margin:0;opacity:.85;font-size:13px;}
+.hero-banner{background:linear-gradient(135deg,var(--olive) 0%,var(--olive-dark) 100%);color:#fff;border-radius:6px;padding:20px 22px;margin-bottom:16px;box-shadow:0 2px 10px rgba(43,58,29,.25);}
+.hero-banner h2{margin:0 0 4px;font-size:20px;font-weight:700;}
+.hero-banner p{margin:0;opacity:.85;font-size:13px;}
+.hero-banner .progress-bar{background:rgba(255,255,255,.25);}
+.hero-banner .progress-fill{background:#fff;}
 .info-tile{background:var(--paper-light);border:1px solid var(--rule);border-radius:6px;padding:12px 14px;}
 .info-tile .ic{font-size:20px;line-height:1;}
 .chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-family:ui-monospace,monospace;font-size:12px;font-weight:600;background:var(--paper-dark);border:1px solid var(--rule);}
 .chip-red{background:#FBEAEA;color:var(--red-dk);border-color:#EBC7C5;}
 .chip-olive{background:#EAF1E4;color:var(--olive-dark);border-color:#C9DABB;}
 .chip-blue{background:#E7EFF6;color:var(--blue);border-color:#C3D7E8;}
+.chip-amber{background:#FCF3E2;color:var(--amber);border-color:#F0DEB0;}
 .rule-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:6px;}
 .rule-item.ok{background:#F1F8ED;}
 .rule-item.no{background:#FCEEED;}
@@ -175,6 +178,13 @@ let tab="overview",leafletMap=null;
 const R=document.getElementById("root");
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 function el(h){const t=document.createElement("template");t.innerHTML=h.trim();return t.content.firstElementChild;}
+function getExDayStatus(){
+const start=new Date(2026,6,5,0,0,0),end=new Date(2026,6,14,23,59,59),now=new Date();
+if(now<start)return{label:"Exercise starts 05 Jul 2026",pct:0};
+if(now>end)return{label:"Exercise complete — AAR due 22 Jul",pct:100};
+const day=Math.min(10,Math.floor((now-start)/86400000)+1);
+return{label:`Day ${day} of 10`,pct:(day/10)*100};
+}
 
 /* ===== RENDER ===== */
 function render(){
@@ -188,7 +198,7 @@ const shell=el(`<div>
 <nav class="container"><div class="tab-nav" id="tn"></div></nav></header>
 <main id="main" style="padding-bottom:32px"></main></div>`);
 R.appendChild(shell);
-const tabs=[{id:"overview",l:"Overview"},{id:"map",l:"Map"},{id:"timeline",l:"Timeline"},{id:"comms",l:"Comms & Rules"},{id:"dailyops",l:"Daily Ops"},{id:"codirectives",l:"CO's Directives"}];
+const tabs=[{id:"overview",l:"📋 Overview"},{id:"map",l:"🗺️ Map"},{id:"timeline",l:"🕐 Timeline"},{id:"comms",l:"📡 Comms & Rules"},{id:"dailyops",l:"🎯 Daily Ops"},{id:"codirectives",l:"⚡ CO's Directives"}];
 const tn=document.getElementById("tn");
 tabs.forEach(t=>{const b=el(`<button class="tab ${t.id===tab?'active':''}">${t.l}</button>`);b.onclick=()=>{tab=t.id;render();};tn.appendChild(b);});
 const m=document.getElementById("main");
@@ -198,11 +208,13 @@ const m=document.getElementById("main");
 /* ===== OVERVIEW ===== */
 function rOverview(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
+const exStatus=getExDayStatus();
 w.innerHTML=`
-<div class="grid-3 mb-5">
-<div class="card p-3"><div class="text-xs uppercase tracking-widest text-ink-soft">Exercise</div><div class="mono text-sm mt-1">${META.exercise}</div></div>
-<div class="card p-3"><div class="text-xs uppercase tracking-widest text-ink-soft">Formation</div><div class="mono text-sm mt-1">${META.formation}</div></div>
-<div class="card p-3"><div class="text-xs uppercase tracking-widest text-ink-soft">Duration</div><div class="mono text-sm mt-1">${META.duration}</div></div>
+<div class="hero-banner mb-4">
+<h2>🎖️ ${esc(META.exercise)}</h2>
+<p>${esc(META.formation)} · ${esc(META.duration)}</p>
+<div class="progress-bar mt-2"><div class="progress-fill" style="width:${exStatus.pct}%"></div></div>
+<div class="text-xs mt-1" style="opacity:.9">${esc(exStatus.label)}</div>
 </div>
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">Our Role</h2><p class="text-base">${META.role}</p></section>
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">Concept</h2><p class="text-base">${META.concept}</p></section>
@@ -240,17 +252,20 @@ mk.on("click",()=>{info.innerHTML=`<div class="font-bold text-olive-dark">${esc(
 },0);
 }
 
+const TAG_META={"H-Hour":{icon:"🚦",cls:"chip-blue"},"Daily":{icon:"🔁",cls:"chip-olive"},"Continuous":{icon:"🔄",cls:"chip-amber"},"Immediate":{icon:"🚨",cls:"chip-red"}};
+
 /* ===== TIMELINE ===== */
 function rTimeline(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
-w.appendChild(el(`<h2 class="text-lg font-bold mb-3">During Exercise — 05–14 Jul 2026</h2>`));
+w.appendChild(el(`<div class="hero-banner mb-3"><h2>🕐 During Exercise Timeline</h2><p>05–14 Jul 2026 — tasks grouped by cadence</p></div>`));
 const groups={},order=[];
 TIMELINE_DURING.forEach(item=>{
 if(!groups[item.tag]){groups[item.tag]=[];order.push(item.tag);}
 groups[item.tag].push(item.e);
 });
 order.forEach(tag=>{
-const card=el(`<div class="card mb-4"><div class="p-3 border-b"><h2 class="text-lg font-bold" style="margin:0">${esc(tag)}</h2></div><div></div></div>`);
+const meta=TAG_META[tag]||{icon:"•",cls:"chip-olive"};
+const card=el(`<div class="card mb-4"><div class="p-3 border-b"><span class="chip ${meta.cls}">${meta.icon} ${esc(tag)}</span></div><div></div></div>`);
 const body=card.querySelector("div:last-child");
 groups[tag].forEach(e=>{
 body.appendChild(el(`<div class="ci"><div style="flex:1"><span class="itxt text-sm">${esc(e)}</span></div></div>`));
@@ -264,7 +279,7 @@ m.appendChild(w);
 function rComms(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
 w.innerHTML=`
-<div class="comms-hero"><h2>📡 Communications Plan</h2><p>Nets, code words, and frequencies for EX BOJRO AGHAT</p></div>
+<div class="hero-banner"><h2>📡 Communications Plan</h2><p>Nets, code words, and frequencies for EX BOJRO AGHAT</p></div>
 <section class="grid-4 mb-4">
 <div class="info-tile"><div class="ic">📻</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Frequencies</div><div class="mono text-sm mt-1">${COMMS.freqs}</div></div>
 <div class="info-tile"><div class="ic">🔤</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Freq Change Word</div><div class="mono text-sm mt-1">${COMMS.freqChange}</div></div>
@@ -295,6 +310,7 @@ m.appendChild(w);
 /* ===== DAILY OPS ===== */
 function rDailyOps(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
+w.appendChild(el(`<div class="hero-banner mb-3"><h2>🎯 Daily Operations</h2><p>Maj Cmt taskings by sub-unit, newest day first</p></div>`));
 [...DAILY_OPS].reverse().forEach((day,idx)=>{
 const det=el(`<details class="card mb-4" ${idx===0?'open':''}><summary><span class="text-lg font-bold">${esc(day.title)} — ${esc(day.date)}</span></summary><div class="border-t p-3"></div></details>`);
 const body=det.querySelector(":scope > div");
@@ -320,7 +336,7 @@ m.appendChild(w);
 /* ===== CO'S DIRECTIVES ===== */
 function rCoDirectives(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
-w.appendChild(el(`<h2 class="text-lg font-bold mb-3">CO's Directives</h2>`));
+w.appendChild(el(`<div class="hero-banner mb-3"><h2>⚡ CO's Directives</h2><p>Command guidance currently in effect</p></div>`));
 CO_DIRECTIVES.forEach(d=>{
 w.appendChild(el(`<div class="directive-box mb-3"><strong>${esc(d.title)}</strong><span class="text-xs" style="margin-left:6px;opacity:.75">${esc(d.date)}</span><ul style="margin:6px 0 0;padding-left:18px">${d.points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>`));
 });
