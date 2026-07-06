@@ -76,15 +76,6 @@ input[type="text"]{font-family:ui-monospace,monospace;font-size:11px;border:none
 /* ===== DATA ===== */
 const META={exercise:"EX BOJRO AGHAT",formation:"TF-A · 33 Artillery Brigade Group",classification:"RESTRICTED",serial:"ST-2026",duration:"05–14 Jul 2026 (10 days)",role:"TF-A (En Ctrl) — 33 Arty Bde Gp depicting a div (-) in conventional defence in captured territory. TF-B (44 Inf Bde) and TF-C (101 Inf Bde) are players.",concept:"Bn defence (frontage 1500–2000m) depicted by battery strength; routine in-line activities and log build-up; player targets 8–10 km (SRP) / 15–20 km (LRP) from FB, avoiding main highways.",endState:"Realistic depiction of en def posn completed; 08 raids conducted; all TF-A tps participate in min 1 minor op; AAR submitted to Bde by 22 Jul."};
 
-const PERSONNEL=[
-{appt:"CO",name:"Lt Col Nafis Bin Ahmed, psc, G"},
-{appt:"2IC",name:"Maj Md Tahminul Islam"},
-{appt:"Adjutant",name:"Capt Md Arman Habib Apu"},
-{appt:"Rear OC",name:"Maj Sadia Sultana (BA-9530)"},
-{appt:"Rear JCO",name:"Sr WO (DMT) Khandaker Ripon Hossain"},
-{appt:"Rear NCO",name:"Sgt (Gnr) Shankar Chandra Sarkar"},
-];
-
 const AMMO=[
 {loc:"Lt Fwd Bn",live_s:"1 Sealed Box",live_l:"100 rds",blank_s:"1 Sealed Box",blank_l:"320 rds"},
 {loc:"Rt Fwd Bn",live_s:"1 Sealed Box",live_l:"100 rds",blank_s:"1 Sealed Box",blank_l:"120 rds"},
@@ -138,7 +129,7 @@ const DOS=["Individual must know and carry his charter of duties","Personal weap
 const DONTS=["No comfort items (fans, fridges, fancy furniture)","No hindrance to local educational institutions","Officers/unauthorised persons must not drive any military vehicle","No Field Kote in exercise area","No spotter on target","No deployment within 8 km of actual IB","No physical contact between players and enemy troops","No occupation of civilian dwellings (yards, backyards, rooftops)","Civilian houses/persons not used for cooking","Troops will not visit market, shop, or civilian houses","No blank ammo firing within 30 yds of any individual or poultry farm","No local transport (CNG, Nosimon, easy bikes, vans) for recce/ops","No water from unauthorised/unsafe sources","No glass/ceramic crockery","No map board or chart below Bn HQ level","No bayonet; no civilian dress","No traps in FB (demo traps only in hideouts, physically guarded)","No 'living off the land' / jungle survival","No bamboo-made forks, spoons, mugs","No use of Dhaka–Ctg highway for recce/ops","No posting/sharing of any event or photo on social media","No leave except extreme emergency (TF Comd approval only)","No live ammo for exercise purpose","No mobile phones except officers, JCOs, and ump org (temp call centres established instead)","No rotation of rear duty party"];
 
 const DAILY_OPS=[{
-date:"06 Jul 2026",title:"Maj Cmt — 17 Fd Regt Arty",
+date:"06 Jul 2026",title:"Maj Cmt",
 subunits:[
 {name:"LT FWD BN",tasks:[
 {ser:1,task:"Estb B Ech",timing:"062300–070200 & 070200–070400",loc:"SQ 0740",brief:"—",comd:"Sgt Gnr Kamrul",str:"20",veh:"1x P/Up, 1x 3-Ton",ump:"Sgt Shah Alam (41 Med)",basis:"114 Jat Ser-1 & Ser-3: Bn B Ech at Barura (Sq-0780) for vehicle security. ⚠ Grid mismatch: Maj Cmt=0740, Bornona=0780."},
@@ -156,7 +147,7 @@ subunits:[
 ]},
 ]},
 {
-date:"07 Jul 2026",title:"Maj Cmt — 17 Fd Regt Arty",
+date:"07 Jul 2026",title:"Maj Cmt",
 subunits:[
 {name:"LT FWD BN",tasks:[
 {ser:1,task:"Estb B Ech",timing:"072300–08200 & 08200–08400",loc:"SQ 0740",brief:"—",comd:"Sgt Gnr Kamrul",str:"—",veh:"1x P/Up",ump:"Sgt Shahadat (41 Med)"},
@@ -193,11 +184,9 @@ const shell=el(`<div>
 <header style="border-bottom:1px solid var(--rule);background:var(--paper-light)">
 <div class="container" style="padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
 <div><div class="mono text-olive-dark tracking-widest" style="font-size:22px;font-weight:700">THE RAVAGERS</div></div>
-<div class="mono text-xs text-ink-soft text-right hide-mobile"><div>${META.serial}</div><div>05–14 Jul 2026</div></div></div>
+</div>
 <nav class="container"><div class="tab-nav" id="tn"></div></nav></header>
-<main id="main" style="padding-bottom:32px"></main>
-<footer style="border-top:1px solid var(--rule);background:var(--paper-light);padding:10px;text-align:center;font-family:ui-monospace,monospace;font-size:9px;color:var(--ink-soft);letter-spacing:.15em">
-RESTRICTED · FOR TRAINING USE ONLY · SOURCES: HQ 33 ARTY BDE GEN INSTR &amp; ANNEXES, 17 FD REGT GEN INSTR, ADMIN/MOVEMENT INSTR, BMA TARGET ANALYSIS, BORNONA SERIALS</footer></div>`);
+<main id="main" style="padding-bottom:32px"></main></div>`);
 R.appendChild(shell);
 const tabs=[{id:"overview",l:"Overview"},{id:"map",l:"Map"},{id:"timeline",l:"Timeline"},{id:"comms",l:"Comms & Rules"},{id:"dailyops",l:"Daily Ops"},{id:"codirectives",l:"CO's Directives"}];
 const tn=document.getElementById("tn");
@@ -218,8 +207,6 @@ w.innerHTML=`
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">Our Role</h2><p class="text-base">${META.role}</p></section>
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">Concept</h2><p class="text-base">${META.concept}</p></section>
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">End State</h2><p class="text-base">${META.endState}</p></section>
-<section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-3">Key Personnel</h2>
-<table><thead><tr><th>Appointment</th><th>Name</th></tr></thead><tbody>${PERSONNEL.map(p=>`<tr><td>${esc(p.appt)}</td><td class="font-semibold">${esc(p.name)}</td></tr>`).join("")}</tbody></table></section>
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-3">Ammo Allocation per Location</h2>
 <table><thead><tr><th>Location</th><th>Live (Sealed)</th><th>Live (Loose)</th><th>Blank (Sealed)</th><th>Blank (Loose)</th></tr></thead><tbody>${AMMO.map(a=>`<tr><td>${esc(a.loc)}</td><td>${esc(a.live_s)}</td><td>${esc(a.live_l)}</td><td>${esc(a.blank_s)}</td><td>${esc(a.blank_l)}</td></tr>`).join("")}</tbody></table>
 <p class="text-xs text-red mt-2 font-semibold">Live and blank ammunition must NEVER be stored together. Live ammo boxes marked with red scotch tape cross.</p></section>
@@ -308,10 +295,11 @@ m.appendChild(w);
 /* ===== DAILY OPS ===== */
 function rDailyOps(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
-DAILY_OPS.forEach(day=>{
-w.appendChild(el(`<h2 class="text-lg font-bold mb-3">${esc(day.title)} — ${esc(day.date)}</h2>`));
+[...DAILY_OPS].reverse().forEach((day,idx)=>{
+const det=el(`<details class="card mb-4" ${idx===0?'open':''}><summary><span class="text-lg font-bold">${esc(day.title)} — ${esc(day.date)}</span></summary><div class="border-t p-3"></div></details>`);
+const body=det.querySelector(":scope > div");
 day.subunits.forEach(su=>{
-const card=el(`<div class="card mb-4"><div class="p-3 border-b" style="background:var(--paper-dark)"><h3 class="font-bold text-sm uppercase tracking-widest text-olive-dark" style="margin:0">${esc(su.name)}</h3></div><div style="overflow-x:auto"><table><thead><tr><th>Ser</th><th>Task</th><th>Timing</th><th>Location</th><th>Ptl Brief</th><th>Comd</th><th>Str</th><th>Veh</th><th>Umpire</th></tr></thead><tbody></tbody></table></div><div id="basis_${su.name.replace(/\W/g,'')}"></div></div>`);
+const card=el(`<div class="card mb-3"><div class="p-3 border-b" style="background:var(--paper-dark)"><h3 class="font-bold text-sm uppercase tracking-widest text-olive-dark" style="margin:0">${esc(su.name)}</h3></div><div style="overflow-x:auto"><table><thead><tr><th>Ser</th><th>Task</th><th>Timing</th><th>Location</th><th>Ptl Brief</th><th>Comd</th><th>Str</th><th>Veh</th><th>Umpire</th></tr></thead><tbody></tbody></table></div><div id="basis_${day.date.replace(/\W/g,'')}_${su.name.replace(/\W/g,'')}"></div></div>`);
 const tbody=card.querySelector("tbody");
 const basisDiv=card.querySelector("div:last-child");
 su.tasks.forEach(t=>{
@@ -321,10 +309,11 @@ const isWarn=t.basis.includes("⚠");
 basisDiv.appendChild(el(`<div class="${isWarn?'warn-box':'directive-box'} mb-2" style="margin:0 12px 8px"><strong>Ser ${t.ser} Basis:</strong> ${esc(t.basis)}</div>`));
 }
 });
-w.appendChild(card);
+body.appendChild(card);
 });
+w.appendChild(det);
 });
-w.appendChild(el(`<p class="card p-3 text-xs text-ink-soft italic">Future days' Maj Cmt will be appended here as new dated sections. Bornona narrative basis is cross-referenced to each serial above.</p>`));
+w.appendChild(el(`<p class="card p-3 text-xs text-ink-soft italic">Future days' Maj Cmt will be appended here as new dated sections, newest first. Bornona narrative basis is cross-referenced to each serial above.</p>`));
 m.appendChild(w);
 }
 
@@ -333,7 +322,7 @@ function rCoDirectives(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
 w.appendChild(el(`<h2 class="text-lg font-bold mb-3">CO's Directives</h2>`));
 CO_DIRECTIVES.forEach(d=>{
-w.appendChild(el(`<div class="directive-box mb-3"><strong>CO's Directive (${d.date}): ${esc(d.title)}</strong><ul style="margin:6px 0 0;padding-left:18px">${d.points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>`));
+w.appendChild(el(`<div class="directive-box mb-3"><strong>${esc(d.title)}</strong><span class="text-xs" style="margin-left:6px;opacity:.75">${esc(d.date)}</span><ul style="margin:6px 0 0;padding-left:18px">${d.points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>`));
 });
 m.appendChild(w);
 }
