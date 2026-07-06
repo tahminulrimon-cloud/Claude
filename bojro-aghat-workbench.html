@@ -23,7 +23,7 @@
 .uppercase{text-transform:uppercase;}.tracking-widest{letter-spacing:.18em;}
 .text-ink-soft{color:var(--ink-soft);}.text-olive{color:var(--olive);}.text-olive-dark{color:var(--olive-dark);}.text-red{color:var(--red);}.text-center{text-align:center;}.text-right{text-align:right;}.italic{font-style:italic;}
 .border-t{border-top:1px solid var(--rule);}.border-b{border-bottom:1px solid var(--rule);}
-.classified-strip{background:repeating-linear-gradient(45deg,var(--red) 0 12px,var(--red-dk) 12px 24px);color:#fff;letter-spacing:.2em;font-weight:700;padding:4px 8px;text-align:center;font-size:11px;}
+.classified-strip{background:repeating-linear-gradient(45deg,var(--red) 0 12px,var(--red-dk) 12px 24px);color:#fff;letter-spacing:.2em;font-weight:700;padding:10px 8px;text-align:center;font-size:20px;}
 button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit;font-size:inherit;}
 .btn{display:inline-flex;align-items:center;justify-content:center;padding:8px 12px;border-radius:4px;font-size:13px;font-weight:500;border:1px solid var(--rule);background:#fff;}.btn:hover{background:var(--paper-dark);}
 .btn-primary{background:var(--olive);color:#fff;border-color:var(--olive-dark);}.btn-primary:hover{background:var(--olive-dark);}
@@ -77,12 +77,12 @@ input[type="text"]{font-family:ui-monospace,monospace;font-size:11px;border:none
 const META={exercise:"EX BOJRO AGHAT",formation:"TF-A · 33 Artillery Brigade Group",classification:"RESTRICTED",serial:"ST-2026",duration:"05–14 Jul 2026 (10 days)",role:"TF-A (En Ctrl) — 33 Arty Bde Gp depicting a div (-) in conventional defence in captured territory. TF-B (44 Inf Bde) and TF-C (101 Inf Bde) are players.",concept:"Bn defence (frontage 1500–2000m) depicted by battery strength; routine in-line activities and log build-up; player targets 8–10 km (SRP) / 15–20 km (LRP) from FB, avoiding main highways.",endState:"Realistic depiction of en def posn completed; 08 raids conducted; all TF-A tps participate in min 1 minor op; AAR submitted to Bde by 22 Jul."};
 
 const PERSONNEL=[
-{appt:"CO",name:"Lt Col Nafis Bin Ahmed, psc, G",contact:"—"},
-{appt:"2IC",name:"Maj Md Tahminul Islam",contact:"—"},
-{appt:"Adjutant",name:"Capt Md Arman Habib Apu",contact:"01769332382"},
-{appt:"Rear OC",name:"Maj Sadia Sultana (BA-9530)",contact:"—"},
-{appt:"Rear JCO",name:"Sr WO (DMT) Khandaker Ripon Hossain",contact:"—"},
-{appt:"Rear NCO",name:"Sgt (Gnr) Shankar Chandra Sarkar",contact:"—"},
+{appt:"CO",name:"Lt Col Nafis Bin Ahmed, psc, G"},
+{appt:"2IC",name:"Maj Md Tahminul Islam"},
+{appt:"Adjutant",name:"Capt Md Arman Habib Apu"},
+{appt:"Rear OC",name:"Maj Sadia Sultana (BA-9530)"},
+{appt:"Rear JCO",name:"Sr WO (DMT) Khandaker Ripon Hossain"},
+{appt:"Rear NCO",name:"Sgt (Gnr) Shankar Chandra Sarkar"},
 ];
 
 const AMMO=[
@@ -105,8 +105,6 @@ const TYPE_STYLE={base:{fill:"#4C5142",icon:"HQ"},hq:{fill:"#1F4E79",icon:"CTL"}
 const CODE_WORDS=[["NODUF","Real message","All"],["BIJLI","Real emergency","All"],["DURBIN","Ex temporarily called off","Ctrl HQ"],["GORJON","Ex resumes","Ctrl HQ"],["ULLASH","Ex terminates","Ctrl HQ"]];
 
 const RADIO_SILENCE=[["BADAL","Impose radio silence"],["JHANKAR","Break radio silence"],["BIJLI","Real emergency / cancel silence"]];
-
-const CALL_SIGNS=[["CO","01"],["FB Comd","A-1"],["Adjutant","3"],["QM","09"],["Platoon 1","Papa-1"],["Platoon 2","Papa-2"],["Platoon 3","Papa-3"],["SM","S-1"],["RSM","S-2"],["MT NCO","M-1"]];
 
 const COMMS={freqs:"1st Circuit: 60-65 | 2nd Circuit: 60-70",freqChange:"Parul → Champa",commsBy:"061500 Jul 2026",hfLink:"Ctrl HQ (Div) ↔ Bdes/Div units",vhfLink:"Bde HQ ↔ Units; within units/sub-units",sds:"Managed by 5 Sig Bn"};
 
@@ -171,19 +169,18 @@ const shell=el(`<div>
 <div class="classified-strip mono">${META.exercise}</div>
 <header style="border-bottom:1px solid var(--rule);background:var(--paper-light)">
 <div class="container" style="padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-<div><div class="mono text-xs text-olive-dark tracking-widest">THE RAVAGERS · CUMILLA CANTT</div>
-<h1 style="font-size:22px;font-weight:700;margin:2px 0 0">EX BOJRO AGHAT</h1></div>
+<div><div class="mono text-olive-dark tracking-widest" style="font-size:22px;font-weight:700">THE RAVAGERS</div></div>
 <div class="mono text-xs text-ink-soft text-right hide-mobile"><div>${META.serial}</div><div>05–14 Jul 2026</div></div></div>
 <nav class="container"><div class="tab-nav" id="tn"></div></nav></header>
 <main id="main" style="padding-bottom:32px"></main>
 <footer style="border-top:1px solid var(--rule);background:var(--paper-light);padding:10px;text-align:center;font-family:ui-monospace,monospace;font-size:9px;color:var(--ink-soft);letter-spacing:.15em">
 RESTRICTED · FOR TRAINING USE ONLY · SOURCES: HQ 33 ARTY BDE GEN INSTR &amp; ANNEXES, 17 FD REGT GEN INSTR, ADMIN/MOVEMENT INSTR, BMA TARGET ANALYSIS, BORNONA SERIALS</footer></div>`);
 R.appendChild(shell);
-const tabs=[{id:"overview",l:"Overview"},{id:"map",l:"Map"},{id:"timeline",l:"Timeline"},{id:"comms",l:"Comms & Rules"},{id:"dailyops",l:"Daily Ops"}];
+const tabs=[{id:"overview",l:"Overview"},{id:"map",l:"Map"},{id:"timeline",l:"Timeline"},{id:"comms",l:"Comms & Rules"},{id:"dailyops",l:"Daily Ops"},{id:"codirectives",l:"CO's Directives"}];
 const tn=document.getElementById("tn");
 tabs.forEach(t=>{const b=el(`<button class="tab ${t.id===tab?'active':''}">${t.l}</button>`);b.onclick=()=>{tab=t.id;render();};tn.appendChild(b);});
 const m=document.getElementById("main");
-({overview:rOverview,map:rMap,timeline:rTimeline,comms:rComms,dailyops:rDailyOps})[tab](m);
+({overview:rOverview,map:rMap,timeline:rTimeline,comms:rComms,dailyops:rDailyOps,codirectives:rCoDirectives})[tab](m);
 }
 
 /* ===== OVERVIEW ===== */
@@ -198,16 +195,15 @@ w.innerHTML=`
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">Our Role</h2><p class="text-base">${META.role}</p></section>
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">Concept</h2><p class="text-base">${META.concept}</p></section>
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">End State</h2><p class="text-base">${META.endState}</p></section>
-${CO_DIRECTIVES.map(d=>`<div class="directive-box mb-3"><strong>CO's Directive (${d.date}): ${esc(d.title)}</strong><ul style="margin:6px 0 0;padding-left:18px">${d.points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>`).join("")}
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-3">Key Personnel</h2>
-<table><thead><tr><th>Appointment</th><th>Name</th><th>Contact</th></tr></thead><tbody>${PERSONNEL.map(p=>`<tr><td>${esc(p.appt)}</td><td class="font-semibold">${esc(p.name)}</td><td class="mono">${esc(p.contact)}</td></tr>`).join("")}</tbody></table></section>
+<table><thead><tr><th>Appointment</th><th>Name</th></tr></thead><tbody>${PERSONNEL.map(p=>`<tr><td>${esc(p.appt)}</td><td class="font-semibold">${esc(p.name)}</td></tr>`).join("")}</tbody></table></section>
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-3">Ammo Allocation per Location</h2>
 <table><thead><tr><th>Location</th><th>Live (Sealed)</th><th>Live (Loose)</th><th>Blank (Sealed)</th><th>Blank (Loose)</th></tr></thead><tbody>${AMMO.map(a=>`<tr><td>${esc(a.loc)}</td><td>${esc(a.live_s)}</td><td>${esc(a.live_l)}</td><td>${esc(a.blank_s)}</td><td>${esc(a.blank_l)}</td></tr>`).join("")}</tbody></table>
 <p class="text-xs text-red mt-2 font-semibold">Live and blank ammunition must NEVER be stored together. Live ammo boxes marked with red scotch tape cross.</p></section>
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-3">Code Words</h2>
 <table><thead><tr><th>Word</th><th>Meaning</th><th>Used By</th></tr></thead><tbody>${CODE_WORDS.map(c=>`<tr><td class="mono font-semibold">${c[0]}</td><td>${c[1]}</td><td>${c[2]}</td></tr>`).join("")}</tbody></table></section>
 <section class="grid-2 mb-4">
-${[["map","Map","Deployment areas with GPS pins"],["timeline","Timeline","Exercise-duration tasks by Daily / Continuous / Immediate"],["comms","Comms & Rules","Call signs, frequencies, Do's/Don'ts"],["dailyops","Daily Ops","Maj Cmt + Bornona narratives"]].map(([id,t,d])=>`<button data-g="${id}" class="card p-4" style="text-align:left"><div class="font-bold">→ ${t}</div><div class="text-sm text-ink-soft">${d}</div></button>`).join("")}
+${[["map","Map","Deployment areas with GPS pins"],["timeline","Timeline","Exercise-duration tasks by Daily / Continuous / Immediate"],["comms","Comms & Rules","Frequencies, code words, Do's/Don'ts"],["dailyops","Daily Ops","Maj Cmt + Bornona narratives"],["codirectives","CO's Directives","Key command directives (06 Jul 2026)"]].map(([id,t,d])=>`<button data-g="${id}" class="card p-4" style="text-align:left"><div class="font-bold">→ ${t}</div><div class="text-sm text-ink-soft">${d}</div></button>`).join("")}
 </section>`;
 w.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{tab=b.dataset.g;render();});
 m.appendChild(w);
@@ -258,7 +254,7 @@ m.appendChild(w);
 function rComms(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
 w.innerHTML=`
-<div class="comms-hero"><h2>📡 Communications Plan</h2><p>Nets, code words, and call signs for EX BOJRO AGHAT</p></div>
+<div class="comms-hero"><h2>📡 Communications Plan</h2><p>Nets, code words, and frequencies for EX BOJRO AGHAT</p></div>
 <section class="grid-4 mb-4">
 <div class="info-tile"><div class="ic">📻</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Frequencies</div><div class="mono text-sm mt-1">${COMMS.freqs}</div></div>
 <div class="info-tile"><div class="ic">🔤</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Freq Change Word</div><div class="mono text-sm mt-1">${COMMS.freqChange}</div></div>
@@ -274,10 +270,6 @@ w.innerHTML=`
 <section class="card p-5 mb-4">
 <h2 class="text-lg font-bold mb-3">🔑 Code Words</h2>
 <div style="display:flex;flex-wrap:wrap;gap:8px">${CODE_WORDS.map(c=>`<span class="chip ${c[0]==='BIJLI'?'chip-red':'chip-blue'}">${c[0]} — ${c[1]}</span>`).join("")}</div>
-</section>
-<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-3">📞 Call Signs</h2>
-<div class="grid-3">${CALL_SIGNS.map(c=>`<div class="info-tile" style="display:flex;justify-content:space-between;align-items:center"><span class="text-sm">${c[0]}</span><span class="chip chip-blue">${c[1]}</span></div>`).join("")}</div>
 </section>
 <section class="card p-5 mb-4">
 <h2 class="text-lg font-bold mb-3">✅ Do's (All Ranks)</h2>
@@ -310,6 +302,16 @@ w.appendChild(card);
 });
 });
 w.appendChild(el(`<p class="card p-3 text-xs text-ink-soft italic">Future days' Maj Cmt will be appended here as new dated sections. Bornona narrative basis is cross-referenced to each serial above.</p>`));
+m.appendChild(w);
+}
+
+/* ===== CO'S DIRECTIVES ===== */
+function rCoDirectives(m){
+const w=el(`<div class="container" style="padding:20px 16px"></div>`);
+w.appendChild(el(`<h2 class="text-lg font-bold mb-3">CO's Directives</h2>`));
+CO_DIRECTIVES.forEach(d=>{
+w.appendChild(el(`<div class="directive-box mb-3"><strong>CO's Directive (${d.date}): ${esc(d.title)}</strong><ul style="margin:6px 0 0;padding-left:18px">${d.points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>`));
+});
 m.appendChild(w);
 }
 
