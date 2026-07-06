@@ -53,22 +53,33 @@ input[type="text"]{font-family:ui-monospace,monospace;font-size:11px;border:none
 .hide-mobile{display:block;}@media(max-width:640px){.hide-mobile{display:none;}}
 .warn-box{background:#FFF3CD;border:1px solid #FFE69C;border-radius:4px;padding:10px 14px;font-size:12px;color:#664D03;}
 .directive-box{background:#E8F5E9;border:1px solid #A5D6A7;border-radius:4px;padding:10px 14px;font-size:12px;color:#1B5E20;}
+.comms-hero{background:linear-gradient(135deg,var(--olive) 0%,var(--olive-dark) 100%);color:#fff;border-radius:6px;padding:20px 22px;margin-bottom:16px;box-shadow:0 2px 10px rgba(43,58,29,.25);}
+.comms-hero h2{margin:0 0 4px;font-size:20px;font-weight:700;}
+.comms-hero p{margin:0;opacity:.85;font-size:13px;}
+.info-tile{background:var(--paper-light);border:1px solid var(--rule);border-radius:6px;padding:12px 14px;}
+.info-tile .ic{font-size:20px;line-height:1;}
+.chip{display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;font-family:ui-monospace,monospace;font-size:12px;font-weight:600;background:var(--paper-dark);border:1px solid var(--rule);}
+.chip-red{background:#FBEAEA;color:var(--red-dk);border-color:#EBC7C5;}
+.chip-olive{background:#EAF1E4;color:var(--olive-dark);border-color:#C9DABB;}
+.chip-blue{background:#E7EFF6;color:var(--blue);border-color:#C3D7E8;}
+.rule-item{display:flex;gap:10px;align-items:flex-start;padding:10px 12px;border-radius:6px;}
+.rule-item.ok{background:#F1F8ED;}
+.rule-item.no{background:#FCEEED;}
+.rule-badge{display:inline-flex;align-items:center;justify-content:center;width:20px;height:20px;border-radius:50%;font-size:12px;font-weight:700;flex-shrink:0;color:#fff;}
+.rule-badge.ok{background:var(--olive);}
+.rule-badge.no{background:var(--red);}
 </style>
 </head>
 <body>
 <div id="root"></div>
 <script>
 /* ===== DATA ===== */
-const META={exercise:"EX BOJRO AGHAT (বজ্র আঘাত)",formation:"TF-A · 33 Artillery Brigade Group",classification:"RESTRICTED",serial:"ST-2026",duration:"05–14 Jul 2026 (10 days)",role:"TF-A (En Ctrl) — 33 Arty Bde Gp depicting a div (-) in conventional defence in captured territory. TF-B (44 Inf Bde) and TF-C (101 Inf Bde) are players.",concept:"Bn defence (frontage 1500–2000m) depicted by battery strength; routine in-line activities and log build-up; player targets 8–10 km (SRP) / 15–20 km (LRP) from FB, avoiding main highways.",deplComplete:"By 1800 hrs, 05 Jul 2026",endState:"Realistic depiction of en def posn completed; 08 raids conducted; all TF-A tps participate in min 1 minor op; AAR submitted to Bde by 22 Jul."};
+const META={exercise:"EX BOJRO AGHAT",formation:"TF-A · 33 Artillery Brigade Group",classification:"RESTRICTED",serial:"ST-2026",duration:"05–14 Jul 2026 (10 days)",role:"TF-A (En Ctrl) — 33 Arty Bde Gp depicting a div (-) in conventional defence in captured territory. TF-B (44 Inf Bde) and TF-C (101 Inf Bde) are players.",concept:"Bn defence (frontage 1500–2000m) depicted by battery strength; routine in-line activities and log build-up; player targets 8–10 km (SRP) / 15–20 km (LRP) from FB, avoiding main highways.",endState:"Realistic depiction of en def posn completed; 08 raids conducted; all TF-A tps participate in min 1 minor op; AAR submitted to Bde by 22 Jul."};
 
 const PERSONNEL=[
-{appt:"CO / Convoy Comd",name:"Lt Col Nafis Bin Ahmed, psc, G",contact:"—"},
-{appt:"2IC / Asst Comd / Convoy 2IC",name:"Maj Md Tahminul Islam",contact:"—"},
-{appt:"Adjutant / Packet 3 Comd",name:"Capt Md Arman Habib Apu",contact:"01769332382"},
-{appt:"Packet 1 Commander",name:"Capt Md Naim Uddin",contact:"01406462564"},
-{appt:"Packet 1 — 2IC",name:"Lt Fuad Ahmed",contact:"01639-631510"},
-{appt:"Packet 2 — 2IC",name:"Lt Abid Karim Shahriar",contact:"01718-110858"},
-{appt:"Packet 3 — 2IC",name:"Sr WO Md Mahmudul Hasan",contact:"01794436251"},
+{appt:"CO",name:"Lt Col Nafis Bin Ahmed, psc, G",contact:"—"},
+{appt:"2IC",name:"Maj Md Tahminul Islam",contact:"—"},
+{appt:"Adjutant",name:"Capt Md Arman Habib Apu",contact:"01769332382"},
 {appt:"Rear OC",name:"Maj Sadia Sultana (BA-9530)",contact:"—"},
 {appt:"Rear JCO",name:"Sr WO (DMT) Khandaker Ripon Hossain",contact:"—"},
 {appt:"Rear NCO",name:"Sgt (Gnr) Shankar Chandra Sarkar",contact:"—"},
@@ -100,95 +111,29 @@ const CALL_SIGNS=[["CO","01"],["FB Comd","A-1"],["Adjutant","3"],["QM","09"],["P
 const COMMS={freqs:"1st Circuit: 60-65 | 2nd Circuit: 60-70",freqChange:"Parul → Champa",commsBy:"061500 Jul 2026",hfLink:"Ctrl HQ (Div) ↔ Bdes/Div units",vhfLink:"Bde HQ ↔ Units; within units/sub-units",sds:"Managed by 5 Sig Bn"};
 
 const CO_DIRECTIVES=[
-{title:"Anti-Snake Trench — Universal",text:"Dig anti-snake trenches around every individual tent/bivouac at all locations (Fwd Bns, Gun Posn, Rear Party, admin/HQ areas). Not limited to defence locations only. Supervisors: FB Comds at fwd locations, Rear OC at cantonment, QM for stores areas.",date:"06 Jul 2026"},
-{title:"Contact/Sighting Reaction + SITREP",text:"If own troops sight the enemy (TF-B/TF-C) during routine work or en recce, react per normal battle drill. CO personally submits SITREP to Div Ctrl HQ following any such sighting/contact. All ranks: react and report up immediately.",date:"06 Jul 2026"},
-{title:"Sick Soldier Reporting",text:"Whenever any soldier falls sick, Adjutant must inform TF-A HQ immediately. Medical Asst/CLS at each location is the first informant and feeds the Adjutant without delay.",date:"06 Jul 2026"},
+{title:"Anti-Snake Trench — Universal",date:"06 Jul 2026",points:[
+"Dig anti-snake trenches around every individual tent/bivouac at all locations (Fwd Bns, Gun Posn, Rear Party, admin/HQ areas)",
+"Not limited to defence locations only",
+"Supervisors: FB Comds at fwd locations, Rear OC at cantonment, QM for stores areas"]},
+{title:"Contact/Sighting Reaction + SITREP",date:"06 Jul 2026",points:[
+"If own troops sight the enemy (TF-B/TF-C) during routine work or en recce, react per normal battle drill",
+"CO personally submits SITREP to Div Ctrl HQ following any such sighting/contact",
+"All ranks: react and report up immediately"]},
+{title:"Sick Soldier Reporting",date:"06 Jul 2026",points:[
+"Whenever any soldier falls sick, Adjutant must inform TF-A HQ immediately",
+"Medical Asst/CLS at each location is the first informant and feeds the Adjutant without delay"]},
 ];
 
-const TIMELINE={
-"Pre-Exercise":[
-{t:"17 Jun",e:"Parade State forwarded to Bde (Anx J); COMPLAN received from 5 Sig Bn"},
-{t:"18 Jun",e:"Prep training programme submitted to Bde (GS Br)"},
-{t:"21 Jun",e:"Plan Presentation by CO to Bde"},
-{t:"Cushion pd",e:"One-week prep trg: defence, minor ops, target setting, explosive handling"},
-{t:"24 Jun",e:"Location State (Anx B), helipad data, detailed vehicle plan to GS Br"},
-{t:"25 Jun",e:"Recce complete (min 8 km from IB); umpire names to Sta HQ Cumilla; attend Bn Def Layout demo (41 Med)"},
-{t:"29 Jun",e:"Attend Raid demo (16 Fd Regt)"},
-{t:"30 Jun",e:"Dummy targets prepared; collect all red vests from TF-B HQ"},
-{t:"01 Jul",e:"Target completion report + photos to Bde; red vests distributed; Umpire Briefing by Chief Umpire; ready for TF-A Comd target visit"},
-{t:"03 Jul",e:"Thunder arresters in unit possession (Bde deadline)"},
-{t:"04 Jul",e:"FB comds collect thunder arresters; vehicle loading complete; drivers rest by 2000 hrs; route cards, windshield serials, EME fitness forms"},
-{t:"Before move",e:"3 days' dry ration per soldier; POL drawn; water tablets, anti-snake kits issued; ammo segregated (live boxes = red tape cross); local admin/PS informed; movement intimated to Div Comd Voice by 1200 hrs prev day"},
-],
-"Movement Day — 05 Jul":[
-{t:"0600",e:"Convoy departs in 3 packets (max 40 km/h; gaps 75–100 yd day / 50–70 yd night; RP in lead veh; spanner patrol at rear)"},
-{t:"—",e:"Pkt 1: Capt Naim Uddin | Pkt 2: Maj Tahminul Islam | Pkt 3: Capt Arman Habib Apu"},
-{t:"—",e:"QMAC set + operator in first and last vehicle of every packet"},
-{t:"—",e:"Debus and occupy defence on foot with proper battle drill"},
-{t:"—",e:"Report start and arrival to Div Comd Voice"},
-{t:"1800",e:"Deployment complete"},
-],
-"During Exercise (05–14 Jul)":[
-{t:"061500",e:"All radio comms established (HF/VHF/SDS)"},
-{t:"Daily",e:"Password promulgated; Rear OC reports 0700 & 2000 hrs; anti-snake trenches (ALL tents), thunder arresters, RPs, sentries checked"},
-{t:"Daily",e:"Ammo state and segregation verified at each location"},
-{t:"Daily",e:"Minor-ops execution tracked against unit's 08-raid target"},
-{t:"Continuous",e:"Realistic target depiction; recce/execution at night; ptl comd briefing before any party leaves def loc"},
-{t:"Continuous",e:"Every engagement covered by 2 umpires (en ctrl + player ctrl); every soldier in min 1 minor op; min 20 pax at isolated targets"},
-{t:"Continuous",e:"React per battle drill if en sighted during routine work; CO submits SITREP to Div Ctrl HQ (CO's Directive #2)"},
-{t:"Continuous",e:"Adjutant informs TF-A HQ immediately of any soldier falling sick (CO's Directive #3)"},
-{t:"Immediate",e:"Report MT accidents (Anx L / AR(I) 260), location changes, helipad changes"},
-],
-"Return & Post-Exercise":[
-{t:"14 Jul",e:"Foot to embussing pt, vehicle to cantt; obtain NOC from local authority; pay crop compensation"},
-{t:"22 Jul",e:"AAR forwarded to Bde HQ (Anx M: participants %, minor-op state, challenges, doctrine changes, local youth involvement, civilian comments, recommendations)"},
-]};
-
-const APPOINTMENTS=[
-{name:"Commanding Officer (CO)",role:"Lt Col Nafis Bin Ahmed, psc, G — Convoy Comd, Unit Umpire",items:[
-"Approve prep-training programme; submit to Bde by 18 Jun","Conduct Plan Presentation to Bde on 21 Jun",
-"Approve final recce, defence layout, target siting (min 8 km from IB)","Attend Chief Umpire's briefing on 01 Jul; receive TF-A Comd's target visit",
-"Sole authority for all vehicle movement — no vehicle moves without CO's order","Amend camp security directives as situation demands",
-"Certify Parade State / Location State / Forecast compliance; sign AAR by 22 Jul","Decide on emergency leave (extreme cases only)",
-"⚡ Submit SITREP to Div Ctrl HQ on any en sighting during routine work (CO's Directive #2)"]},
-{name:"Second-in-Command (2IC)",role:"Maj Md Tahminul Islam — Asst Comd, Convoy 2IC, Packet 2 Comd",items:[
-"Maintain master checklist/timeline; track completion for CO","Cross-check every officer/appointment has actioned their part by each deadline",
-"Coordinate target prep across sub-units; consolidate report + photos by 01 Jul","Supervise red vest collection (30 Jun) and redistribution (01 Jul)",
-"Act as Unit Umpire; command Packet 2 during movement","Consolidate Parade State, Location State, vehicle plan for Bde",
-"Supervise defence-position 2ICs; chase thunder arresters, POL, rations, water tablets, anti-snake kits",
-"Monitor daily reports/returns; verify 20-pax minimum at isolated targets","Stand in for CO on admin decisions when CO is forward/unavailable",
-"Ensure anti-snake trenches dug around ALL tents/bivouacs at ALL locations (CO's Directive #1)"]},
-{name:"Adjutant",role:"Capt Md Arman Habib Apu — Packet 3 Comd",items:[
-"Submit Parade State (Anx J) by 17 Jun; Location State/helipad data by 24 Jun","Forward umpire nominal roll to Sta HQ Cumilla by 25 Jun",
-"Maintain Forecast of Major Events tracker (Anx K)","Coordinate RP tasking; command Packet 3 during movement",
-"Draft movement intimation to Div Comd Voice (1200 hrs prev day, at move-out, on arrival)","Report MT accidents (Anx L / AR(I) 260) immediately",
-"Custodian of daily password schedule; promulgate on receipt from Div HQ",
-"⚡ Inform TF-A HQ immediately of any soldier falling sick (CO's Directive #3)"]},
-{name:"Quartermaster (QM)",role:"Appointment-based — name to be confirmed",items:[
-"Issue 3 days' dry ration, POL, water tablets, anti-snake kits before departure","Issue mug/mess tin only — no bamboo, glass, or ceramic",
-"Collect thunder arresters; fix at each location by 03 Jul","Coordinate red vest collection from TF-B HQ; hand to 2IC",
-"Issue sealed + loose ammo per location; mark live boxes with red tape; segregate live/blank at all times",
-"Confirm signal stores/walkie-talkie collection with Signal NCO (2 days before move)","No comfort items to be issued/carried"]},
-{name:"Forward Bn / Gun Position Commanders",role:"Lt Fwd Bn (Kachua), Rt Fwd Bn (Madhaiya), Gun Posn (Barura)",items:[
-"Complete recce by 25 Jun (min 8 km from IB); build dummy target by 30 Jun; submit report + photos by 01 Jul",
-"Occupy defence on foot with proper battle drill; realistic depiction (size, layout, manning)",
-"⚡ Dig anti-snake trenches around EVERY tent/bivouac — not just perimeter (CO's Directive #1)",
-"Fix thunder arrester by 03 Jul; post sentries day/night; check duty performance",
-"Weapons on chain/sling; secure crossing water obstacles; maintain mobile call centre for ORs",
-"Ensure Medical Asst/CLS present with first-aid kit; brief patrols before movement",
-"Every engagement covered by 2 umpires; conduct assigned share of 08 raids",
-"Maintain min 20 pax at isolated targets; enforce Do's/Don'ts within own AOR; report daily status (0700/2000)"]},
-{name:"MTO / MT NCO",role:"Vehicle movement, safety, convoy discipline",items:[
-"Vehicle fitness/EME clearance before movement; route cards; windshield serials",
-"Brief drivers/2nd riders; enforce rest by 2000 hrs night before move","Detail spanner patrol; enforce breakdown drill (pull left, no full-convoy halt)",
-"RP at level crossings; halt inspections off main road; camouflage nets on all vehicles when parked",
-"POL dump dug-in at low ground, sentry posted, no naked flame within 50 yds","No vehicle overloading; civilian vehicles given priority to pass"]},
-{name:"Signal Officer / Regt Signal NCO",role:"Communications and net management",items:[
-"Collect radios/walkie-talkies 2 days before move; distribute per call-sign plan",
-"Establish net (freq 1st ckt 60-65, 2nd ckt 60-70; change word Parul→Champa)",
-"Brief operators: BADAL (silence imposed), JHANKAR (silence broken), BIJLI (real emergency)",
-"Ensure comms established by 061500 Jul; anti-jamming procedure ready; sets off in thunderstorms",
-"QMAC set + operator in first and last vehicle of every convoy packet","Protect radio eqpt from rain; maintain SDS liaison with 5 Sig Bn"]},
+const TIMELINE_DURING=[
+{tag:"H-Hour",e:"All radio comms established (HF/VHF/SDS) by 061500"},
+{tag:"Daily",e:"Password promulgated; Rear OC reports 0700 & 2000 hrs; anti-snake trenches (ALL tents), thunder arresters, RPs, sentries checked"},
+{tag:"Daily",e:"Ammo state and segregation verified at each location"},
+{tag:"Daily",e:"Minor-ops execution tracked against unit's 08-raid target"},
+{tag:"Continuous",e:"Realistic target depiction; recce/execution at night; ptl comd briefing before any party leaves def loc"},
+{tag:"Continuous",e:"Every engagement covered by 2 umpires (en ctrl + player ctrl); every soldier in min 1 minor op; min 20 pax at isolated targets"},
+{tag:"Continuous",e:"React per battle drill if en sighted during routine work; CO submits SITREP to Div Ctrl HQ (CO's Directive #2)"},
+{tag:"Continuous",e:"Adjutant informs TF-A HQ immediately of any soldier falling sick (CO's Directive #3)"},
+{tag:"Immediate",e:"Report MT accidents (Anx L / AR(I) 260), location changes, helipad changes"},
 ];
 
 const DOS=["Individual must know and carry his charter of duties","Personal weapon always carried by authorised individual; sling and chain for all SA","Local PS and population informed of explosive/blank firing before commencement","Strength of group employed in isolation not less than 20 personnel","Obtain NOC from local authority before leaving ex area","Limited cooking utensils; mug (enamel) and mess tin only","Always carry anti-snake bite kit","Use natural cover and C/C; utilise drones, NVG, hand-to-hand comm sets, range finders effectively","One magazine per weapon; secure weapons crossing water obstacles","Adequate socks; compensate crop damage; helipad with wind socks, red/yellow flags, GPS"];
@@ -213,12 +158,8 @@ subunits:[
 ]},
 ]}];
 
-const BATTLE_RHYTHM=[
-"0700 & 2000 — Rear OC status call received","Daily — Password/code word compliance verified","Daily — Anti-snake trenches checked at ALL tents/bivouacs (every location)","Daily — Ammunition state and segregation checked at each location","Daily — Minor-ops execution tracked against unit's 08-raid target","Daily — Any MT accident/incident reports actioned within the hour","Ongoing — Verify no Do's/Don'ts violations (esp. mobile phones, social media, civilian contact)","Ongoing — Confirm 20-personnel minimum at isolated targets","Ongoing — Any en sighting → ensure CO submits SITREP to Div Ctrl HQ","Ongoing — Any sick soldier → ensure Adjutant informs TF-A HQ","22 Jul — AAR consolidated and forwarded to Bde"
-];
-
 /* ===== STATE ===== */
-let tab="overview",checked={},leafletMap=null;
+let tab="overview",leafletMap=null;
 const R=document.getElementById("root");
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 function el(h){const t=document.createElement("template");t.innerHTML=h.trim();return t.content.firstElementChild;}
@@ -227,38 +168,37 @@ function el(h){const t=document.createElement("template");t.innerHTML=h.trim();r
 function render(){
 R.innerHTML="";
 const shell=el(`<div>
-<div class="classified-strip mono">${META.classification} · ${META.serial} · ${META.formation} · ${META.duration}</div>
+<div class="classified-strip mono">${META.exercise}</div>
 <header style="border-bottom:1px solid var(--rule);background:var(--paper-light)">
 <div class="container" style="padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-<div><div class="mono text-xs text-olive-dark tracking-widest">17 FIELD REGIMENT ARTILLERY · CUMILLA CANTT</div>
-<h1 style="font-size:22px;font-weight:700;margin:2px 0 0">EX BOJRO AGHAT — Officer Workbench</h1></div>
+<div><div class="mono text-xs text-olive-dark tracking-widest">THE RAVAGERS · CUMILLA CANTT</div>
+<h1 style="font-size:22px;font-weight:700;margin:2px 0 0">EX BOJRO AGHAT</h1></div>
 <div class="mono text-xs text-ink-soft text-right hide-mobile"><div>${META.serial}</div><div>05–14 Jul 2026</div></div></div>
 <nav class="container"><div class="tab-nav" id="tn"></div></nav></header>
 <main id="main" style="padding-bottom:32px"></main>
 <footer style="border-top:1px solid var(--rule);background:var(--paper-light);padding:10px;text-align:center;font-family:ui-monospace,monospace;font-size:9px;color:var(--ink-soft);letter-spacing:.15em">
 RESTRICTED · FOR TRAINING USE ONLY · SOURCES: HQ 33 ARTY BDE GEN INSTR &amp; ANNEXES, 17 FD REGT GEN INSTR, ADMIN/MOVEMENT INSTR, BMA TARGET ANALYSIS, BORNONA SERIALS</footer></div>`);
 R.appendChild(shell);
-const tabs=[{id:"overview",l:"Overview"},{id:"map",l:"Map"},{id:"timeline",l:"Timeline"},{id:"appointments",l:"Appointments"},{id:"comms",l:"Comms & Rules"},{id:"dailyops",l:"Daily Ops"},{id:"rhythm",l:"2IC Battle Rhythm"}];
+const tabs=[{id:"overview",l:"Overview"},{id:"map",l:"Map"},{id:"timeline",l:"Timeline"},{id:"comms",l:"Comms & Rules"},{id:"dailyops",l:"Daily Ops"}];
 const tn=document.getElementById("tn");
 tabs.forEach(t=>{const b=el(`<button class="tab ${t.id===tab?'active':''}">${t.l}</button>`);b.onclick=()=>{tab=t.id;render();};tn.appendChild(b);});
 const m=document.getElementById("main");
-({overview:rOverview,map:rMap,timeline:rTimeline,appointments:rAppt,comms:rComms,dailyops:rDailyOps,rhythm:rRhythm})[tab](m);
+({overview:rOverview,map:rMap,timeline:rTimeline,comms:rComms,dailyops:rDailyOps})[tab](m);
 }
 
 /* ===== OVERVIEW ===== */
 function rOverview(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
 w.innerHTML=`
-<div class="grid-4 mb-5">
+<div class="grid-3 mb-5">
 <div class="card p-3"><div class="text-xs uppercase tracking-widest text-ink-soft">Exercise</div><div class="mono text-sm mt-1">${META.exercise}</div></div>
 <div class="card p-3"><div class="text-xs uppercase tracking-widest text-ink-soft">Formation</div><div class="mono text-sm mt-1">${META.formation}</div></div>
 <div class="card p-3"><div class="text-xs uppercase tracking-widest text-ink-soft">Duration</div><div class="mono text-sm mt-1">${META.duration}</div></div>
-<div class="card p-3"><div class="text-xs uppercase tracking-widest text-ink-soft">Depl Complete</div><div class="mono text-sm mt-1">${META.deplComplete}</div></div>
 </div>
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">Our Role</h2><p class="text-base">${META.role}</p></section>
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">Concept</h2><p class="text-base">${META.concept}</p></section>
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">End State</h2><p class="text-base">${META.endState}</p></section>
-${CO_DIRECTIVES.map(d=>`<div class="directive-box mb-3"><strong>CO's Directive (${d.date}):</strong> ${esc(d.title)} — ${esc(d.text)}</div>`).join("")}
+${CO_DIRECTIVES.map(d=>`<div class="directive-box mb-3"><strong>CO's Directive (${d.date}): ${esc(d.title)}</strong><ul style="margin:6px 0 0;padding-left:18px">${d.points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>`).join("")}
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-3">Key Personnel</h2>
 <table><thead><tr><th>Appointment</th><th>Name</th><th>Contact</th></tr></thead><tbody>${PERSONNEL.map(p=>`<tr><td>${esc(p.appt)}</td><td class="font-semibold">${esc(p.name)}</td><td class="mono">${esc(p.contact)}</td></tr>`).join("")}</tbody></table></section>
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-3">Ammo Allocation per Location</h2>
@@ -267,7 +207,7 @@ ${CO_DIRECTIVES.map(d=>`<div class="directive-box mb-3"><strong>CO's Directive (
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-3">Code Words</h2>
 <table><thead><tr><th>Word</th><th>Meaning</th><th>Used By</th></tr></thead><tbody>${CODE_WORDS.map(c=>`<tr><td class="mono font-semibold">${c[0]}</td><td>${c[1]}</td><td>${c[2]}</td></tr>`).join("")}</tbody></table></section>
 <section class="grid-2 mb-4">
-${[["map","Map","Deployment areas with GPS pins"],["timeline","Timeline","Pre-ex through post-ex checklist"],["appointments","Appointments","Officer responsibilities"],["comms","Comms & Rules","Call signs, frequencies, Do's/Don'ts"],["dailyops","Daily Ops","Maj Cmt + Bornona narratives"],["rhythm","2IC Rhythm","Daily battle rhythm for 2IC"]].map(([id,t,d])=>`<button data-g="${id}" class="card p-4" style="text-align:left"><div class="font-bold">→ ${t}</div><div class="text-sm text-ink-soft">${d}</div></button>`).join("")}
+${[["map","Map","Deployment areas with GPS pins"],["timeline","Timeline","Exercise-duration tasks by Daily / Continuous / Immediate"],["comms","Comms & Rules","Call signs, frequencies, Do's/Don'ts"],["dailyops","Daily Ops","Maj Cmt + Bornona narratives"]].map(([id,t,d])=>`<button data-g="${id}" class="card p-4" style="text-align:left"><div class="font-bold">→ ${t}</div><div class="text-sm text-ink-soft">${d}</div></button>`).join("")}
 </section>`;
 w.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{tab=b.dataset.g;render();});
 m.appendChild(w);
@@ -297,30 +237,19 @@ mk.on("click",()=>{info.innerHTML=`<div class="font-bold text-olive-dark">${esc(
 /* ===== TIMELINE ===== */
 function rTimeline(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
-Object.entries(TIMELINE).forEach(([sec,items])=>{
-const card=el(`<div class="card mb-4"><div class="p-3 border-b"><h2 class="text-lg font-bold" style="margin:0">${sec}</h2></div><div></div></div>`);
+w.appendChild(el(`<h2 class="text-lg font-bold mb-3">During Exercise — 05–14 Jul 2026</h2>`));
+const groups={},order=[];
+TIMELINE_DURING.forEach(item=>{
+if(!groups[item.tag]){groups[item.tag]=[];order.push(item.tag);}
+groups[item.tag].push(item.e);
+});
+order.forEach(tag=>{
+const card=el(`<div class="card mb-4"><div class="p-3 border-b"><h2 class="text-lg font-bold" style="margin:0">${esc(tag)}</h2></div><div></div></div>`);
 const body=card.querySelector("div:last-child");
-items.forEach(item=>{
-const row=el(`<div class="ci"><div style="flex:1"><span class="mono text-xs text-red font-semibold">${esc(item.t)}</span> <span class="itxt text-sm">${esc(item.e)}</span></div></div>`);
-body.appendChild(row);
+groups[tag].forEach(e=>{
+body.appendChild(el(`<div class="ci"><div style="flex:1"><span class="itxt text-sm">${esc(e)}</span></div></div>`));
 });
 w.appendChild(card);
-});
-m.appendChild(w);
-}
-
-/* ===== APPOINTMENTS ===== */
-function rAppt(m){
-const w=el(`<div class="container" style="padding:20px 16px"></div>`);
-w.appendChild(el(`<p class="text-sm text-ink-soft mb-4">Officer responsibilities for <b>EX BOJRO AGHAT</b>. Items marked ⚡ are CO's Directives (06 Jul 2026).</p>`));
-APPOINTMENTS.forEach((a,idx)=>{
-const d=el(`<details class="card mb-3" ${idx<2?'open':''}><summary><span>${idx+1}. ${esc(a.name)}</span></summary><div class="border-t p-4"><div class="text-sm italic text-ink-soft mb-3">${esc(a.role)}</div><ul style="list-style:none;padding:0;margin:0" class="space-y-2 text-sm"></ul></div></details>`);
-const ul=d.querySelector("ul");
-a.items.forEach(it=>{
-const isDir=it.startsWith("⚡");
-ul.appendChild(el(`<li style="display:flex;gap:8px;${isDir?'color:var(--olive-dark);font-weight:600':''}"><span class="text-olive">▸</span><span>${esc(it)}</span></li>`));
-});
-w.appendChild(d);
 });
 m.appendChild(w);
 }
@@ -329,24 +258,35 @@ m.appendChild(w);
 function rComms(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
 w.innerHTML=`
-<section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-3">Communications</h2>
-<div class="grid-2 mb-3">
-<div><div class="text-xs uppercase tracking-widest text-ink-soft">Frequencies</div><div class="mono text-sm mt-1">${COMMS.freqs}</div></div>
-<div><div class="text-xs uppercase tracking-widest text-ink-soft">Freq Change Word</div><div class="mono text-sm mt-1">${COMMS.freqChange}</div></div>
-<div><div class="text-xs uppercase tracking-widest text-ink-soft">Comms Established By</div><div class="mono text-sm mt-1">${COMMS.commsBy}</div></div>
-<div><div class="text-xs uppercase tracking-widest text-ink-soft">SDS</div><div class="mono text-sm mt-1">${COMMS.sds}</div></div>
-</div>
-<div class="text-xs uppercase tracking-widest text-ink-soft mb-2 mt-4">Net Structure</div>
-<div class="text-sm mb-3">HF: ${COMMS.hfLink}<br>VHF: ${COMMS.vhfLink}<br>Walkie-Talkies where available</div>
-<div class="text-xs uppercase tracking-widest text-ink-soft mb-2">Radio Silence</div>
-<table><thead><tr><th>Code Word</th><th>Action</th></tr></thead><tbody>${RADIO_SILENCE.map(r=>`<tr><td class="mono font-semibold">${r[0]}</td><td>${r[1]}</td></tr>`).join("")}</tbody></table>
+<div class="comms-hero"><h2>📡 Communications Plan</h2><p>Nets, code words, and call signs for EX BOJRO AGHAT</p></div>
+<section class="grid-4 mb-4">
+<div class="info-tile"><div class="ic">📻</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Frequencies</div><div class="mono text-sm mt-1">${COMMS.freqs}</div></div>
+<div class="info-tile"><div class="ic">🔤</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Freq Change Word</div><div class="mono text-sm mt-1">${COMMS.freqChange}</div></div>
+<div class="info-tile"><div class="ic">⏱️</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Comms Established By</div><div class="mono text-sm mt-1">${COMMS.commsBy}</div></div>
+<div class="info-tile"><div class="ic">📶</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">SDS</div><div class="mono text-sm mt-1">${COMMS.sds}</div></div>
 </section>
-<section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-3">Call Signs</h2>
-<table><thead><tr><th>Appointment</th><th>Call Sign</th></tr></thead><tbody>${CALL_SIGNS.map(c=>`<tr><td>${c[0]}</td><td class="mono font-semibold">${c[1]}</td></tr>`).join("")}</tbody></table></section>
-<section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-3">Do's (All Ranks)</h2>
-<ul style="list-style:none;padding:0;margin:0" class="space-y-2 text-sm">${DOS.map(d=>`<li style="display:flex;gap:8px"><span class="text-olive">✓</span><span>${esc(d)}</span></li>`).join("")}</ul></section>
-<section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-3">Don'ts (All Ranks)</h2>
-<ul style="list-style:none;padding:0;margin:0" class="space-y-2 text-sm">${DONTS.map(d=>`<li style="display:flex;gap:8px"><span class="text-red">✗</span><span>${esc(d)}</span></li>`).join("")}</ul></section>`;
+<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-2">🔗 Net Structure</h2>
+<div class="text-sm mb-3">HF: ${COMMS.hfLink}<br>VHF: ${COMMS.vhfLink}<br>Walkie-Talkies where available</div>
+<div class="text-xs uppercase tracking-widest text-ink-soft mb-2">Radio Silence Codes</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">${RADIO_SILENCE.map(r=>`<span class="chip ${r[0]==='BIJLI'?'chip-red':'chip-olive'}">${r[0]} — ${r[1]}</span>`).join("")}</div>
+</section>
+<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-3">🔑 Code Words</h2>
+<div style="display:flex;flex-wrap:wrap;gap:8px">${CODE_WORDS.map(c=>`<span class="chip ${c[0]==='BIJLI'?'chip-red':'chip-blue'}">${c[0]} — ${c[1]}</span>`).join("")}</div>
+</section>
+<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-3">📞 Call Signs</h2>
+<div class="grid-3">${CALL_SIGNS.map(c=>`<div class="info-tile" style="display:flex;justify-content:space-between;align-items:center"><span class="text-sm">${c[0]}</span><span class="chip chip-blue">${c[1]}</span></div>`).join("")}</div>
+</section>
+<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-3">✅ Do's (All Ranks)</h2>
+<div class="space-y-2">${DOS.map(d=>`<div class="rule-item ok"><span class="rule-badge ok">✓</span><span class="text-sm">${esc(d)}</span></div>`).join("")}</div>
+</section>
+<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-3">🚫 Don'ts (All Ranks)</h2>
+<div class="space-y-2">${DONTS.map(d=>`<div class="rule-item no"><span class="rule-badge no">✗</span><span class="text-sm">${esc(d)}</span></div>`).join("")}</div>
+</section>`;
 m.appendChild(w);
 }
 
@@ -370,22 +310,6 @@ w.appendChild(card);
 });
 });
 w.appendChild(el(`<p class="card p-3 text-xs text-ink-soft italic">Future days' Maj Cmt will be appended here as new dated sections. Bornona narrative basis is cross-referenced to each serial above.</p>`));
-m.appendChild(w);
-}
-
-/* ===== 2IC BATTLE RHYTHM ===== */
-function rRhythm(m){
-const w=el(`<div class="container" style="padding:20px 16px"></div>`);
-w.appendChild(el(`<h2 class="text-lg font-bold mb-3">Daily Battle Rhythm Checklist — 2IC</h2>`));
-const card=el(`<div class="card"></div>`);
-BATTLE_RHYTHM.forEach((item,i)=>{
-const k='br_'+i;
-const row=el(`<div class="ci ${checked[k]?'done':''}"><input type="checkbox" ${checked[k]?'checked':''}/><span class="itxt text-sm">${esc(item)}</span></div>`);
-row.querySelector("input").onchange=()=>{checked[k]=!checked[k];render();};
-card.appendChild(row);
-});
-w.appendChild(card);
-w.appendChild(el(`<p class="text-xs text-ink-soft italic mt-4">This checklist resets each day. Items marked ⚡ in the Appointments tab are CO's Directives integrated into the daily rhythm.</p>`));
 m.appendChild(w);
 }
 
