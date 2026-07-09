@@ -236,20 +236,28 @@ subunits:[
 ]}];
 
 /* ===== STATE ===== */
-let tab="overview",leafletMap=null;
+let tab="overview",leafletMap=null,countdownInterval=null;
 const R=document.getElementById("root");
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 function el(h){const t=document.createElement("template");t.innerHTML=h.trim();return t.content.firstElementChild;}
 function getExDayStatus(){
 const start=new Date(2026,6,5,0,0,0),end=new Date(2026,6,14,23,59,59),now=new Date();
-if(now<start)return{label:"Exercise starts 05 Jul 2026",pct:0};
-if(now>end)return{label:"Exercise complete — AAR due 22 Jul",pct:100};
+if(now<start)return{label:"Exercise starts 05 Jul 2026",pct:0,target:start,targetLabel:"Exercise Start"};
+if(now>end)return{label:"Exercise complete — AAR due 22 Jul",pct:100,target:null,targetLabel:null};
 const day=Math.min(10,Math.floor((now-start)/86400000)+1);
-return{label:`Day ${day} of 10`,pct:(day/10)*100};
+if(day>=10)return{label:`Day ${day} of 10`,pct:100,target:end,targetLabel:"Exercise End"};
+return{label:`Day ${day} of 10`,pct:(day/10)*100,target:new Date(2026,6,5+day,0,0,0),targetLabel:`Day ${day+1}`};
+}
+function fmtCountdown(ms){
+if(ms<=0)return"00:00:00:00";
+const s=Math.floor(ms/1000),dd=Math.floor(s/86400),hh=Math.floor((s%86400)/3600),mm=Math.floor((s%3600)/60),ss=s%60;
+const p=n=>String(n).padStart(2,'0');
+return p(dd)+":"+p(hh)+":"+p(mm)+":"+p(ss);
 }
 
 /* ===== RENDER ===== */
 function render(){
+if(countdownInterval){clearInterval(countdownInterval);countdownInterval=null;}
 R.innerHTML="";
 const shell=el(`<div>
 <div class="classified-strip mono">${META.exercise}</div>
@@ -277,7 +285,10 @@ w.innerHTML=`
 <h2>🎖️ ${esc(META.exercise)}</h2>
 <p>${esc(META.formation)} · ${esc(META.duration)}</p>
 <div class="progress-bar mt-2"><div class="progress-fill" style="width:${exStatus.pct}%"></div></div>
-<div class="text-xs mt-1" style="opacity:.9">${esc(exStatus.label)}</div>
+<div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:4px;margin-top:6px">
+<span class="text-xs" style="opacity:.9">${esc(exStatus.label)}</span>
+<span class="mono text-xs" id="countdown" style="opacity:.9;letter-spacing:.08em"></span>
+</div>
 </div>
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">Our Role</h2><p class="text-base">${META.role}</p></section>
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">Concept</h2><p class="text-base">${META.concept}</p></section>
@@ -292,6 +303,10 @@ ${[["map","Map","Deployment areas with GPS pins"],["timeline","Timeline","Exerci
 </section>`;
 w.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{tab=b.dataset.g;render();});
 m.appendChild(w);
+if(exStatus.target){
+const updCd=()=>{const c=document.getElementById("countdown");if(!c)return;const r=exStatus.target-new Date();if(r<=0){clearInterval(countdownInterval);countdownInterval=null;render();return;}c.textContent="⏱ "+fmtCountdown(r)+" to "+exStatus.targetLabel;};
+updCd();countdownInterval=setInterval(updCd,1000);
+}
 }
 
 /* ===== MAP ===== */
