@@ -35,8 +35,6 @@ button.card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(33,38,31
 @keyframes copiedFlash{0%,60%{box-shadow:0 0 0 2px var(--olive);}100%{box-shadow:none;}}
 .copy-toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--olive-dark);color:#fff;padding:9px 18px;border-radius:999px;font-size:13px;font-weight:600;box-shadow:0 4px 18px rgba(0,0,0,.3);opacity:0;transition:transform .25s ease,opacity .25s ease;z-index:50;pointer-events:none;}
 .copy-toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
-.theme-toggle{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:8px;border:1px solid var(--rule);background:var(--paper);font-size:18px;transition:background .15s,transform .15s;}
-.theme-toggle:hover{background:var(--paper-dark);transform:scale(1.05);}
 .ops-search{width:100%;font-family:inherit;font-size:14px;padding:11px 14px;border-radius:8px;border:1px solid var(--rule);background:var(--paper-light);color:var(--ink);margin-bottom:16px;}
 .ops-search:focus{outline:none;border-color:var(--olive);box-shadow:0 0 0 3px rgba(69,89,47,.15);}
 tr.filtered-out{display:none;}
@@ -359,7 +357,6 @@ const R=document.getElementById("root");
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 function el(h){const t=document.createElement("template");t.innerHTML=h.trim();return t.content.firstElementChild;}
 function applyTheme(){document.documentElement.setAttribute("data-theme",theme);}
-function toggleTheme(){theme=theme==="dark"?"light":"dark";try{localStorage.setItem("ba_theme",theme);}catch(e){}applyTheme();const b=document.getElementById("themeBtn");if(b)b.textContent=theme==="dark"?"☀️":"🌙";}
 let toastTimer=null;
 function showToast(msg){let t=document.getElementById("copyToast");if(!t){t=el(`<div class="copy-toast" id="copyToast"></div>`);document.body.appendChild(t);}t.textContent=msg;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),1400);}
 function copyText(str,elem){const done=()=>{showToast("✓ Copied: "+str);if(elem){elem.classList.remove("copied-flash");void elem.offsetWidth;elem.classList.add("copied-flash");}};
@@ -387,15 +384,13 @@ R.innerHTML="";
 const shell=el(`<div>
 <div class="classified-strip mono">${META.exercise}</div>
 <header style="border-bottom:1px solid var(--rule);background:var(--paper-light)">
-<div class="container" style="padding:10px 16px;display:flex;align-items:center;justify-content:center;position:relative">
+<div class="container" style="padding:10px 16px;display:flex;align-items:center;justify-content:center">
 <div class="mono text-olive-dark tracking-widest" style="font-size:22px;font-weight:700">THE RAVAGERS</div>
-<button class="theme-toggle" id="themeBtn" title="Toggle dark / light mode" style="position:absolute;right:16px">${theme==="dark"?"☀️":"🌙"}</button>
 </div>
 </header>
 <div class="tab-nav-wrap"><nav class="container"><div class="tab-nav" id="tn"></div></nav></div>
 <main id="main" style="padding-bottom:32px"></main></div>`);
 R.appendChild(shell);
-document.getElementById("themeBtn").onclick=toggleTheme;
 const tabs=[{id:"flood",l:"🌧️ Flood Watch"},{id:"overview",l:"📋 Overview"},{id:"map",l:"🗺️ Map"},{id:"timeline",l:"🕐 Timeline"},{id:"comms",l:"📡 Comms & Rules"},{id:"dailyops",l:"🎯 Daily Ops"},{id:"codirectives",l:"⚡ CO's Directives"}];
 const tn=document.getElementById("tn");
 tabs.forEach(t=>{const b=el(`<button class="tab ${t.id===tab?'active':''}">${t.l}</button>`);b.onclick=()=>{tab=t.id;render();};tn.appendChild(b);});
