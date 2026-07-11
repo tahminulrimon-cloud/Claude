@@ -343,6 +343,17 @@ function showToast(msg){let t=document.getElementById("copyToast");if(!t){t=el(`
 function copyText(str,elem){const done=()=>{showToast("✓ Copied: "+str);if(elem){elem.classList.remove("copied-flash");void elem.offsetWidth;elem.classList.add("copied-flash");}};
 if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(str).then(done).catch(()=>fallbackCopy(str,done));}else{fallbackCopy(str,done);}}
 function fallbackCopy(str,cb){const ta=document.createElement("textarea");ta.value=str;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");cb();}catch(e){}document.body.removeChild(ta);}
+function haversineKm(lat1,lon1,lat2,lon2){const R=6371,toRad=x=>x*Math.PI/180;const dLat=toRad(lat2-lat1),dLon=toRad(lon2-lon1);const a=Math.sin(dLat/2)**2+Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(a));}
+function findNearestShelter(){
+if(!LAKSHMIPUR_SHELTERS.length){showToast("No shelters logged yet — add coordinates first");return;}
+if(!navigator.geolocation){showToast("Location not available on this device");return;}
+navigator.geolocation.getCurrentPosition(pos=>{
+const{latitude,longitude}=pos.coords;
+let best=null,bestD=Infinity;
+LAKSHMIPUR_SHELTERS.forEach(s=>{const d=haversineKm(latitude,longitude,s.lat,s.lng);if(d<bestD){bestD=d;best=s;}});
+if(best)window.open(`https://www.google.com/maps/dir/?api=1&destination=${best.lat},${best.lng}`,"_blank");
+},()=>{showToast("Couldn't get your location — check location permission");});
+}
 function getExDayStatus(){
 const start=new Date(2026,6,5,0,0,0),end=new Date(2026,6,14,23,59,59),now=new Date();
 if(now<start)return{label:"Exercise starts 05 Jul 2026",pct:0,target:start,targetLabel:"Exercise Start"};
@@ -572,8 +583,27 @@ const LAKSHMIPUR_CONTACTS=[
 {role:"Superintendent of Police (SP), Lakshmipur",name:"District police control room",phone:"",verified:false},
 {role:"Civil Surgeon, Lakshmipur",name:"District health / medical",phone:"",verified:false},
 {role:"District Relief & Rehabilitation Officer (DRRO)",name:"Disaster management",phone:"",verified:false},
+{role:"UNO, Lakshmipur Sadar",name:"Upazila Nirbahi Officer",phone:"",verified:false},
+{role:"UNO, Ramganj",name:"Upazila Nirbahi Officer",phone:"",verified:false},
+{role:"UNO, Raipur",name:"Upazila Nirbahi Officer",phone:"",verified:false},
+{role:"UNO, Ramgati",name:"Upazila Nirbahi Officer",phone:"",verified:false},
+{role:"UNO, Kamalnagar",name:"Upazila Nirbahi Officer",phone:"",verified:false},
+{role:"Bangladesh Coast Guard",name:"Nearest station / control room",phone:"",verified:false},
+{role:"Bangladesh Red Crescent Society",name:"Lakshmipur unit",phone:"",verified:false},
 {role:"GSO-1, HQ 33 Inf Div",name:"Flood deployment reporting",phone:"01769032006",verified:true},
 {role:"GSO-2 (Ops), HQ 33 Inf Div",name:"Flood deployment reporting",phone:"01968062008",verified:true},
+];
+const LAKSHMIPUR_UPAZILAS=[
+{name:"Lakshmipur Sadar",lat:22.950,lng:90.825},
+{name:"Ramganj",lat:23.100,lng:90.850},
+{name:"Raipur",lat:22.975,lng:90.733},
+{name:"Ramgati",lat:22.606,lng:90.997},
+{name:"Kamalnagar",lat:22.750,lng:90.867},
+];
+const LAKSHMIPUR_SHELTERS=[
+/* No verified shelter coordinates on file yet. Add {name,union,capacity,lat,lng} entries here
+   once the DC office / Cyclone Preparedness Programme list is confirmed — the routing button
+   below activates automatically as soon as this array is populated. */
 ];
 function wmo(c){const t={0:["Clear sky","☀️"],1:["Mainly clear","🌤️"],2:["Partly cloudy","⛅"],3:["Overcast","☁️"],45:["Fog","🌫️"],48:["Rime fog","🌫️"],51:["Light drizzle","🌦️"],53:["Drizzle","🌦️"],55:["Dense drizzle","🌦️"],56:["Freezing drizzle","🌧️"],57:["Freezing drizzle","🌧️"],61:["Light rain","🌧️"],63:["Rain","🌧️"],65:["Heavy rain","🌧️"],66:["Freezing rain","🌧️"],67:["Freezing rain","🌧️"],71:["Light snow","🌨️"],73:["Snow","🌨️"],75:["Heavy snow","🌨️"],77:["Snow grains","🌨️"],80:["Light showers","🌦️"],81:["Showers","🌧️"],82:["Violent showers","⛈️"],85:["Snow showers","🌨️"],86:["Snow showers","🌨️"],95:["Thunderstorm","⛈️"],96:["Thunderstorm + hail","⛈️"],99:["Thunderstorm + hail","⛈️"]};return t[c]||["—","🌡️"];}
 function fmtDay(t){const d=new Date(t+"T00:00:00");return{wd:d.toLocaleDateString("en",{weekday:"short"}),dm:d.getDate()};}
@@ -592,6 +622,11 @@ info.innerHTML=`
 <div style="overflow-x:auto"><table><thead><tr><th>River / Water Body</th><th>Notes</th><th>Danger Level (mPWD)</th></tr></thead><tbody>
 ${LAKSHMIPUR_RIVERS.map(r=>`<tr><td class="font-semibold">${esc(r.name)}</td><td class="text-xs">${esc(r.note)}</td><td class="mono text-xs">${r.danger?esc(r.danger):`<span class="text-ink-soft italic">Per FFWC — confirm</span>`}</td></tr>`).join("")}
 </tbody></table></div>
+<div class="mt-3" style="display:flex;gap:8px;flex-wrap:wrap">
+<a href="https://ffwc.gov.bd" target="_blank" rel="noopener" class="btn" style="text-decoration:none;font-size:12px">🔗 Live Water Levels — FFWC Portal ↗</a>
+<a href="https://ffwc.gov.bd" target="_blank" rel="noopener" class="btn" style="text-decoration:none;font-size:12px">🛰️ Satellite Flood Map — FFWC ↗</a>
+</div>
+<div class="text-xs text-ink-soft italic mt-2">FFWC's official gauge API requires internal authentication we don't have — live readings can't be pulled automatically into this dashboard. Use the links above to check current levels directly.</div>
 </section>
 <section class="card p-5 mb-4">
 <h2 class="text-lg font-bold mb-1">☎️ Civil Administration & Emergency Contacts</h2>
@@ -599,6 +634,12 @@ ${LAKSHMIPUR_RIVERS.map(r=>`<tr><td class="font-semibold">${esc(r.name)}</td><td
 <div>
 ${LAKSHMIPUR_CONTACTS.map(c=>`<div class="metric-row"><div style="padding-right:10px"><div class="font-semibold text-sm">${esc(c.role)}</div><div class="text-xs text-ink-soft">${esc(c.name)}</div></div><div style="flex-shrink:0">${c.verified?`<a href="tel:${esc(c.phone)}" class="chip chip-olive" style="text-decoration:none">📞 ${esc(c.phone)}</a>`:`<span class="chip chip-amber">Confirm locally</span>`}</div></div>`).join("")}
 </div>
+</section>
+<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-1">🏠 Emergency Shelters & Routing</h2>
+<div class="text-xs text-ink-soft mb-3">One-tap directions to the nearest designated flood/cyclone shelter</div>
+${LAKSHMIPUR_SHELTERS.length?`<div style="overflow-x:auto"><table><thead><tr><th>Shelter</th><th>Union / Upazila</th><th>Capacity</th></tr></thead><tbody>${LAKSHMIPUR_SHELTERS.map(s=>`<tr><td class="font-semibold">${esc(s.name)}</td><td class="text-xs">${esc(s.union)}</td><td class="mono text-xs">${esc(s.capacity||"—")}</td></tr>`).join("")}</tbody></table></div>`:`<div class="text-sm text-ink-soft italic mb-2">No verified shelter locations logged yet. Add coordinates from the DC office / Cyclone Preparedness Programme (CPP) list to enable one-tap routing.</div>`}
+<button class="btn mt-3" id="findShelterBtn" style="font-size:12px">📍 Find Nearest Shelter</button>
 </section>
 <section class="card p-5 mb-4">
 <h2 class="text-lg font-bold mb-1">📜 Div Flood Directive — HQ 33 Inf Div</h2>
@@ -622,6 +663,8 @@ ${LAKSHMIPUR_CONTACTS.map(c=>`<div class="metric-row"><div style="padding-right:
 w.appendChild(info);
 w.appendChild(el(`<p class="text-xs text-ink-soft italic mt-4">Weather & rainfall: live observations + forecast from Open-Meteo. River level: GloFAS hydrological model (indicative river discharge) — <strong>not</strong> an official FFWC/BWDB flood warning. Contact numbers marked "Confirm locally" and blank danger levels must be verified against the DC office / ffwc.gov.bd before operational use.</p>`));
 m.appendChild(w);
+const shelterBtn=info.querySelector("#findShelterBtn");
+if(shelterBtn)shelterBtn.onclick=findNearestShelter;
 const btn=bar.querySelector("#floodRefresh");
 btn.onclick=()=>loadFlood(content,btn);
 loadFlood(content,btn);
@@ -632,18 +675,22 @@ if(btn)btn.disabled=true;
 try{
 const wxUrl=`https://api.open-meteo.com/v1/forecast?latitude=${LAKSHMIPUR.lat}&longitude=${LAKSHMIPUR.lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,weather_code,wind_speed_10m&daily=precipitation_sum,precipitation_probability_max,weather_code&timezone=Asia%2FDhaka&forecast_days=7`;
 const flUrl=`https://flood-api.open-meteo.com/v1/flood?latitude=${LAKSHMIPUR.lat}&longitude=${LAKSHMIPUR.lng}&daily=river_discharge&forecast_days=7`;
-const [wx,fl]=await Promise.all([
+const uziLat=LAKSHMIPUR_UPAZILAS.map(u=>u.lat).join(",");
+const uziLng=LAKSHMIPUR_UPAZILAS.map(u=>u.lng).join(",");
+const uziUrl=`https://api.open-meteo.com/v1/forecast?latitude=${uziLat}&longitude=${uziLng}&daily=precipitation_sum&past_days=1&forecast_days=5&timezone=Asia%2FDhaka`;
+const [wx,fl,uzi]=await Promise.all([
 fetch(wxUrl).then(r=>{if(!r.ok)throw new Error("weather "+r.status);return r.json();}),
-fetch(flUrl).then(r=>{if(!r.ok)throw new Error("flood "+r.status);return r.json();})
+fetch(flUrl).then(r=>{if(!r.ok)throw new Error("flood "+r.status);return r.json();}),
+fetch(uziUrl).then(r=>{if(!r.ok)throw new Error("upazila "+r.status);return r.json();})
 ]);
-renderFlood(content,wx,fl);
+renderFlood(content,wx,fl,uzi);
 const upd=document.getElementById("floodUpdated");
 if(upd)upd.innerHTML=`<span class="live-dot"></span>Last updated `+new Date().toLocaleString("en-GB",{hour:"2-digit",minute:"2-digit",day:"2-digit",month:"short"})+" · your local time";
 }catch(e){
 content.innerHTML=`<div class="card p-5 text-center"><div style="font-size:34px">⚠️</div><div class="font-bold mb-1 mt-2">Couldn't load live data</div><div class="text-sm text-ink-soft">Check your connection and tap Refresh.<br><span class="mono text-xs">(${esc(e.message||"network error")})</span></div></div>`;
 }finally{if(btn)btn.disabled=false;}
 }
-function renderFlood(content,wx,fl){
+function renderFlood(content,wx,fl,uzi){
 const cur=wx.current,d=wx.daily,wc=wmo(cur.weather_code);
 const today=d.precipitation_sum[0]||0,maxRain=Math.max(...d.precipitation_sum,1),peakRain=Math.max(...d.precipitation_sum);
 const disc=fl.daily.river_discharge,discMax=Math.max(...disc,1),discTrendUp=disc[disc.length-1]>disc[0];
@@ -693,6 +740,26 @@ ${d.time.map((t,i)=>{const f=fmtDay(t);const mm=d.precipitation_sum[i]||0;const 
 <div class="spark">
 ${disc.map((v,i)=>{const f=fmtDay(fl.daily.time[i]);const h=Math.max(Math.round((v/discMax)*80),4);return `<div class="spark-col"><div class="text-xs mono">${v.toFixed(0)}</div><div class="spark-bar" style="height:${h}px"></div><div class="text-xs text-ink-soft">${f.dm}</div></div>`;}).join("")}
 </div>
+</section>
+${renderUpazilaRainfall(uzi)}`;
+}
+function renderUpazilaRainfall(uzi){
+if(!Array.isArray(uzi)||!uzi.length)return"";
+const rows=LAKSHMIPUR_UPAZILAS.map((u,i)=>{
+const dd=uzi[i]&&uzi[i].daily;
+if(!dd)return{name:u.name,past24:0,fcTotal:0,peak:0};
+const past24=dd.precipitation_sum[0]||0;
+const fc=dd.precipitation_sum.slice(1);
+const fcTotal=fc.reduce((a,b)=>a+(b||0),0);
+const peak=fc.length?Math.max(...fc):0;
+return{name:u.name,past24,fcTotal,peak};
+});
+return `<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-1">☔ Hyper-Local Rainfall — By Upazila</h2>
+<div class="text-xs text-ink-soft mb-3">Lakshmipur Sadar · Ramganj · Raipur · Ramgati · Kamalnagar — Open-Meteo model data, not official BMD observations</div>
+<div style="overflow-x:auto"><table><thead><tr><th>Upazila</th><th>Past 24h (mm)</th><th>5-Day Forecast Total (mm)</th><th>Peak Day (mm)</th></tr></thead><tbody>
+${rows.map(r=>`<tr><td class="font-semibold">${esc(r.name)}</td><td class="mono text-xs">${r.past24.toFixed(1)}</td><td class="mono text-xs">${r.fcTotal.toFixed(1)}</td><td class="mono text-xs">${r.peak.toFixed(1)}</td></tr>`).join("")}
+</tbody></table></div>
 </section>`;
 }
 
