@@ -8,12 +8,40 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
 :root{--paper:#F3F0E6;--paper-dark:#E6E1CE;--paper-light:#FBF9F2;--ink:#21261F;--ink-soft:#4C5142;--olive:#45592F;--olive-dark:#2B3A1D;--khaki:#A8996A;--red:#A6332F;--red-dk:#7C2521;--blue:#1F4E79;--rule:#C7BC9C;--amber:#AD7C1B;}
+:root[data-theme="dark"]{--paper:#171A14;--paper-dark:#252A1F;--paper-light:#20241B;--ink:#E8E5D8;--ink-soft:#A2A892;--olive:#6E8A45;--olive-dark:#3A4D26;--khaki:#A8996A;--red:#D45A54;--red-dk:#9E3733;--blue:#5B8FC4;--rule:#3B4230;--amber:#D9AC4E;}
+:root[data-theme="dark"] .chip-red{background:#3A211F;color:#E8A9A5;border-color:#5C302D;}
+:root[data-theme="dark"] .chip-olive{background:#26301C;color:#B8CCA0;border-color:#3C4A2C;}
+:root[data-theme="dark"] .chip-blue{background:#1E2E3E;color:#9BC0E0;border-color:#2E4258;}
+:root[data-theme="dark"] .chip-amber{background:#332A18;color:#E0C179;border-color:#4C3F20;}
+:root[data-theme="dark"] .warn-box{background:#332B14;border-color:#5C4E1F;color:#E8D9A0;}
+:root[data-theme="dark"] .directive-box{background:#1A2E1C;border-color:#2E5230;color:#A8D8AB;}
+:root[data-theme="dark"] .rule-item.ok{background:#1E2A18;}
+:root[data-theme="dark"] .rule-item.no{background:#2E1E1D;}
+html{transition:background .25s ease,color .25s ease;}
 *{box-sizing:border-box;}html,body{margin:0;padding:0;font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;background:var(--paper);color:var(--ink);-webkit-font-smoothing:antialiased;font-size:14px;line-height:1.5;}
 .mono{font-family:ui-monospace,SFMono-Regular,"SF Mono",Menlo,Consolas,monospace;}
 .container{max-width:1180px;margin:0 auto;padding:0 16px;}
 .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
 @media(max-width:640px){.grid-2,.grid-3,.grid-4{grid-template-columns:1fr;}}
 .card{background:var(--paper-light);border:1px solid var(--rule);border-radius:4px;}
+button.card{transition:transform .15s ease,box-shadow .15s ease,border-color .15s ease;}
+button.card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(33,38,31,.14);border-color:var(--olive);}
+.info-tile{transition:transform .15s ease,box-shadow .15s ease;}
+.info-tile.copyable:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(33,38,31,.14);cursor:pointer;}
+.copyable{cursor:pointer;position:relative;}
+.copyable::after{content:"⧉";position:absolute;top:4px;right:6px;font-size:11px;opacity:0;transition:opacity .15s;}
+.copyable:hover::after{opacity:.5;}
+.copied-flash{animation:copiedFlash 1s ease;}
+@keyframes copiedFlash{0%,60%{box-shadow:0 0 0 2px var(--olive);}100%{box-shadow:none;}}
+.copy-toast{position:fixed;bottom:22px;left:50%;transform:translateX(-50%) translateY(60px);background:var(--olive-dark);color:#fff;padding:9px 18px;border-radius:999px;font-size:13px;font-weight:600;box-shadow:0 4px 18px rgba(0,0,0,.3);opacity:0;transition:transform .25s ease,opacity .25s ease;z-index:50;pointer-events:none;}
+.copy-toast.show{transform:translateX(-50%) translateY(0);opacity:1;}
+.theme-toggle{display:inline-flex;align-items:center;justify-content:center;width:38px;height:38px;border-radius:8px;border:1px solid var(--rule);background:var(--paper);font-size:18px;transition:background .15s,transform .15s;}
+.theme-toggle:hover{background:var(--paper-dark);transform:scale(1.05);}
+.ops-search{width:100%;font-family:inherit;font-size:14px;padding:11px 14px;border-radius:8px;border:1px solid var(--rule);background:var(--paper-light);color:var(--ink);margin-bottom:16px;}
+.ops-search:focus{outline:none;border-color:var(--olive);box-shadow:0 0 0 3px rgba(69,89,47,.15);}
+tr.filtered-out{display:none;}
+.copy-cell{cursor:pointer;}.copy-cell:hover{text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px;}
+mark.ops-hit{background:var(--amber);color:#fff;border-radius:2px;padding:0 1px;}
 .p-2{padding:8px;}.p-3{padding:12px;}.p-4{padding:16px;}.p-5{padding:20px;}
 .mb-2{margin-bottom:8px;}.mb-3{margin-bottom:12px;}.mb-4{margin-bottom:16px;}.mb-5{margin-bottom:20px;}
 .mt-1{margin-top:4px;}.mt-2{margin-top:8px;}.mt-4{margin-top:16px;}
@@ -276,9 +304,17 @@ subunits:[
 
 /* ===== STATE ===== */
 let tab="overview",leafletMap=null,countdownInterval=null;
+let theme="light";try{theme=localStorage.getItem("ba_theme")||"light";}catch(e){}
 const R=document.getElementById("root");
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
 function el(h){const t=document.createElement("template");t.innerHTML=h.trim();return t.content.firstElementChild;}
+function applyTheme(){document.documentElement.setAttribute("data-theme",theme);}
+function toggleTheme(){theme=theme==="dark"?"light":"dark";try{localStorage.setItem("ba_theme",theme);}catch(e){}applyTheme();const b=document.getElementById("themeBtn");if(b)b.textContent=theme==="dark"?"☀️":"🌙";}
+let toastTimer=null;
+function showToast(msg){let t=document.getElementById("copyToast");if(!t){t=el(`<div class="copy-toast" id="copyToast"></div>`);document.body.appendChild(t);}t.textContent=msg;t.classList.add("show");clearTimeout(toastTimer);toastTimer=setTimeout(()=>t.classList.remove("show"),1400);}
+function copyText(str,elem){const done=()=>{showToast("✓ Copied: "+str);if(elem){elem.classList.remove("copied-flash");void elem.offsetWidth;elem.classList.add("copied-flash");}};
+if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(str).then(done).catch(()=>fallbackCopy(str,done));}else{fallbackCopy(str,done);}}
+function fallbackCopy(str,cb){const ta=document.createElement("textarea");ta.value=str;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");cb();}catch(e){}document.body.removeChild(ta);}
 function getExDayStatus(){
 const start=new Date(2026,6,5,0,0,0),end=new Date(2026,6,14,23,59,59),now=new Date();
 if(now<start)return{label:"Exercise starts 05 Jul 2026",pct:0,target:start,targetLabel:"Exercise Start"};
@@ -303,11 +339,13 @@ const shell=el(`<div>
 <header style="border-bottom:1px solid var(--rule);background:var(--paper-light)">
 <div class="container" style="padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
 <div><div class="mono text-olive-dark tracking-widest" style="font-size:22px;font-weight:700">THE RAVAGERS</div></div>
+<button class="theme-toggle" id="themeBtn" title="Toggle dark / light mode">${theme==="dark"?"☀️":"🌙"}</button>
 </div>
 </header>
 <div class="tab-nav-wrap"><nav class="container"><div class="tab-nav" id="tn"></div></nav></div>
 <main id="main" style="padding-bottom:32px"></main></div>`);
 R.appendChild(shell);
+document.getElementById("themeBtn").onclick=toggleTheme;
 const tabs=[{id:"overview",l:"📋 Overview"},{id:"map",l:"🗺️ Map"},{id:"timeline",l:"🕐 Timeline"},{id:"comms",l:"📡 Comms & Rules"},{id:"dailyops",l:"🎯 Daily Ops"},{id:"codirectives",l:"⚡ CO's Directives"}];
 const tn=document.getElementById("tn");
 tabs.forEach(t=>{const b=el(`<button class="tab ${t.id===tab?'active':''}">${t.l}</button>`);b.onclick=()=>{tab=t.id;render();};tn.appendChild(b);});
@@ -396,22 +434,22 @@ m.appendChild(w);
 function rComms(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
 w.innerHTML=`
-<div class="hero-banner"><h2>📡 Communications Plan</h2><p>Nets, code words, and frequencies for EX BOJRO AGHAT</p></div>
+<div class="hero-banner"><h2>📡 Communications Plan</h2><p>Nets, code words, and frequencies — tap any chip or tile to copy</p></div>
 <section class="grid-4 mb-4">
-<div class="info-tile"><div class="ic">📻</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Frequencies</div><div class="mono text-sm mt-1">${COMMS.freqs}</div></div>
-<div class="info-tile"><div class="ic">🔤</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Freq Change Word</div><div class="mono text-sm mt-1">${COMMS.freqChange}</div></div>
-<div class="info-tile"><div class="ic">⏱️</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Comms Established By</div><div class="mono text-sm mt-1">${COMMS.commsBy}</div></div>
-<div class="info-tile"><div class="ic">📶</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">SDS</div><div class="mono text-sm mt-1">${COMMS.sds}</div></div>
+<div class="info-tile copyable" data-copy="${esc(COMMS.freqs)}"><div class="ic">📻</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Frequencies</div><div class="mono text-sm mt-1">${COMMS.freqs}</div></div>
+<div class="info-tile copyable" data-copy="${esc(COMMS.freqChange)}"><div class="ic">🔤</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Freq Change Word</div><div class="mono text-sm mt-1">${COMMS.freqChange}</div></div>
+<div class="info-tile copyable" data-copy="${esc(COMMS.commsBy)}"><div class="ic">⏱️</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Comms Established By</div><div class="mono text-sm mt-1">${COMMS.commsBy}</div></div>
+<div class="info-tile copyable" data-copy="${esc(COMMS.sds)}"><div class="ic">📶</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">SDS</div><div class="mono text-sm mt-1">${COMMS.sds}</div></div>
 </section>
 <section class="card p-5 mb-4">
 <h2 class="text-lg font-bold mb-2">🔗 Net Structure</h2>
 <div class="text-sm mb-3">HF: ${COMMS.hfLink}<br>VHF: ${COMMS.vhfLink}<br>Walkie-Talkies where available</div>
 <div class="text-xs uppercase tracking-widest text-ink-soft mb-2">Radio Silence Codes</div>
-<div style="display:flex;flex-wrap:wrap;gap:8px">${RADIO_SILENCE.map(r=>`<span class="chip ${r[0]==='BIJLI'?'chip-red':'chip-olive'}">${r[0]} — ${r[1]}</span>`).join("")}</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">${RADIO_SILENCE.map(r=>`<span class="chip copyable ${r[0]==='BIJLI'?'chip-red':'chip-olive'}" data-copy="${r[0]}" style="padding-right:22px">${r[0]} — ${r[1]}</span>`).join("")}</div>
 </section>
 <section class="card p-5 mb-4">
 <h2 class="text-lg font-bold mb-3">🔑 Code Words</h2>
-<div style="display:flex;flex-wrap:wrap;gap:8px">${CODE_WORDS.map(c=>`<span class="chip ${c[0]==='BIJLI'?'chip-red':'chip-blue'}">${c[0]} — ${c[1]}</span>`).join("")}</div>
+<div style="display:flex;flex-wrap:wrap;gap:8px">${CODE_WORDS.map(c=>`<span class="chip copyable ${c[0]==='BIJLI'?'chip-red':'chip-blue'}" data-copy="${c[0]}" style="padding-right:22px">${c[0]} — ${c[1]}</span>`).join("")}</div>
 </section>
 <section class="card p-5 mb-4">
 <h2 class="text-lg font-bold mb-3">✅ Do's (All Ranks)</h2>
@@ -421,22 +459,27 @@ w.innerHTML=`
 <h2 class="text-lg font-bold mb-3">🚫 Don'ts (All Ranks)</h2>
 <div class="space-y-2">${DONTS.map(d=>`<div class="rule-item no"><span class="rule-badge no">✗</span><span class="text-sm">${esc(d)}</span></div>`).join("")}</div>
 </section>`;
+w.querySelectorAll("[data-copy]").forEach(elm=>elm.addEventListener("click",()=>copyText(elm.dataset.copy,elm)));
 m.appendChild(w);
 }
 
 /* ===== DAILY OPS ===== */
 function rDailyOps(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
-w.appendChild(el(`<div class="hero-banner mb-3"><h2>🎯 Daily Operations</h2><p>Maj Cmt taskings by sub-unit, newest day first</p></div>`));
+w.appendChild(el(`<div class="hero-banner mb-3"><h2>🎯 Daily Operations</h2><p>Maj Cmt taskings by sub-unit, newest day first — tap a grid to copy</p></div>`));
+const search=el(`<input type="search" class="ops-search" id="opsearch" placeholder="🔍 Filter serials — task, commander, grid, umpire, timing…" autocomplete="off"/>`);
+w.appendChild(search);
+const noRes=el(`<p class="card p-3 text-sm text-ink-soft text-center" id="opsNoResult" style="display:none">No serials match your filter.</p>`);
 [...DAILY_OPS].reverse().forEach((day,idx)=>{
-const det=el(`<details class="card mb-4" ${idx===0?'open':''}><summary><span class="text-lg font-bold">${esc(day.title)} — ${esc(day.date)}</span></summary><div class="border-t p-3"></div></details>`);
+const det=el(`<details class="card mb-4" data-defopen="${idx===0?'1':'0'}" ${idx===0?'open':''}><summary><span class="text-lg font-bold">${esc(day.title)} — ${esc(day.date)}</span></summary><div class="border-t p-3"></div></details>`);
 const body=det.querySelector(":scope > div");
 day.subunits.forEach(su=>{
 const card=el(`<div class="card mb-3"><div class="p-3 border-b" style="background:var(--paper-dark)"><h3 class="font-bold text-sm uppercase tracking-widest text-olive-dark" style="margin:0">${esc(su.name)}</h3></div><div style="overflow-x:auto"><table><thead><tr><th>Ser</th><th>Task</th><th>Timing</th><th>Location</th><th>Ptl Brief</th><th>Comd</th><th>Str</th><th>Veh</th><th>Umpire</th></tr></thead><tbody></tbody></table></div><div id="basis_${day.date.replace(/\W/g,'')}_${su.name.replace(/\W/g,'')}"></div></div>`);
 const tbody=card.querySelector("tbody");
 const basisDiv=card.querySelector("div:last-child");
 su.tasks.forEach(t=>{
-tbody.appendChild(el(`<tr><td>${t.ser}</td><td class="font-semibold">${esc(t.task)}</td><td class="mono">${esc(t.timing)}</td><td class="mono">${esc(t.loc)}</td><td>${esc(t.brief)}</td><td>${esc(t.comd)}</td><td class="mono">${esc(t.str)}</td><td>${esc(t.veh)}</td><td>${esc(t.ump)}</td></tr>`));
+const locReal=t.loc&&t.loc!=="—";
+tbody.appendChild(el(`<tr><td>${t.ser}</td><td class="font-semibold">${esc(t.task)}</td><td class="mono">${esc(t.timing)}</td><td class="mono ${locReal?'copy-cell':''}" ${locReal?`data-copy="${esc(t.loc)}" title="Tap to copy grid"`:''}>${esc(t.loc)}</td><td>${esc(t.brief)}</td><td>${esc(t.comd)}</td><td class="mono">${esc(t.str)}</td><td>${esc(t.veh)}</td><td>${esc(t.ump)}</td></tr>`));
 if(t.basis){
 const isWarn=t.basis.includes("⚠");
 basisDiv.appendChild(el(`<div class="${isWarn?'warn-box':'directive-box'} mb-2" style="margin:0 12px 8px"><strong>Ser ${t.ser} Basis:</strong> ${esc(t.basis)}</div>`));
@@ -446,7 +489,31 @@ body.appendChild(card);
 });
 w.appendChild(det);
 });
+w.appendChild(noRes);
 w.appendChild(el(`<p class="card p-3 text-xs text-ink-soft italic">Future days' Maj Cmt will be appended here as new dated sections, newest first. Bornona narrative basis is cross-referenced to each serial above.</p>`));
+w.querySelectorAll(".copy-cell").forEach(c=>c.addEventListener("click",()=>copyText(c.dataset.copy,c)));
+function filterOps(){
+const q=search.value.trim().toLowerCase();
+let anyMatch=false;
+w.querySelectorAll("details").forEach(det=>{
+let dayMatch=false;
+det.querySelectorAll(".card.mb-3").forEach(su=>{
+let suMatch=false;
+su.querySelectorAll("tbody tr").forEach(tr=>{
+const hit=!q||tr.textContent.toLowerCase().includes(q);
+tr.classList.toggle("filtered-out",!hit);
+if(hit)suMatch=true;
+});
+su.style.display=(!q||suMatch)?"":"none";
+if(suMatch)dayMatch=true;
+});
+det.style.display=(!q||dayMatch)?"":"none";
+det.open=q?dayMatch:det.dataset.defopen==="1";
+if(dayMatch)anyMatch=true;
+});
+noRes.style.display=(q&&!anyMatch)?"":"none";
+}
+search.addEventListener("input",filterOps);
 m.appendChild(w);
 }
 
@@ -460,6 +527,7 @@ w.appendChild(el(`<div class="directive-box mb-3"><strong>${esc(d.title)}</stron
 m.appendChild(w);
 }
 
+applyTheme();
 render();
 </script>
 </body>
