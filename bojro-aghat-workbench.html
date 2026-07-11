@@ -343,17 +343,6 @@ function showToast(msg){let t=document.getElementById("copyToast");if(!t){t=el(`
 function copyText(str,elem){const done=()=>{showToast("✓ Copied: "+str);if(elem){elem.classList.remove("copied-flash");void elem.offsetWidth;elem.classList.add("copied-flash");}};
 if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(str).then(done).catch(()=>fallbackCopy(str,done));}else{fallbackCopy(str,done);}}
 function fallbackCopy(str,cb){const ta=document.createElement("textarea");ta.value=str;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");cb();}catch(e){}document.body.removeChild(ta);}
-function haversineKm(lat1,lon1,lat2,lon2){const R=6371,toRad=x=>x*Math.PI/180;const dLat=toRad(lat2-lat1),dLon=toRad(lon2-lon1);const a=Math.sin(dLat/2)**2+Math.cos(toRad(lat1))*Math.cos(toRad(lat2))*Math.sin(dLon/2)**2;return 2*R*Math.asin(Math.sqrt(a));}
-function findNearestShelter(){
-if(!LAKSHMIPUR_SHELTERS.length){showToast("No shelters logged yet — add coordinates first");return;}
-if(!navigator.geolocation){showToast("Location not available on this device");return;}
-navigator.geolocation.getCurrentPosition(pos=>{
-const{latitude,longitude}=pos.coords;
-let best=null,bestD=Infinity;
-LAKSHMIPUR_SHELTERS.forEach(s=>{const d=haversineKm(latitude,longitude,s.lat,s.lng);if(d<bestD){bestD=d;best=s;}});
-if(best)window.open(`https://www.google.com/maps/dir/?api=1&destination=${best.lat},${best.lng}`,"_blank");
-},()=>{showToast("Couldn't get your location — check location permission");});
-}
 function getExDayStatus(){
 const start=new Date(2026,6,5,0,0,0),end=new Date(2026,6,14,23,59,59),now=new Date();
 if(now<start)return{label:"Exercise starts 05 Jul 2026",pct:0,target:start,targetLabel:"Exercise Start"};
@@ -569,25 +558,31 @@ m.appendChild(w);
 /* ===== FLOOD WATCH ===== */
 const LAKSHMIPUR={lat:22.94,lng:90.84};
 const LAKSHMIPUR_RIVERS=[
-{name:"Meghna (Lower Meghna)",note:"Major river along the western & southern edge of the district; tidal / estuarine.",danger:""},
-{name:"Dakatia River",note:"Flows through the north near Ramganj & Raipur upazilas.",danger:""},
-{name:"Rahmatkhali Khal",note:"Principal drainage canal through Lakshmipur Sadar.",danger:""},
-{name:"Bhulua River",note:"Runs along the Lakshmipur–Noakhali border area.",danger:""},
-{name:"Katakhali",note:"Local channel feeding into the Meghna estuary.",danger:""},
+{name:"Meghna (Lower Meghna)",note:"Major river along the western & southern edge of the district; tidal / estuarine."},
+{name:"Dakatia River",note:"Flows through the north near Ramganj & Raipur upazilas."},
+{name:"Rahmatkhali Khal",note:"Principal drainage canal through Lakshmipur Sadar."},
+{name:"Bhulua River",note:"Runs along the Lakshmipur–Noakhali border area."},
+{name:"Katakhali",note:"Local channel feeding into the Meghna estuary."},
 ];
 const LAKSHMIPUR_CONTACTS=[
 {role:"National Emergency (Police / Fire / Ambulance)",name:"24-hr hotline",phone:"999",verified:true},
 {role:"National Helpline → DC Office services",name:"Govt. info & services",phone:"333",verified:true},
 {role:"Flood & Disaster Early Warning (IVR)",name:"FFWC helpline",phone:"1090",verified:true},
-{role:"Deputy Commissioner (DC), Lakshmipur",name:"DC Office control room",phone:"",verified:false},
-{role:"Superintendent of Police (SP), Lakshmipur",name:"District police control room",phone:"",verified:false},
+{role:"Deputy Commissioner (DC), Lakshmipur",name:"S M Mehedi Hasan",phone:"01788577701",verified:true},
+{role:"Deputy Director (Dy Secretary), Local Government",name:"Md. Jasim Uddin · Office: 02334442045",phone:"01332546002",verified:true},
+{role:"District Election Officer",name:"Md. Abdur Rashid · Office: 0233442005",phone:"01712787114",verified:true},
+{role:"Superintendent of Police (SP), Lakshmipur",name:"Md. Abu Tarek · Office: 02334441479",phone:"01320111900",verified:true},
+{role:"Additional Superintendent of Police, Lakshmipur",name:"Hossain Mohammad Rayhan Kazemi, PPM Seba",phone:"01320111902",verified:true},
 {role:"Civil Surgeon, Lakshmipur",name:"District health / medical",phone:"",verified:false},
 {role:"District Relief & Rehabilitation Officer (DRRO)",name:"Disaster management",phone:"",verified:false},
-{role:"UNO, Lakshmipur Sadar",name:"Upazila Nirbahi Officer",phone:"",verified:false},
-{role:"UNO, Ramganj",name:"Upazila Nirbahi Officer",phone:"",verified:false},
-{role:"UNO, Raipur",name:"Upazila Nirbahi Officer",phone:"",verified:false},
-{role:"UNO, Ramgati",name:"Upazila Nirbahi Officer",phone:"",verified:false},
-{role:"UNO, Kamalnagar",name:"Upazila Nirbahi Officer",phone:"",verified:false},
+{role:"UNO, Lakshmipur Sadar",name:"Md. Farooq Hossain",phone:"01710476132",verified:true},
+{role:"Asst. Returning Officer, Lakshmipur-3 (Sadar area)",name:"Kyathoaiprue Marma",phone:"01788577710",verified:true},
+{role:"UNO, Ramganj",name:"Farashid Bin Enam",phone:"01788577712",verified:true},
+{role:"UNO, Raipur",name:"Mehedi Hasan Kauchar",phone:"01788577711",verified:true},
+{role:"UNO, Ramgati",name:"Nilufa Yeasmin Nipa",phone:"01788577713",verified:true},
+{role:"UNO, Kamalnagar",name:"Md. Rahat Uz Zaman",phone:"01788577714",verified:true},
+{role:"RAB-11, CPC-3",name:"Company Commander",phone:"01777-11133",verified:true},
+{role:"District Commandant, Ansar-VDP",name:"Md. Kamrul Islam",phone:"01730038081",verified:true},
 {role:"Bangladesh Coast Guard",name:"Nearest station / control room",phone:"",verified:false},
 {role:"Bangladesh Red Crescent Society",name:"Lakshmipur unit",phone:"",verified:false},
 {role:"GSO-1, HQ 33 Inf Div",name:"Flood deployment reporting",phone:"01769032006",verified:true},
@@ -599,11 +594,6 @@ const LAKSHMIPUR_UPAZILAS=[
 {name:"Raipur",lat:22.975,lng:90.733},
 {name:"Ramgati",lat:22.606,lng:90.997},
 {name:"Kamalnagar",lat:22.750,lng:90.867},
-];
-const LAKSHMIPUR_SHELTERS=[
-/* No verified shelter coordinates on file yet. Add {name,union,capacity,lat,lng} entries here
-   once the DC office / Cyclone Preparedness Programme list is confirmed — the routing button
-   below activates automatically as soon as this array is populated. */
 ];
 function wmo(c){const t={0:["Clear sky","☀️"],1:["Mainly clear","🌤️"],2:["Partly cloudy","⛅"],3:["Overcast","☁️"],45:["Fog","🌫️"],48:["Rime fog","🌫️"],51:["Light drizzle","🌦️"],53:["Drizzle","🌦️"],55:["Dense drizzle","🌦️"],56:["Freezing drizzle","🌧️"],57:["Freezing drizzle","🌧️"],61:["Light rain","🌧️"],63:["Rain","🌧️"],65:["Heavy rain","🌧️"],66:["Freezing rain","🌧️"],67:["Freezing rain","🌧️"],71:["Light snow","🌨️"],73:["Snow","🌨️"],75:["Heavy snow","🌨️"],77:["Snow grains","🌨️"],80:["Light showers","🌦️"],81:["Showers","🌧️"],82:["Violent showers","⛈️"],85:["Snow showers","🌨️"],86:["Snow showers","🌨️"],95:["Thunderstorm","⛈️"],96:["Thunderstorm + hail","⛈️"],99:["Thunderstorm + hail","⛈️"]};return t[c]||["—","🌡️"];}
 function fmtDay(t){const d=new Date(t+"T00:00:00");return{wd:d.toLocaleDateString("en",{weekday:"short"}),dm:d.getDate()};}
@@ -618,15 +608,14 @@ const info=el(`<div></div>`);
 info.innerHTML=`
 <section class="card p-5 mb-4">
 <h2 class="text-lg font-bold mb-1">🌊 Rivers & Major Water Bodies</h2>
-<div class="text-xs text-ink-soft mb-3">Lakshmipur District · danger levels are official BWDB/FFWC gauge-station values</div>
-<div style="overflow-x:auto"><table><thead><tr><th>River / Water Body</th><th>Notes</th><th>Danger Level (mPWD)</th></tr></thead><tbody>
-${LAKSHMIPUR_RIVERS.map(r=>`<tr><td class="font-semibold">${esc(r.name)}</td><td class="text-xs">${esc(r.note)}</td><td class="mono text-xs">${r.danger?esc(r.danger):`<span class="text-ink-soft italic">Per FFWC — confirm</span>`}</td></tr>`).join("")}
+<div class="text-xs text-ink-soft mb-3">Lakshmipur District</div>
+<div style="overflow-x:auto"><table><thead><tr><th>River / Water Body</th><th>Notes</th></tr></thead><tbody>
+${LAKSHMIPUR_RIVERS.map(r=>`<tr><td class="font-semibold">${esc(r.name)}</td><td class="text-xs">${esc(r.note)}</td></tr>`).join("")}
 </tbody></table></div>
 <div class="mt-3" style="display:flex;gap:8px;flex-wrap:wrap">
 <a href="https://ffwc.gov.bd" target="_blank" rel="noopener" class="btn" style="text-decoration:none;font-size:12px">🔗 Live Water Levels — FFWC Portal ↗</a>
-<a href="https://ffwc.gov.bd" target="_blank" rel="noopener" class="btn" style="text-decoration:none;font-size:12px">🛰️ Satellite Flood Map — FFWC ↗</a>
 </div>
-<div class="text-xs text-ink-soft italic mt-2">FFWC's official gauge API requires internal authentication we don't have — live readings can't be pulled automatically into this dashboard. Use the links above to check current levels directly.</div>
+<div class="text-xs text-ink-soft italic mt-2">FFWC's official gauge API requires internal authentication we don't have — live readings can't be pulled automatically into this dashboard. Use the link above to check current levels directly.</div>
 </section>
 <section class="card p-5 mb-4">
 <h2 class="text-lg font-bold mb-1">☎️ Civil Administration & Emergency Contacts</h2>
@@ -634,12 +623,6 @@ ${LAKSHMIPUR_RIVERS.map(r=>`<tr><td class="font-semibold">${esc(r.name)}</td><td
 <div>
 ${LAKSHMIPUR_CONTACTS.map(c=>`<div class="metric-row"><div style="padding-right:10px"><div class="font-semibold text-sm">${esc(c.role)}</div><div class="text-xs text-ink-soft">${esc(c.name)}</div></div><div style="flex-shrink:0">${c.verified?`<a href="tel:${esc(c.phone)}" class="chip chip-olive" style="text-decoration:none">📞 ${esc(c.phone)}</a>`:`<span class="chip chip-amber">Confirm locally</span>`}</div></div>`).join("")}
 </div>
-</section>
-<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-1">🏠 Emergency Shelters & Routing</h2>
-<div class="text-xs text-ink-soft mb-3">One-tap directions to the nearest designated flood/cyclone shelter</div>
-${LAKSHMIPUR_SHELTERS.length?`<div style="overflow-x:auto"><table><thead><tr><th>Shelter</th><th>Union / Upazila</th><th>Capacity</th></tr></thead><tbody>${LAKSHMIPUR_SHELTERS.map(s=>`<tr><td class="font-semibold">${esc(s.name)}</td><td class="text-xs">${esc(s.union)}</td><td class="mono text-xs">${esc(s.capacity||"—")}</td></tr>`).join("")}</tbody></table></div>`:`<div class="text-sm text-ink-soft italic mb-2">No verified shelter locations logged yet. Add coordinates from the DC office / Cyclone Preparedness Programme (CPP) list to enable one-tap routing.</div>`}
-<button class="btn mt-3" id="findShelterBtn" style="font-size:12px">📍 Find Nearest Shelter</button>
 </section>
 <section class="card p-5 mb-4">
 <h2 class="text-lg font-bold mb-1">📜 Div Flood Directive — HQ 33 Inf Div</h2>
@@ -661,10 +644,8 @@ ${LAKSHMIPUR_SHELTERS.length?`<div style="overflow-x:auto"><table><thead><tr><th
 </div>
 </section>`;
 w.appendChild(info);
-w.appendChild(el(`<p class="text-xs text-ink-soft italic mt-4">Weather & rainfall: live observations + forecast from Open-Meteo. River level: GloFAS hydrological model (indicative river discharge) — <strong>not</strong> an official FFWC/BWDB flood warning. Contact numbers marked "Confirm locally" and blank danger levels must be verified against the DC office / ffwc.gov.bd before operational use.</p>`));
+w.appendChild(el(`<p class="text-xs text-ink-soft italic mt-4">Weather & rainfall: live observations + forecast from Open-Meteo. River level: GloFAS hydrological model (indicative river discharge) — <strong>not</strong> an official FFWC/BWDB flood warning. Contact numbers marked "Confirm locally" must be verified against the DC office / ffwc.gov.bd before operational use.</p>`));
 m.appendChild(w);
-const shelterBtn=info.querySelector("#findShelterBtn");
-if(shelterBtn)shelterBtn.onclick=findNearestShelter;
 const btn=bar.querySelector("#floodRefresh");
 btn.onclick=()=>loadFlood(content,btn);
 loadFlood(content,btn);
