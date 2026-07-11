@@ -742,22 +742,43 @@ ${disc.map((v,i)=>{const f=fmtDay(fl.daily.time[i]);const h=Math.max(Math.round(
 </section>
 ${renderUpazilaRainfall(uzi)}`;
 }
+function uziSparkline(fc){
+const max=Math.max(...fc,0.1);
+const W=7,G=3,H=28;
+const bars=fc.map((v,i)=>{
+const h=Math.max(3,Math.round(((v||0)/max)*H));
+const y=H-h;
+const op=(0.35+0.65*((v||0)/max)).toFixed(2);
+return `<rect x="${i*(W+G)}" y="${y}" width="${W}" height="${h}" rx="1" fill="#4A87C8" fill-opacity="${op}"/>`;
+}).join('');
+return `<svg width="${fc.length*(W+G)-G}" height="${H}" style="display:block;overflow:visible">${bars}</svg>`;
+}
+function uziTrend(fc){
+if(!fc||fc.length<2)return'<span style="opacity:.5">—</span>';
+const h=Math.ceil(fc.length/2);
+const first=fc.slice(0,h).reduce((a,b)=>a+(b||0),0)/h;
+const last=fc.slice(-h).reduce((a,b)=>a+(b||0),0)/h;
+const d=last-first;
+if(d>1)return'<span style="color:var(--red);font-weight:600">↗ Rising</span>';
+if(d<-1)return'<span style="color:var(--olive);font-weight:600">↘ Easing</span>';
+return'<span style="color:var(--ink-soft)">→ Steady</span>';
+}
 function renderUpazilaRainfall(uzi){
 if(!Array.isArray(uzi)||!uzi.length)return"";
 const rows=LAKSHMIPUR_UPAZILAS.map((u,i)=>{
 const dd=uzi[i]&&uzi[i].daily;
-if(!dd)return{name:u.name,past24:0,fcTotal:0,peak:0};
+if(!dd)return{name:u.name,past24:0,fc:[0,0,0,0,0],fcTotal:0,peak:0};
 const past24=dd.precipitation_sum[0]||0;
-const fc=dd.precipitation_sum.slice(1);
-const fcTotal=fc.reduce((a,b)=>a+(b||0),0);
+const fc=dd.precipitation_sum.slice(1).map(v=>v||0);
+const fcTotal=fc.reduce((a,b)=>a+b,0);
 const peak=fc.length?Math.max(...fc):0;
-return{name:u.name,past24,fcTotal,peak};
+return{name:u.name,past24,fc,fcTotal,peak};
 });
 return `<section class="card p-5 mb-4">
 <h2 class="text-lg font-bold mb-1">☔ Hyper-Local Rainfall — By Upazila</h2>
 <div class="text-xs text-ink-soft mb-3">Lakshmipur Sadar · Ramganj · Raipur · Ramgati · Kamalnagar — Open-Meteo model data, not official BMD observations</div>
-<div style="overflow-x:auto"><table><thead><tr><th>Upazila</th><th>Past 24h (mm)</th><th>5-Day Forecast Total (mm)</th><th>Peak Day (mm)</th></tr></thead><tbody>
-${rows.map(r=>`<tr><td class="font-semibold">${esc(r.name)}</td><td class="mono text-xs">${r.past24.toFixed(1)}</td><td class="mono text-xs">${r.fcTotal.toFixed(1)}</td><td class="mono text-xs">${r.peak.toFixed(1)}</td></tr>`).join("")}
+<div style="overflow-x:auto"><table><thead><tr><th>Upazila</th><th>Past 24h (mm)</th><th>5-Day Trend</th><th>5-Day Total (mm)</th><th>Peak Day (mm)</th></tr></thead><tbody>
+${rows.map(r=>`<tr><td class="font-semibold">${esc(r.name)}</td><td class="mono text-xs">${r.past24.toFixed(1)}</td><td><div style="display:flex;align-items:flex-end;gap:8px">${uziSparkline(r.fc)}<div class="text-xs" style="padding-bottom:2px">${uziTrend(r.fc)}</div></div></td><td class="mono text-xs">${r.fcTotal.toFixed(1)}</td><td class="mono text-xs">${r.peak.toFixed(1)}</td></tr>`).join("")}
 </tbody></table></div>
 </section>`;
 }
