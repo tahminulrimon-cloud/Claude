@@ -320,7 +320,7 @@ subunits:[
 ]}];
 
 /* ===== STATE ===== */
-let tab="overview",leafletMap=null,countdownInterval=null;
+let tab="flood",leafletMap=null,countdownInterval=null;
 let theme="light";try{theme=localStorage.getItem("ba_theme")||"light";}catch(e){}
 const R=document.getElementById("root");
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
@@ -332,6 +332,7 @@ function showToast(msg){let t=document.getElementById("copyToast");if(!t){t=el(`
 function copyText(str,elem){const done=()=>{showToast("✓ Copied: "+str);if(elem){elem.classList.remove("copied-flash");void elem.offsetWidth;elem.classList.add("copied-flash");}};
 if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(str).then(done).catch(()=>fallbackCopy(str,done));}else{fallbackCopy(str,done);}}
 function fallbackCopy(str,cb){const ta=document.createElement("textarea");ta.value=str;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");cb();}catch(e){}document.body.removeChild(ta);}
+function copyFloodRpt(){const hdr=["Ser","Report / Unit","Area","Upazila / Thana","Garrison Location","Deployed Manpower","Deployed Equipment","Remarks"];const rows=["1\t\t\t\t\t\t\t","2\t\t\t\t\t\t\t","3\t\t\t\t\t\t\t"];const str=hdr.join("\t")+"\n"+rows.join("\n");copyText(str,document.querySelector('#floodRptTbl'));}
 function getExDayStatus(){
 const start=new Date(2026,6,5,0,0,0),end=new Date(2026,6,14,23,59,59),now=new Date();
 if(now<start)return{label:"Exercise starts 05 Jul 2026",pct:0,target:start,targetLabel:"Exercise Start"};
@@ -363,7 +364,7 @@ const shell=el(`<div>
 <main id="main" style="padding-bottom:32px"></main></div>`);
 R.appendChild(shell);
 document.getElementById("themeBtn").onclick=toggleTheme;
-const tabs=[{id:"overview",l:"📋 Overview"},{id:"map",l:"🗺️ Map"},{id:"timeline",l:"🕐 Timeline"},{id:"comms",l:"📡 Comms & Rules"},{id:"dailyops",l:"🎯 Daily Ops"},{id:"codirectives",l:"⚡ CO's Directives"},{id:"flood",l:"🌧️ Flood Watch"}];
+const tabs=[{id:"flood",l:"🌧️ Flood Watch"},{id:"overview",l:"📋 Overview"},{id:"map",l:"🗺️ Map"},{id:"timeline",l:"🕐 Timeline"},{id:"comms",l:"📡 Comms & Rules"},{id:"dailyops",l:"🎯 Daily Ops"},{id:"codirectives",l:"⚡ CO's Directives"}];
 const tn=document.getElementById("tn");
 tabs.forEach(t=>{const b=el(`<button class="tab ${t.id===tab?'active':''}">${t.l}</button>`);b.onclick=()=>{tab=t.id;render();};tn.appendChild(b);});
 const m=document.getElementById("main");
@@ -561,6 +562,8 @@ const LAKSHMIPUR_CONTACTS=[
 {role:"Superintendent of Police (SP), Lakshmipur",name:"District police control room",phone:"",verified:false},
 {role:"Civil Surgeon, Lakshmipur",name:"District health / medical",phone:"",verified:false},
 {role:"District Relief & Rehabilitation Officer (DRRO)",name:"Disaster management",phone:"",verified:false},
+{role:"GSO-1, HQ 13 Inf Div",name:"Flood deployment reporting",phone:"01769032006",verified:true},
+{role:"GSO-2 (Ops), HQ 13 Inf Div",name:"Flood deployment reporting",phone:"01968062008",verified:true},
 ];
 function wmo(c){const t={0:["Clear sky","☀️"],1:["Mainly clear","🌤️"],2:["Partly cloudy","⛅"],3:["Overcast","☁️"],45:["Fog","🌫️"],48:["Rime fog","🌫️"],51:["Light drizzle","🌦️"],53:["Drizzle","🌦️"],55:["Dense drizzle","🌦️"],56:["Freezing drizzle","🌧️"],57:["Freezing drizzle","🌧️"],61:["Light rain","🌧️"],63:["Rain","🌧️"],65:["Heavy rain","🌧️"],66:["Freezing rain","🌧️"],67:["Freezing rain","🌧️"],71:["Light snow","🌨️"],73:["Snow","🌨️"],75:["Heavy snow","🌨️"],77:["Snow grains","🌨️"],80:["Light showers","🌦️"],81:["Showers","🌧️"],82:["Violent showers","⛈️"],85:["Snow showers","🌨️"],86:["Snow showers","🌨️"],95:["Thunderstorm","⛈️"],96:["Thunderstorm + hail","⛈️"],99:["Thunderstorm + hail","⛈️"]};return t[c]||["—","🌡️"];}
 function fmtDay(t){const d=new Date(t+"T00:00:00");return{wd:d.toLocaleDateString("en",{weekday:"short"}),dm:d.getDate()};}
@@ -586,6 +589,36 @@ ${LAKSHMIPUR_RIVERS.map(r=>`<tr><td class="font-semibold">${esc(r.name)}</td><td
 <div>
 ${LAKSHMIPUR_CONTACTS.map(c=>`<div class="metric-row"><div style="padding-right:10px"><div class="font-semibold text-sm">${esc(c.role)}</div><div class="text-xs text-ink-soft">${esc(c.name)}</div></div><div style="flex-shrink:0">${c.verified?`<a href="tel:${esc(c.phone)}" class="chip chip-olive" style="text-decoration:none">📞 ${esc(c.phone)}</a>`:`<span class="chip chip-amber">Confirm locally</span>`}</div></div>`).join("")}
 </div>
+</section>
+<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-1">📜 Div Flood Directive — HQ 13 Inf Div</h2>
+<div class="text-xs text-ink-soft mb-3">Ref AFD letter dtd 11 Jul 2026 · Signed Maj Imtiaz Zaman Chowdhury on behalf of GOC</div>
+<div class="directive-box mb-2"><strong>⚡ (a)</strong> Monitor flood situation in own AOR and maintain <strong>24/7 comms</strong> with local civil administration.</div>
+<div class="directive-box mb-2"><strong>⚡ (b)</strong> Conduct <strong>Recce</strong> of flood-prone areas in coordination with civil admin. Submit recce report to Col HQ by <span class="chip chip-amber" style="font-size:11px">NLT 13 Jul 2026</span></div>
+<div class="directive-box mb-2"><strong>⚡ (c)</strong> Keep <strong>manpower &amp; equipment</strong> ready for rescue and relief operations.</div>
+<div class="directive-box mb-2"><strong>⚡ (d)</strong> On civil admin request → <strong>deploy immediately</strong> and inform HQ (GSO-1: 01769032006, GSO-2 Ops: 01968062008).</div>
+<div class="directive-box mb-2"><strong>⚡ (e)</strong> If deployed → submit <strong>daily flood sitrep</strong> at <span class="chip chip-olive" style="font-size:11px">0800 hrs</span> (covering 1800–0600 period).</div>
+</section>
+<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-1">📋 Flood Recce Checklist</h2>
+<div class="text-xs text-ink-soft mb-3">Items to cover per Div directive para 1(b) · report due 13 Jul 2026</div>
+<div style="display:flex;flex-direction:column;gap:6px">
+<label class="rule-item" style="display:flex;align-items:flex-start;gap:8px;cursor:pointer"><input type="checkbox" style="margin-top:3px"><span class="text-sm">River water levels vs danger levels (all gauges in AOR)</span></label>
+<label class="rule-item" style="display:flex;align-items:flex-start;gap:8px;cursor:pointer"><input type="checkbox" style="margin-top:3px"><span class="text-sm">Shelter centres — locations, capacity, current occupancy</span></label>
+<label class="rule-item" style="display:flex;align-items:flex-start;gap:8px;cursor:pointer"><input type="checkbox" style="margin-top:3px"><span class="text-sm">Local civil admin's assessment &amp; views on army deployment</span></label>
+<label class="rule-item" style="display:flex;align-items:flex-start;gap:8px;cursor:pointer"><input type="checkbox" style="margin-top:3px"><span class="text-sm">Affected / vulnerable areas identified</span></label>
+<label class="rule-item" style="display:flex;align-items:flex-start;gap:8px;cursor:pointer"><input type="checkbox" style="margin-top:3px"><span class="text-sm">Relief distribution plan &amp; requirements</span></label>
+</div>
+</section>
+<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-1">📊 Daily Flood Deployment Report Template</h2>
+<div class="text-xs text-ink-soft mb-3">Submit daily at 0800 hrs (for 1800–0600 period) per Div directive para 1(e)</div>
+<div style="overflow-x:auto"><table id="floodRptTbl"><thead><tr><th>Ser</th><th>Report / Unit</th><th>Area</th><th>Upazila / Thana</th><th>Garrison Location</th><th>Deployed Manpower</th><th>Deployed Equipment</th><th>Remarks</th></tr></thead><tbody>
+<tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+<tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
+</tbody></table></div>
+<button class="btn mt-3" onclick="copyFloodRpt()" style="font-size:12px">📋 Copy Report Template</button>
 </section>`;
 w.appendChild(info);
 w.appendChild(el(`<p class="text-xs text-ink-soft italic mt-4">Weather & rainfall: live observations + forecast from Open-Meteo. River level: GloFAS hydrological model (indicative river discharge) — <strong>not</strong> an official FFWC/BWDB flood warning. Contact numbers marked "Confirm locally" and blank danger levels must be verified against the DC office / ffwc.gov.bd before operational use.</p>`));
