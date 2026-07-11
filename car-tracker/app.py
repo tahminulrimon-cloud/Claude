@@ -8,6 +8,35 @@ from init_db import init_db, DB_PATH
 
 st.set_page_config(page_title="Car Maintenance Tracker", page_icon="🚗", layout="wide")
 
+
+def check_password():
+    """Gate the app behind a password stored in st.secrets['app_password'].
+    If no password is configured (e.g. local dev without secrets.toml),
+    the app runs unprotected."""
+    try:
+        configured_password = st.secrets.get("app_password")
+    except FileNotFoundError:
+        configured_password = None
+    if not configured_password:
+        return True
+
+    if st.session_state.get("authenticated"):
+        return True
+
+    st.title("🔒 Car Maintenance Tracker")
+    entered = st.text_input("Password", type="password")
+    if st.button("Unlock"):
+        if entered == configured_password:
+            st.session_state["authenticated"] = True
+            st.rerun()
+        else:
+            st.error("Incorrect password.")
+    return False
+
+
+if not check_password():
+    st.stop()
+
 init_db()
 
 
