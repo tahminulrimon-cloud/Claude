@@ -332,7 +332,6 @@ function showToast(msg){let t=document.getElementById("copyToast");if(!t){t=el(`
 function copyText(str,elem){const done=()=>{showToast("✓ Copied: "+str);if(elem){elem.classList.remove("copied-flash");void elem.offsetWidth;elem.classList.add("copied-flash");}};
 if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(str).then(done).catch(()=>fallbackCopy(str,done));}else{fallbackCopy(str,done);}}
 function fallbackCopy(str,cb){const ta=document.createElement("textarea");ta.value=str;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");cb();}catch(e){}document.body.removeChild(ta);}
-function copyFloodRpt(){const hdr=["Ser","Report / Unit","Area","Upazila / Thana","Garrison Location","Deployed Manpower","Deployed Equipment","Remarks"];const rows=["1\t\t\t\t\t\t\t","2\t\t\t\t\t\t\t","3\t\t\t\t\t\t\t"];const str=hdr.join("\t")+"\n"+rows.join("\n");copyText(str,document.querySelector('#floodRptTbl'));}
 function getExDayStatus(){
 const start=new Date(2026,6,5,0,0,0),end=new Date(2026,6,14,23,59,59),now=new Date();
 if(now<start)return{label:"Exercise starts 05 Jul 2026",pct:0,target:start,targetLabel:"Exercise Start"};
@@ -591,8 +590,7 @@ ${LAKSHMIPUR_CONTACTS.map(c=>`<div class="metric-row"><div style="padding-right:
 </div>
 </section>
 <section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-1">📜 Div Flood Directive — HQ 13 Inf Div</h2>
-<div class="text-xs text-ink-soft mb-3">Ref AFD letter dtd 11 Jul 2026 · Signed Maj Imtiaz Zaman Chowdhury on behalf of GOC</div>
+<h2 class="text-lg font-bold mb-1">📜 Div Flood Directive — HQ 33 Inf Div</h2>
 <div class="directive-box mb-2"><strong>⚡ (a)</strong> Monitor flood situation in own AOR and maintain <strong>24/7 comms</strong> with local civil administration.</div>
 <div class="directive-box mb-2"><strong>⚡ (b)</strong> Conduct <strong>Recce</strong> of flood-prone areas in coordination with civil admin. Submit recce report to Col HQ by <span class="chip chip-amber" style="font-size:11px">NLT 13 Jul 2026</span></div>
 <div class="directive-box mb-2"><strong>⚡ (c)</strong> Keep <strong>manpower &amp; equipment</strong> ready for rescue and relief operations.</div>
@@ -609,16 +607,6 @@ ${LAKSHMIPUR_CONTACTS.map(c=>`<div class="metric-row"><div style="padding-right:
 <label class="rule-item" style="display:flex;align-items:flex-start;gap:8px;cursor:pointer"><input type="checkbox" style="margin-top:3px"><span class="text-sm">Affected / vulnerable areas identified</span></label>
 <label class="rule-item" style="display:flex;align-items:flex-start;gap:8px;cursor:pointer"><input type="checkbox" style="margin-top:3px"><span class="text-sm">Relief distribution plan &amp; requirements</span></label>
 </div>
-</section>
-<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-1">📊 Daily Flood Deployment Report Template</h2>
-<div class="text-xs text-ink-soft mb-3">Submit daily at 0800 hrs (for 1800–0600 period) per Div directive para 1(e)</div>
-<div style="overflow-x:auto"><table id="floodRptTbl"><thead><tr><th>Ser</th><th>Report / Unit</th><th>Area</th><th>Upazila / Thana</th><th>Garrison Location</th><th>Deployed Manpower</th><th>Deployed Equipment</th><th>Remarks</th></tr></thead><tbody>
-<tr><td>1</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>2</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-<tr><td>3</td><td></td><td></td><td></td><td></td><td></td><td></td><td></td></tr>
-</tbody></table></div>
-<button class="btn mt-3" onclick="copyFloodRpt()" style="font-size:12px">📋 Copy Report Template</button>
 </section>`;
 w.appendChild(info);
 w.appendChild(el(`<p class="text-xs text-ink-soft italic mt-4">Weather & rainfall: live observations + forecast from Open-Meteo. River level: GloFAS hydrological model (indicative river discharge) — <strong>not</strong> an official FFWC/BWDB flood warning. Contact numbers marked "Confirm locally" and blank danger levels must be verified against the DC office / ffwc.gov.bd before operational use.</p>`));
