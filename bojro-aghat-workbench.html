@@ -56,6 +56,17 @@ mark.ops-hit{background:var(--amber);color:#fff;border-radius:2px;padding:0 1px;
 :root[data-theme="dark"] .risk-low{background:#26301C;color:#B8CCA0;}
 :root[data-theme="dark"] .risk-mod{background:#332A18;color:#E0C179;}
 :root[data-theme="dark"] .risk-high{background:#3A211F;color:#E8A9A5;}
+@keyframes pulseGlowHigh{0%,100%{box-shadow:0 0 0 0 rgba(166,51,47,.45);}50%{box-shadow:0 0 0 9px rgba(166,51,47,0);}}
+@keyframes pulseGlowMod{0%,100%{box-shadow:0 0 0 0 rgba(173,124,27,.4);}50%{box-shadow:0 0 0 9px rgba(173,124,27,0);}}
+.risk-badge.risk-high.pulse{animation:pulseGlowHigh 1.7s ease-in-out infinite;}
+.risk-badge.risk-mod.pulse{animation:pulseGlowMod 1.7s ease-in-out infinite;}
+.live-dot{display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--olive);margin-right:6px;animation:liveDotPulse 1.4s ease-in-out infinite;}
+@keyframes liveDotPulse{0%,100%{opacity:1;}50%{opacity:.3;}}
+.glance-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:16px;}
+.glance-tile{background:var(--paper-light);border:1px solid var(--rule);border-radius:8px;padding:13px 10px;text-align:center;}
+.glance-tile .glance-icon{font-size:22px;line-height:1;margin-bottom:4px;}
+.glance-tile .glance-val{font-size:17px;font-weight:700;font-family:ui-monospace,monospace;}
+.glance-tile .glance-label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-top:2px;}
 .spinner{width:34px;height:34px;border:3px solid var(--rule);border-top-color:var(--olive);border-radius:50%;animation:spin .8s linear infinite;margin:20px auto;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .refresh-btn{display:inline-flex;align-items:center;gap:6px;}
@@ -561,14 +572,14 @@ const LAKSHMIPUR_CONTACTS=[
 {role:"Superintendent of Police (SP), Lakshmipur",name:"District police control room",phone:"",verified:false},
 {role:"Civil Surgeon, Lakshmipur",name:"District health / medical",phone:"",verified:false},
 {role:"District Relief & Rehabilitation Officer (DRRO)",name:"Disaster management",phone:"",verified:false},
-{role:"GSO-1, HQ 13 Inf Div",name:"Flood deployment reporting",phone:"01769032006",verified:true},
-{role:"GSO-2 (Ops), HQ 13 Inf Div",name:"Flood deployment reporting",phone:"01968062008",verified:true},
+{role:"GSO-1, HQ 33 Inf Div",name:"Flood deployment reporting",phone:"01769032006",verified:true},
+{role:"GSO-2 (Ops), HQ 33 Inf Div",name:"Flood deployment reporting",phone:"01968062008",verified:true},
 ];
 function wmo(c){const t={0:["Clear sky","☀️"],1:["Mainly clear","🌤️"],2:["Partly cloudy","⛅"],3:["Overcast","☁️"],45:["Fog","🌫️"],48:["Rime fog","🌫️"],51:["Light drizzle","🌦️"],53:["Drizzle","🌦️"],55:["Dense drizzle","🌦️"],56:["Freezing drizzle","🌧️"],57:["Freezing drizzle","🌧️"],61:["Light rain","🌧️"],63:["Rain","🌧️"],65:["Heavy rain","🌧️"],66:["Freezing rain","🌧️"],67:["Freezing rain","🌧️"],71:["Light snow","🌨️"],73:["Snow","🌨️"],75:["Heavy snow","🌨️"],77:["Snow grains","🌨️"],80:["Light showers","🌦️"],81:["Showers","🌧️"],82:["Violent showers","⛈️"],85:["Snow showers","🌨️"],86:["Snow showers","🌨️"],95:["Thunderstorm","⛈️"],96:["Thunderstorm + hail","⛈️"],99:["Thunderstorm + hail","⛈️"]};return t[c]||["—","🌡️"];}
 function fmtDay(t){const d=new Date(t+"T00:00:00");return{wd:d.toLocaleDateString("en",{weekday:"short"}),dm:d.getDate()};}
 function rFlood(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
-w.appendChild(el(`<div class="hero-banner mb-3"><h2>🌧️ Lakshmipur Flood Watch</h2><p>Live rainfall & river conditions · Lakshmipur District, Bangladesh</p></div>`));
+w.appendChild(el(`<div class="hero-banner mb-3"><h2>🌊 Lakshmipur Flood Watch</h2><p>Real-time rainfall, river & flood-risk intelligence for 33 Inf Div's AOR</p></div>`));
 const bar=el(`<div class="mb-3" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px"><div class="text-xs text-ink-soft" id="floodUpdated">&nbsp;</div><button class="btn refresh-btn" id="floodRefresh">🔄 Refresh</button></div>`);
 w.appendChild(bar);
 const content=el(`<div id="floodContent"></div>`);
@@ -627,7 +638,7 @@ fetch(flUrl).then(r=>{if(!r.ok)throw new Error("flood "+r.status);return r.json(
 ]);
 renderFlood(content,wx,fl);
 const upd=document.getElementById("floodUpdated");
-if(upd)upd.textContent="Last updated "+new Date().toLocaleString("en-GB",{hour:"2-digit",minute:"2-digit",day:"2-digit",month:"short"})+" · your local time";
+if(upd)upd.innerHTML=`<span class="live-dot"></span>Last updated `+new Date().toLocaleString("en-GB",{hour:"2-digit",minute:"2-digit",day:"2-digit",month:"short"})+" · your local time";
 }catch(e){
 content.innerHTML=`<div class="card p-5 text-center"><div style="font-size:34px">⚠️</div><div class="font-bold mb-1 mt-2">Couldn't load live data</div><div class="text-sm text-ink-soft">Check your connection and tap Refresh.<br><span class="mono text-xs">(${esc(e.message||"network error")})</span></div></div>`;
 }finally{if(btn)btn.disabled=false;}
@@ -637,10 +648,17 @@ const cur=wx.current,d=wx.daily,wc=wmo(cur.weather_code);
 const today=d.precipitation_sum[0]||0,maxRain=Math.max(...d.precipitation_sum,1),peakRain=Math.max(...d.precipitation_sum);
 const disc=fl.daily.river_discharge,discMax=Math.max(...disc,1),discTrendUp=disc[disc.length-1]>disc[0];
 let risk,rcls,ricon,rtext;
-if(peakRain>=50){risk="HIGH";rcls="risk-high";ricon="🔴";rtext="Heavy rain expected — monitor low-lying areas, drainage, and FB locations closely.";}
-else if(peakRain>=20){risk="MODERATE";rcls="risk-mod";ricon="🟠";rtext="Significant rain expected — keep anti-flood and drainage measures ready.";}
-else{risk="LOW";rcls="risk-low";ricon="🟢";rtext="No major rainfall-driven flooding indicated in the forecast window.";}
+if(peakRain>=50){risk="HIGH";rcls="risk-high";ricon="🔴";rtext="⚠️ Heavy rain on the way — flood risk is HIGH. Monitor low-lying areas, drainage, and FB locations closely, and stay in lockstep with civil admin.";}
+else if(peakRain>=20){risk="MODERATE";rcls="risk-mod";ricon="🟠";rtext="Significant rain ahead — stay alert. Keep anti-flood and drainage measures ready to go.";}
+else{risk="LOW";rcls="risk-low";ricon="🟢";rtext="All clear for now — no major rainfall-driven flooding indicated in the forecast window.";}
 content.innerHTML=`
+<section class="glance-strip">
+<div class="glance-tile"><div class="glance-icon">${wc[1]}</div><div class="glance-val">${cur.temperature_2m}°C</div><div class="glance-label">Right Now</div></div>
+<div class="glance-tile"><div class="glance-icon">🌧️</div><div class="glance-val">${today.toFixed(1)}mm</div><div class="glance-label">Rain Today</div></div>
+<div class="glance-tile"><div class="glance-icon">📈</div><div class="glance-val">${peakRain.toFixed(1)}mm</div><div class="glance-label">Peak (7d)</div></div>
+<div class="glance-tile"><div class="glance-icon">${discTrendUp?"↗️":"↘️"}</div><div class="glance-val">${discTrendUp?"Rising":"Falling"}</div><div class="glance-label">River Trend</div></div>
+<div class="glance-tile ${rcls}"><div class="glance-icon">${ricon}</div><div class="glance-val">${risk}</div><div class="glance-label">Flood Risk</div></div>
+</section>
 <section class="grid-2 mb-4">
 <div class="card p-5">
 <div class="text-xs uppercase tracking-widest text-ink-soft mb-2">Current Conditions</div>
@@ -657,7 +675,7 @@ content.innerHTML=`
 </div>
 <div class="card p-5">
 <div class="text-xs uppercase tracking-widest text-ink-soft mb-2">Flood Risk (Indicative)</div>
-<div class="mb-3"><span class="risk-badge ${rcls}">${ricon} ${risk} RISK</span></div>
+<div class="mb-3"><span class="risk-badge ${rcls} ${risk!=="LOW"?"pulse":""}">${ricon} ${risk} RISK</span></div>
 <p class="text-sm mb-3">${rtext}</p>
 <div class="metric-row"><span class="text-sm text-ink-soft">Rain today</span><span class="mono font-semibold">${today.toFixed(1)} mm</span></div>
 <div class="metric-row"><span class="text-sm text-ink-soft">Peak day (7-day)</span><span class="mono font-semibold">${peakRain.toFixed(1)} mm</span></div>
@@ -665,12 +683,12 @@ content.innerHTML=`
 </div>
 </section>
 <section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-1">7-Day Rainfall Outlook</h2>
+<h2 class="text-lg font-bold mb-1">🌦️ 7-Day Rainfall Outlook</h2>
 <div class="text-xs text-ink-soft mb-3">Daily total (mm) · max chance of rain</div>
 ${d.time.map((t,i)=>{const f=fmtDay(t);const mm=d.precipitation_sum[i]||0;const pct=Math.round((mm/maxRain)*100);return `<div class="rainrow"><div class="text-xs"><strong>${f.wd}</strong> ${f.dm}</div><div class="rainbar-track"><div class="rainbar-fill" style="width:${pct}%"></div></div><div class="text-xs mono text-right">${mm.toFixed(1)}mm · ${d.precipitation_probability_max[i]}%</div></div>`;}).join("")}
 </section>
 <section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-1">River Discharge — GloFAS Model</h2>
+<h2 class="text-lg font-bold mb-1">🌊 River Discharge — GloFAS Model</h2>
 <div class="text-xs text-ink-soft mb-3">Modeled flow near Lakshmipur · m³/s · 7-day outlook</div>
 <div class="spark">
 ${disc.map((v,i)=>{const f=fmtDay(fl.daily.time[i]);const h=Math.max(Math.round((v/discMax)*80),4);return `<div class="spark-col"><div class="text-xs mono">${v.toFixed(0)}</div><div class="spark-bar" style="height:${h}px"></div><div class="text-xs text-ink-soft">${f.dm}</div></div>`;}).join("")}
