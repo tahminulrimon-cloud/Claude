@@ -45,10 +45,13 @@ mark.ops-hit{background:var(--amber);color:#fff;border-radius:2px;padding:0 1px;
 .metric-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--rule);}.metric-row:last-child{border-bottom:none;}
 .rainrow{display:grid;grid-template-columns:52px 1fr 62px;align-items:center;gap:10px;padding:5px 0;}
 .rainbar-track{height:16px;background:var(--paper-dark);border-radius:8px;overflow:hidden;}
-.rainbar-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,#5B8FC4,#1F4E79);transition:width .4s;}
+.rainbar-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,#5B8FC4,#1F4E79);transition:width .4s;position:relative;overflow:hidden;}
+.rainbar-fill::after{content:"";position:absolute;inset:0;background:linear-gradient(90deg,transparent,rgba(255,255,255,.4),transparent);transform:translateX(-100%);animation:shimmer 2.4s ease-in-out infinite;}
+@keyframes shimmer{0%{transform:translateX(-100%);}100%{transform:translateX(100%);}}
 .spark{display:flex;align-items:flex-end;gap:5px;}
 .spark-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;}
-.spark-bar{width:72%;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#6E8A45,#45592F);transition:height .4s;}
+.spark-bar{width:72%;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#8FB56B 0%,#6E8A45 55%,#45592F 100%);box-shadow:inset 0 1px 0 rgba(255,255,255,.35);transition:height .4s;transform-origin:bottom;animation:growUp .7s cubic-bezier(.22,.9,.32,1) backwards;}
+@keyframes growUp{from{transform:scaleY(0);}to{transform:scaleY(1);}}
 .risk-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;font-weight:700;font-size:13px;}
 .risk-low{background:#EAF1E4;color:#2B3A1D;}.risk-mod{background:#FCF3E2;color:#8A5A0A;}.risk-high{background:#FBEAEA;color:#7C2521;}
 :root[data-theme="dark"] .risk-low{background:#26301C;color:#B8CCA0;}
@@ -62,9 +65,23 @@ mark.ops-hit{background:var(--amber);color:#fff;border-radius:2px;padding:0 1px;
 @keyframes liveDotPulse{0%,100%{opacity:1;}50%{opacity:.3;}}
 .glance-strip{display:grid;grid-template-columns:repeat(auto-fit,minmax(120px,1fr));gap:10px;margin-bottom:16px;}
 .glance-tile{background:var(--paper-light);border:1px solid var(--rule);border-radius:8px;padding:13px 10px;text-align:center;}
-.glance-tile .glance-icon{font-size:22px;line-height:1;margin-bottom:4px;}
+.glance-tile .glance-icon{margin:0 auto 6px;}
 .glance-tile .glance-val{font-size:17px;font-weight:700;font-family:ui-monospace,monospace;}
 .glance-tile .glance-label{font-size:10px;text-transform:uppercase;letter-spacing:.06em;color:var(--ink-soft);margin-top:2px;}
+.icon-3d{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:50%;background:radial-gradient(circle at 32% 26%,var(--paper-light) 0%,var(--paper-dark) 55%,var(--khaki) 140%);box-shadow:inset 0 2px 2px rgba(255,255,255,.55),inset 0 -4px 7px rgba(33,38,31,.2),0 5px 10px rgba(33,38,31,.16),0 2px 3px rgba(33,38,31,.1);font-size:20px;line-height:1;flex-shrink:0;animation:iconFloat 3.6s ease-in-out infinite;}
+.icon-3d-sm{width:28px;height:28px;font-size:14px;}
+.icon-3d-lg{width:76px;height:76px;font-size:38px;}
+@keyframes iconFloat{0%,100%{transform:translateY(0);}50%{transform:translateY(-3px);}}
+:root[data-theme="dark"] .icon-3d{box-shadow:inset 0 2px 2px rgba(255,255,255,.12),inset 0 -4px 7px rgba(0,0,0,.4),0 5px 12px rgba(0,0,0,.45),0 2px 3px rgba(0,0,0,.3);}
+.gauge-arc{transition:stroke-dashoffset 1.1s cubic-bezier(.22,.9,.32,1);}
+.wx-card{position:relative;overflow:hidden;}
+.wx-card-body{position:relative;z-index:1;}
+.wx-card.raining::before{content:"";position:absolute;inset:0;background:repeating-linear-gradient(115deg,rgba(31,78,121,.16) 0 2px,transparent 2px 14px);animation:rainFall .6s linear infinite;pointer-events:none;}
+@keyframes rainFall{from{background-position:0 0;}to{background-position:-40px 60px;}}
+.wx-card.clearsky::before{content:"";position:absolute;top:-34px;right:-34px;width:150px;height:150px;border-radius:50%;background:radial-gradient(circle,rgba(214,175,60,.4),transparent 70%);animation:sunGlow 4s ease-in-out infinite;pointer-events:none;}
+@keyframes sunGlow{0%,100%{opacity:.55;transform:scale(1);}50%{opacity:1;transform:scale(1.15);}}
+.fade-in-up{animation:fadeInUp .5s ease both;}
+@keyframes fadeInUp{from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);}}
 .spinner{width:34px;height:34px;border:3px solid var(--rule);border-top-color:var(--olive);border-radius:50%;animation:spin .8s linear infinite;margin:20px auto;}
 @keyframes spin{to{transform:rotate(360deg);}}
 .refresh-btn{display:inline-flex;align-items:center;gap:6px;}
@@ -617,8 +634,8 @@ const content=el(`<div id="floodContent"></div>`);
 w.appendChild(content);
 const info=el(`<div></div>`);
 info.innerHTML=`
-<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-1">🌊 Rivers & Major Water Bodies</h2>
+<section class="card p-5 mb-4 fade-in-up" style="animation-delay:240ms">
+<h2 class="text-lg font-bold mb-1" style="display:flex;align-items:center;gap:8px"><span class="icon-3d icon-3d-sm">🌊</span> Rivers & Major Water Bodies</h2>
 <div class="text-xs text-ink-soft mb-3">Lakshmipur District</div>
 <div style="overflow-x:auto"><table><thead><tr><th>River / Water Body</th><th>Notes</th></tr></thead><tbody>
 ${LAKSHMIPUR_RIVERS.map(r=>`<tr><td class="font-semibold">${esc(r.name)}</td><td class="text-xs">${esc(r.note)}</td></tr>`).join("")}
@@ -628,15 +645,15 @@ ${LAKSHMIPUR_RIVERS.map(r=>`<tr><td class="font-semibold">${esc(r.name)}</td><td
 </div>
 <div class="text-xs text-ink-soft italic mt-2">FFWC's official gauge API requires internal authentication we don't have — live readings can't be pulled automatically into this dashboard. Use the link above to check current levels directly.</div>
 </section>
-<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-1">☎️ Civil Administration & Emergency Contacts</h2>
+<section class="card p-5 mb-4 fade-in-up" style="animation-delay:300ms">
+<h2 class="text-lg font-bold mb-1" style="display:flex;align-items:center;gap:8px"><span class="icon-3d icon-3d-sm">☎️</span> Civil Administration & Emergency Contacts</h2>
 <div class="text-xs text-ink-soft mb-3">Tap a verified helpline to dial · confirm local office lines before relying on them</div>
 <div>
 ${LAKSHMIPUR_CONTACTS.map(c=>`<div class="metric-row"><div style="padding-right:10px"><div class="font-semibold text-sm">${esc(c.role)}</div><div class="text-xs text-ink-soft">${esc(c.name)}</div></div><div style="flex-shrink:0">${c.verified?`<a href="tel:${esc(c.phone)}" class="chip chip-olive" style="text-decoration:none">📞 ${esc(c.phone)}</a>`:`<span class="chip chip-amber">Confirm locally</span>`}</div></div>`).join("")}
 </div>
 </section>
-<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-1">📜 Div Flood Directive — HQ 33 Inf Div</h2>
+<section class="card p-5 mb-4 fade-in-up" style="animation-delay:360ms">
+<h2 class="text-lg font-bold mb-1" style="display:flex;align-items:center;gap:8px"><span class="icon-3d icon-3d-sm">📜</span> Div Flood Directive — HQ 33 Inf Div</h2>
 <div class="directive-box mb-2"><strong>⚡ (a)</strong> Monitor flood situation in own AOR and maintain <strong>24/7 comms</strong> with local civil administration.</div>
 <div class="directive-box mb-2"><strong>⚡ (b)</strong> Conduct <strong>Recce</strong> of flood-prone areas in coordination with civil admin.</div>
 <div class="directive-box mb-2"><strong>⚡ (c)</strong> Keep <strong>manpower &amp; equipment</strong> ready for rescue and relief operations.</div>
@@ -670,27 +687,40 @@ if(upd)upd.innerHTML=`<span class="live-dot"></span>Last updated `+new Date().to
 content.innerHTML=`<div class="card p-5 text-center"><div style="font-size:34px">⚠️</div><div class="font-bold mb-1 mt-2">Couldn't load live data</div><div class="text-sm text-ink-soft">Check your connection and tap Refresh.<br><span class="mono text-xs">(${esc(e.message||"network error")})</span></div></div>`;
 }finally{if(btn)btn.disabled=false;}
 }
+function riskGauge(pct,color){
+const rad=42,C=2*Math.PI*rad;
+const off=(C-(pct/100)*C).toFixed(1);
+return `<svg width="104" height="104" viewBox="0 0 104 104" style="display:block">
+<circle cx="52" cy="52" r="${rad}" fill="none" stroke="var(--paper-dark)" stroke-width="10"/>
+<circle class="gauge-arc" cx="52" cy="52" r="${rad}" fill="none" stroke="${color}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${C.toFixed(1)}" data-target="${off}" transform="rotate(-90 52 52)"/>
+<text x="52" y="49" text-anchor="middle" font-size="21" font-weight="700" fill="var(--ink)" font-family="ui-monospace,monospace">${Math.round(pct)}%</text>
+<text x="52" y="65" text-anchor="middle" font-size="8" fill="var(--ink-soft)" letter-spacing="1">RISK</text>
+</svg>`;
+}
 function renderFlood(content,wx,fl,uzi){
 const cur=wx.current,d=wx.daily,wc=wmo(cur.weather_code);
 const today=d.precipitation_sum[0]||0,maxRain=Math.max(...d.precipitation_sum,1),peakRain=Math.max(...d.precipitation_sum);
 const disc=fl.daily.river_discharge,discMax=Math.max(...disc,1),discTrendUp=disc[disc.length-1]>disc[0];
-let risk,rcls,ricon,rtext;
-if(peakRain>=50){risk="HIGH";rcls="risk-high";ricon="🔴";rtext="⚠️ Heavy rain on the way — flood risk is HIGH. Monitor low-lying areas, drainage, and FB locations closely, and stay in lockstep with civil admin.";}
-else if(peakRain>=20){risk="MODERATE";rcls="risk-mod";ricon="🟠";rtext="Significant rain ahead — stay alert. Keep anti-flood and drainage measures ready to go.";}
-else{risk="LOW";rcls="risk-low";ricon="🟢";rtext="All clear for now — no major rainfall-driven flooding indicated in the forecast window.";}
+let risk,rcls,ricon,rtext,rcolor;
+if(peakRain>=50){risk="HIGH";rcls="risk-high";ricon="🔴";rcolor="var(--red)";rtext="⚠️ Heavy rain on the way — flood risk is HIGH. Monitor low-lying areas, drainage, and FB locations closely, and stay in lockstep with civil admin.";}
+else if(peakRain>=20){risk="MODERATE";rcls="risk-mod";ricon="🟠";rcolor="var(--amber)";rtext="Significant rain ahead — stay alert. Keep anti-flood and drainage measures ready to go.";}
+else{risk="LOW";rcls="risk-low";ricon="🟢";rcolor="var(--olive)";rtext="All clear for now — no major rainfall-driven flooding indicated in the forecast window.";}
+const gaugePct=Math.min(100,Math.round((peakRain/80)*100));
+const wxCardCls=cur.precipitation>0?"raining":(cur.weather_code<=1?"clearsky":"");
 content.innerHTML=`
-<section class="glance-strip">
-<div class="glance-tile"><div class="glance-icon">${wc[1]}</div><div class="glance-val">${cur.temperature_2m}°C</div><div class="glance-label">Right Now</div></div>
-<div class="glance-tile"><div class="glance-icon">🌧️</div><div class="glance-val">${today.toFixed(1)}mm</div><div class="glance-label">Rain Today</div></div>
-<div class="glance-tile"><div class="glance-icon">📈</div><div class="glance-val">${peakRain.toFixed(1)}mm</div><div class="glance-label">Peak (7d)</div></div>
-<div class="glance-tile"><div class="glance-icon">${discTrendUp?"↗️":"↘️"}</div><div class="glance-val">${discTrendUp?"Rising":"Falling"}</div><div class="glance-label">River Trend</div></div>
-<div class="glance-tile ${rcls}"><div class="glance-icon">${ricon}</div><div class="glance-val">${risk}</div><div class="glance-label">Flood Risk</div></div>
+<section class="glance-strip fade-in-up" style="animation-delay:0ms">
+<div class="glance-tile"><div class="glance-icon icon-3d">${wc[1]}</div><div class="glance-val">${cur.temperature_2m}°C</div><div class="glance-label">Right Now</div></div>
+<div class="glance-tile"><div class="glance-icon icon-3d">🌧️</div><div class="glance-val">${today.toFixed(1)}mm</div><div class="glance-label">Rain Today</div></div>
+<div class="glance-tile"><div class="glance-icon icon-3d">📈</div><div class="glance-val">${peakRain.toFixed(1)}mm</div><div class="glance-label">Peak (7d)</div></div>
+<div class="glance-tile"><div class="glance-icon icon-3d">${discTrendUp?"↗️":"↘️"}</div><div class="glance-val">${discTrendUp?"Rising":"Falling"}</div><div class="glance-label">River Trend</div></div>
+<div class="glance-tile ${rcls}"><div class="glance-icon icon-3d">${ricon}</div><div class="glance-val">${risk}</div><div class="glance-label">Flood Risk</div></div>
 </section>
-<section class="grid-2 mb-4">
-<div class="card p-5">
+<section class="grid-2 mb-4 fade-in-up" style="animation-delay:60ms">
+<div class="card p-5 wx-card ${wxCardCls}">
+<div class="wx-card-body">
 <div class="text-xs uppercase tracking-widest text-ink-soft mb-2">Current Conditions</div>
 <div style="display:flex;align-items:center;gap:14px">
-<div style="font-size:46px;line-height:1">${wc[1]}</div>
+<div class="icon-3d icon-3d-lg">${wc[1]}</div>
 <div><div class="stat-big">${cur.temperature_2m}<span class="stat-unit">°C</span></div><div class="text-sm text-ink-soft">${wc[0]}</div></div>
 </div>
 <div class="mt-4">
@@ -700,28 +730,35 @@ content.innerHTML=`
 <div class="metric-row"><span class="text-sm text-ink-soft">💨 Wind</span><span class="mono font-semibold">${cur.wind_speed_10m} km/h</span></div>
 </div>
 </div>
+</div>
 <div class="card p-5">
 <div class="text-xs uppercase tracking-widest text-ink-soft mb-2">Flood Risk (Indicative)</div>
-<div class="mb-3"><span class="risk-badge ${rcls} ${risk!=="LOW"?"pulse":""}">${ricon} ${risk} RISK</span></div>
+<div style="display:flex;align-items:center;gap:16px;margin-bottom:12px">
+${riskGauge(gaugePct,rcolor)}
+<div><span class="risk-badge ${rcls} ${risk!=="LOW"?"pulse":""}">${ricon} ${risk} RISK</span></div>
+</div>
 <p class="text-sm mb-3">${rtext}</p>
 <div class="metric-row"><span class="text-sm text-ink-soft">Rain today</span><span class="mono font-semibold">${today.toFixed(1)} mm</span></div>
 <div class="metric-row"><span class="text-sm text-ink-soft">Peak day (7-day)</span><span class="mono font-semibold">${peakRain.toFixed(1)} mm</span></div>
 <div class="metric-row"><span class="text-sm text-ink-soft">River trend</span><span class="mono font-semibold">${discTrendUp?"↗ Rising":"↘ Falling / steady"}</span></div>
 </div>
 </section>
-<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-1">🌦️ 7-Day Rainfall Outlook</h2>
+<section class="card p-5 mb-4 fade-in-up" style="animation-delay:120ms">
+<h2 class="text-lg font-bold mb-1" style="display:flex;align-items:center;gap:8px"><span class="icon-3d icon-3d-sm">🌦️</span> 7-Day Rainfall Outlook</h2>
 <div class="text-xs text-ink-soft mb-3">Daily total (mm) · max chance of rain</div>
 ${d.time.map((t,i)=>{const f=fmtDay(t);const mm=d.precipitation_sum[i]||0;const pct=Math.round((mm/maxRain)*100);return `<div class="rainrow"><div class="text-xs"><strong>${f.wd}</strong> ${f.dm}</div><div class="rainbar-track"><div class="rainbar-fill" style="width:${pct}%"></div></div><div class="text-xs mono text-right">${mm.toFixed(1)}mm · ${d.precipitation_probability_max[i]}%</div></div>`;}).join("")}
 </section>
-<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-1">🌊 River Discharge — GloFAS Model</h2>
+<section class="card p-5 mb-4 fade-in-up" style="animation-delay:180ms">
+<h2 class="text-lg font-bold mb-1" style="display:flex;align-items:center;gap:8px"><span class="icon-3d icon-3d-sm">🌊</span> River Discharge — GloFAS Model</h2>
 <div class="text-xs text-ink-soft mb-3">Modeled flow near Lakshmipur · m³/s · 7-day outlook</div>
 <div class="spark">
-${disc.map((v,i)=>{const f=fmtDay(fl.daily.time[i]);const h=Math.max(Math.round((v/discMax)*80),4);return `<div class="spark-col"><div class="text-xs mono">${v.toFixed(0)}</div><div class="spark-bar" style="height:${h}px"></div><div class="text-xs text-ink-soft">${f.dm}</div></div>`;}).join("")}
+${disc.map((v,i)=>{const f=fmtDay(fl.daily.time[i]);const h=Math.max(Math.round((v/discMax)*80),4);return `<div class="spark-col"><div class="text-xs mono">${v.toFixed(0)}</div><div class="spark-bar" style="height:${h}px;animation-delay:${i*60}ms"></div><div class="text-xs text-ink-soft">${f.dm}</div></div>`;}).join("")}
 </div>
 </section>
 ${renderUpazilaRainfall(uzi)}`;
+requestAnimationFrame(()=>requestAnimationFrame(()=>{
+content.querySelectorAll(".gauge-arc").forEach(a=>{a.style.strokeDashoffset=a.dataset.target;});
+}));
 }
 function uziSparkline(fc){
 const max=Math.max(...fc,0.1);
@@ -755,8 +792,8 @@ const fcTotal=fc.reduce((a,b)=>a+b,0);
 const peak=fc.length?Math.max(...fc):0;
 return{name:u.name,past24,fc,fcTotal,peak};
 });
-return `<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-1">☔ Hyper-Local Rainfall — By Upazila</h2>
+return `<section class="card p-5 mb-4 fade-in-up" style="animation-delay:220ms">
+<h2 class="text-lg font-bold mb-1" style="display:flex;align-items:center;gap:8px"><span class="icon-3d icon-3d-sm">☔</span> Hyper-Local Rainfall — By Upazila</h2>
 <div class="text-xs text-ink-soft mb-3">Lakshmipur Sadar · Ramganj · Raipur · Ramgati · Kamalnagar — Open-Meteo model data, not official BMD observations</div>
 <div style="overflow-x:auto"><table><thead><tr><th>Upazila</th><th>Past 24h (mm)</th><th>5-Day Trend</th><th>5-Day Total (mm)</th><th>Peak Day (mm)</th></tr></thead><tbody>
 ${rows.map(r=>`<tr><td class="font-semibold">${esc(r.name)}</td><td class="mono text-xs">${r.past24.toFixed(1)}</td><td><div style="display:flex;align-items:flex-end;gap:8px">${uziSparkline(r.fc)}<div class="text-xs" style="padding-bottom:2px">${uziTrend(r.fc)}</div></div></td><td class="mono text-xs">${r.fcTotal.toFixed(1)}</td><td class="mono text-xs">${r.peak.toFixed(1)}</td></tr>`).join("")}
