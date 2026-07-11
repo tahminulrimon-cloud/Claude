@@ -387,9 +387,9 @@ R.innerHTML="";
 const shell=el(`<div>
 <div class="classified-strip mono">${META.exercise}</div>
 <header style="border-bottom:1px solid var(--rule);background:var(--paper-light)">
-<div class="container" style="padding:10px 16px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
-<div><div class="mono text-olive-dark tracking-widest" style="font-size:22px;font-weight:700">THE RAVAGERS</div></div>
-<button class="theme-toggle" id="themeBtn" title="Toggle dark / light mode">${theme==="dark"?"☀️":"🌙"}</button>
+<div class="container" style="padding:10px 16px;display:flex;align-items:center;justify-content:center;position:relative">
+<div class="mono text-olive-dark tracking-widest" style="font-size:22px;font-weight:700">THE RAVAGERS</div>
+<button class="theme-toggle" id="themeBtn" title="Toggle dark / light mode" style="position:absolute;right:16px">${theme==="dark"?"☀️":"🌙"}</button>
 </div>
 </header>
 <div class="tab-nav-wrap"><nav class="container"><div class="tab-nav" id="tn"></div></nav></div>
