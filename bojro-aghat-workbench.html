@@ -42,6 +42,23 @@ button.card:hover{transform:translateY(-2px);box-shadow:0 6px 18px rgba(33,38,31
 tr.filtered-out{display:none;}
 .copy-cell{cursor:pointer;}.copy-cell:hover{text-decoration:underline;text-decoration-style:dotted;text-underline-offset:2px;}
 mark.ops-hit{background:var(--amber);color:#fff;border-radius:2px;padding:0 1px;}
+.stat-big{font-size:34px;font-weight:700;line-height:1;}
+.stat-unit{font-size:15px;font-weight:600;opacity:.7;}
+.metric-row{display:flex;align-items:center;justify-content:space-between;padding:8px 0;border-bottom:1px solid var(--rule);}.metric-row:last-child{border-bottom:none;}
+.rainrow{display:grid;grid-template-columns:52px 1fr 62px;align-items:center;gap:10px;padding:5px 0;}
+.rainbar-track{height:16px;background:var(--paper-dark);border-radius:8px;overflow:hidden;}
+.rainbar-fill{height:100%;border-radius:8px;background:linear-gradient(90deg,#5B8FC4,#1F4E79);transition:width .4s;}
+.spark{display:flex;align-items:flex-end;gap:5px;}
+.spark-col{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:flex-end;gap:4px;}
+.spark-bar{width:72%;border-radius:4px 4px 0 0;background:linear-gradient(180deg,#6E8A45,#45592F);transition:height .4s;}
+.risk-badge{display:inline-flex;align-items:center;gap:6px;padding:6px 14px;border-radius:999px;font-weight:700;font-size:13px;}
+.risk-low{background:#EAF1E4;color:#2B3A1D;}.risk-mod{background:#FCF3E2;color:#8A5A0A;}.risk-high{background:#FBEAEA;color:#7C2521;}
+:root[data-theme="dark"] .risk-low{background:#26301C;color:#B8CCA0;}
+:root[data-theme="dark"] .risk-mod{background:#332A18;color:#E0C179;}
+:root[data-theme="dark"] .risk-high{background:#3A211F;color:#E8A9A5;}
+.spinner{width:34px;height:34px;border:3px solid var(--rule);border-top-color:var(--olive);border-radius:50%;animation:spin .8s linear infinite;margin:20px auto;}
+@keyframes spin{to{transform:rotate(360deg);}}
+.refresh-btn{display:inline-flex;align-items:center;gap:6px;}
 .p-2{padding:8px;}.p-3{padding:12px;}.p-4{padding:16px;}.p-5{padding:20px;}
 .mb-2{margin-bottom:8px;}.mb-3{margin-bottom:12px;}.mb-4{margin-bottom:16px;}.mb-5{margin-bottom:20px;}
 .mt-1{margin-top:4px;}.mt-2{margin-top:8px;}.mt-4{margin-top:16px;}
@@ -346,11 +363,11 @@ const shell=el(`<div>
 <main id="main" style="padding-bottom:32px"></main></div>`);
 R.appendChild(shell);
 document.getElementById("themeBtn").onclick=toggleTheme;
-const tabs=[{id:"overview",l:"📋 Overview"},{id:"map",l:"🗺️ Map"},{id:"timeline",l:"🕐 Timeline"},{id:"comms",l:"📡 Comms & Rules"},{id:"dailyops",l:"🎯 Daily Ops"},{id:"codirectives",l:"⚡ CO's Directives"}];
+const tabs=[{id:"overview",l:"📋 Overview"},{id:"map",l:"🗺️ Map"},{id:"timeline",l:"🕐 Timeline"},{id:"comms",l:"📡 Comms & Rules"},{id:"dailyops",l:"🎯 Daily Ops"},{id:"codirectives",l:"⚡ CO's Directives"},{id:"flood",l:"🌧️ Flood Watch"}];
 const tn=document.getElementById("tn");
 tabs.forEach(t=>{const b=el(`<button class="tab ${t.id===tab?'active':''}">${t.l}</button>`);b.onclick=()=>{tab=t.id;render();};tn.appendChild(b);});
 const m=document.getElementById("main");
-({overview:rOverview,map:rMap,timeline:rTimeline,comms:rComms,dailyops:rDailyOps,codirectives:rCoDirectives})[tab](m);
+({overview:rOverview,map:rMap,timeline:rTimeline,comms:rComms,dailyops:rDailyOps,codirectives:rCoDirectives,flood:rFlood})[tab](m);
 }
 
 /* ===== OVERVIEW ===== */
@@ -525,6 +542,86 @@ CO_DIRECTIVES.forEach(d=>{
 w.appendChild(el(`<div class="directive-box mb-3"><strong>${esc(d.title)}</strong><span class="text-xs" style="margin-left:6px;opacity:.75">${esc(d.date)}</span><ul style="margin:6px 0 0;padding-left:18px">${d.points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>`));
 });
 m.appendChild(w);
+}
+
+/* ===== FLOOD WATCH ===== */
+const LAKSHMIPUR={lat:22.94,lng:90.84};
+function wmo(c){const t={0:["Clear sky","☀️"],1:["Mainly clear","🌤️"],2:["Partly cloudy","⛅"],3:["Overcast","☁️"],45:["Fog","🌫️"],48:["Rime fog","🌫️"],51:["Light drizzle","🌦️"],53:["Drizzle","🌦️"],55:["Dense drizzle","🌦️"],56:["Freezing drizzle","🌧️"],57:["Freezing drizzle","🌧️"],61:["Light rain","🌧️"],63:["Rain","🌧️"],65:["Heavy rain","🌧️"],66:["Freezing rain","🌧️"],67:["Freezing rain","🌧️"],71:["Light snow","🌨️"],73:["Snow","🌨️"],75:["Heavy snow","🌨️"],77:["Snow grains","🌨️"],80:["Light showers","🌦️"],81:["Showers","🌧️"],82:["Violent showers","⛈️"],85:["Snow showers","🌨️"],86:["Snow showers","🌨️"],95:["Thunderstorm","⛈️"],96:["Thunderstorm + hail","⛈️"],99:["Thunderstorm + hail","⛈️"]};return t[c]||["—","🌡️"];}
+function fmtDay(t){const d=new Date(t+"T00:00:00");return{wd:d.toLocaleDateString("en",{weekday:"short"}),dm:d.getDate()};}
+function rFlood(m){
+const w=el(`<div class="container" style="padding:20px 16px"></div>`);
+w.appendChild(el(`<div class="hero-banner mb-3"><h2>🌧️ Lakshmipur Flood Watch</h2><p>Live rainfall & river conditions · Lakshmipur District, Bangladesh</p></div>`));
+const bar=el(`<div class="mb-3" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px"><div class="text-xs text-ink-soft" id="floodUpdated">&nbsp;</div><button class="btn refresh-btn" id="floodRefresh">🔄 Refresh</button></div>`);
+w.appendChild(bar);
+const content=el(`<div id="floodContent"></div>`);
+w.appendChild(content);
+w.appendChild(el(`<p class="text-xs text-ink-soft italic mt-4">Weather & rainfall: live observations + forecast from Open-Meteo. River level: GloFAS hydrological model (indicative river discharge) — <strong>not</strong> an official FFWC/BWDB flood warning. For official bulletins consult ffwc.gov.bd.</p>`));
+m.appendChild(w);
+const btn=bar.querySelector("#floodRefresh");
+btn.onclick=()=>loadFlood(content,btn);
+loadFlood(content,btn);
+}
+async function loadFlood(content,btn){
+content.innerHTML=`<div class="card p-5 text-center"><div class="spinner"></div><div class="text-sm text-ink-soft">Fetching live data for Lakshmipur…</div></div>`;
+if(btn)btn.disabled=true;
+try{
+const wxUrl=`https://api.open-meteo.com/v1/forecast?latitude=${LAKSHMIPUR.lat}&longitude=${LAKSHMIPUR.lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,weather_code,wind_speed_10m&daily=precipitation_sum,precipitation_probability_max,weather_code&timezone=Asia%2FDhaka&forecast_days=7`;
+const flUrl=`https://flood-api.open-meteo.com/v1/flood?latitude=${LAKSHMIPUR.lat}&longitude=${LAKSHMIPUR.lng}&daily=river_discharge&forecast_days=7`;
+const [wx,fl]=await Promise.all([
+fetch(wxUrl).then(r=>{if(!r.ok)throw new Error("weather "+r.status);return r.json();}),
+fetch(flUrl).then(r=>{if(!r.ok)throw new Error("flood "+r.status);return r.json();})
+]);
+renderFlood(content,wx,fl);
+const upd=document.getElementById("floodUpdated");
+if(upd)upd.textContent="Last updated "+new Date().toLocaleString("en-GB",{hour:"2-digit",minute:"2-digit",day:"2-digit",month:"short"})+" · your local time";
+}catch(e){
+content.innerHTML=`<div class="card p-5 text-center"><div style="font-size:34px">⚠️</div><div class="font-bold mb-1 mt-2">Couldn't load live data</div><div class="text-sm text-ink-soft">Check your connection and tap Refresh.<br><span class="mono text-xs">(${esc(e.message||"network error")})</span></div></div>`;
+}finally{if(btn)btn.disabled=false;}
+}
+function renderFlood(content,wx,fl){
+const cur=wx.current,d=wx.daily,wc=wmo(cur.weather_code);
+const today=d.precipitation_sum[0]||0,maxRain=Math.max(...d.precipitation_sum,1),peakRain=Math.max(...d.precipitation_sum);
+const disc=fl.daily.river_discharge,discMax=Math.max(...disc,1),discTrendUp=disc[disc.length-1]>disc[0];
+let risk,rcls,ricon,rtext;
+if(peakRain>=50){risk="HIGH";rcls="risk-high";ricon="🔴";rtext="Heavy rain expected — monitor low-lying areas, drainage, and FB locations closely.";}
+else if(peakRain>=20){risk="MODERATE";rcls="risk-mod";ricon="🟠";rtext="Significant rain expected — keep anti-flood and drainage measures ready.";}
+else{risk="LOW";rcls="risk-low";ricon="🟢";rtext="No major rainfall-driven flooding indicated in the forecast window.";}
+content.innerHTML=`
+<section class="grid-2 mb-4">
+<div class="card p-5">
+<div class="text-xs uppercase tracking-widest text-ink-soft mb-2">Current Conditions</div>
+<div style="display:flex;align-items:center;gap:14px">
+<div style="font-size:46px;line-height:1">${wc[1]}</div>
+<div><div class="stat-big">${cur.temperature_2m}<span class="stat-unit">°C</span></div><div class="text-sm text-ink-soft">${wc[0]}</div></div>
+</div>
+<div class="mt-4">
+<div class="metric-row"><span class="text-sm text-ink-soft">🌧️ Rain now</span><span class="mono font-semibold">${cur.precipitation} mm</span></div>
+<div class="metric-row"><span class="text-sm text-ink-soft">💧 Humidity</span><span class="mono font-semibold">${cur.relative_humidity_2m}%</span></div>
+<div class="metric-row"><span class="text-sm text-ink-soft">🌡️ Feels like</span><span class="mono font-semibold">${cur.apparent_temperature}°C</span></div>
+<div class="metric-row"><span class="text-sm text-ink-soft">💨 Wind</span><span class="mono font-semibold">${cur.wind_speed_10m} km/h</span></div>
+</div>
+</div>
+<div class="card p-5">
+<div class="text-xs uppercase tracking-widest text-ink-soft mb-2">Flood Risk (Indicative)</div>
+<div class="mb-3"><span class="risk-badge ${rcls}">${ricon} ${risk} RISK</span></div>
+<p class="text-sm mb-3">${rtext}</p>
+<div class="metric-row"><span class="text-sm text-ink-soft">Rain today</span><span class="mono font-semibold">${today.toFixed(1)} mm</span></div>
+<div class="metric-row"><span class="text-sm text-ink-soft">Peak day (7-day)</span><span class="mono font-semibold">${peakRain.toFixed(1)} mm</span></div>
+<div class="metric-row"><span class="text-sm text-ink-soft">River trend</span><span class="mono font-semibold">${discTrendUp?"↗ Rising":"↘ Falling / steady"}</span></div>
+</div>
+</section>
+<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-1">7-Day Rainfall Outlook</h2>
+<div class="text-xs text-ink-soft mb-3">Daily total (mm) · max chance of rain</div>
+${d.time.map((t,i)=>{const f=fmtDay(t);const mm=d.precipitation_sum[i]||0;const pct=Math.round((mm/maxRain)*100);return `<div class="rainrow"><div class="text-xs"><strong>${f.wd}</strong> ${f.dm}</div><div class="rainbar-track"><div class="rainbar-fill" style="width:${pct}%"></div></div><div class="text-xs mono text-right">${mm.toFixed(1)}mm · ${d.precipitation_probability_max[i]}%</div></div>`;}).join("")}
+</section>
+<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-1">River Discharge — GloFAS Model</h2>
+<div class="text-xs text-ink-soft mb-3">Modeled flow near Lakshmipur · m³/s · 7-day outlook</div>
+<div class="spark">
+${disc.map((v,i)=>{const f=fmtDay(fl.daily.time[i]);const h=Math.max(Math.round((v/discMax)*80),4);return `<div class="spark-col"><div class="text-xs mono">${v.toFixed(0)}</div><div class="spark-bar" style="height:${h}px"></div><div class="text-xs text-ink-soft">${f.dm}</div></div>`;}).join("")}
+</div>
+</section>`;
 }
 
 applyTheme();
