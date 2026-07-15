@@ -1,154 +1,104 @@
-import { useState, useCallback } from "react";
-import { timelineEntries } from "./data/timelineData";
-import PhotoCard from "./components/PhotoCard";
-import LightboxModal from "./components/LightboxModal";
-import GrowthTimeline from "./components/GrowthTimeline";
-import "./App.css";
+import { useState, useEffect, useCallback } from 'react'
+import { api } from './services/api.js'
+import Navbar from './components/Navbar.jsx'
+import Hero from './components/Hero.jsx'
+import WorldMap from './components/WorldMap.jsx'
+import CountryGrid from './components/CountryGrid.jsx'
+import CountryPage from './components/CountryPage.jsx'
+import AlbumPage from './components/AlbumPage.jsx'
+import './App.css'
 
 export default function App() {
-  const [activeEntry, setActiveEntry] = useState(null);
-  const [filter, setFilter] = useState("all");
+  const [view, setView] = useState('home')
+  const [countries, setCountries] = useState([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState(null)
+  const [selectedCountry, setSelectedCountry] = useState(null)
+  const [selectedAlbum, setSelectedAlbum] = useState(null)
+  const [tick, setTick] = useState(0)
 
-  const filters = [
-    { key: "all",    label: "All Moments" },
-    { key: "birth",  label: "Birth Day" },
-    { key: "week1",  label: "First Week" },
-    { key: "week2",  label: "Week 2" },
-    { key: "month1", label: "1 Month+" },
-  ];
+  useEffect(() => {
+    api.getCountries()
+      .then(data => { setCountries(data); setError(null); setLoading(false) })
+      .catch(e => { setError(e.message); setLoading(false) })
+  }, [tick])
 
-  const filteredEntries = timelineEntries.filter((e) => {
-    if (filter === "all")    return true;
-    const d = e.ageInDays ?? 0;
-    if (filter === "birth")  return d === 0;
-    if (filter === "week1")  return d > 0 && d <= 7;
-    if (filter === "week2")  return d > 7 && d <= 14;
-    if (filter === "month1") return d > 14;
-    return true;
-  });
+  const refresh = useCallback(() => setTick(t => t + 1), [])
 
-  const openModal = useCallback((entry) => setActiveEntry(entry), []);
-  const closeModal = useCallback(() => setActiveEntry(null), []);
+  const goHome = useCallback(() => {
+    setView('home')
+    setSelectedCountry(null)
+    setSelectedAlbum(null)
+    refresh()
+  }, [refresh])
 
-  const activeIndex = activeEntry
-    ? filteredEntries.findIndex((e) => e.id === activeEntry.id)
-    : -1;
+  const goToCountry = useCallback((country) => {
+    setSelectedCountry(country)
+    setSelectedAlbum(null)
+    setView('country')
+  }, [])
 
-  const goPrev = useCallback(() => {
-    if (activeIndex > 0) setActiveEntry(filteredEntries[activeIndex - 1]);
-  }, [activeIndex, filteredEntries]);
+  const goToAlbum = useCallback((album) => {
+    setSelectedAlbum(album)
+    setView('album')
+  }, [])
 
-  const goNext = useCallback(() => {
-    if (activeIndex < filteredEntries.length - 1)
-      setActiveEntry(filteredEntries[activeIndex + 1]);
-  }, [activeIndex, filteredEntries]);
+  const backToCountry = useCallback(() => {
+    setSelectedAlbum(null)
+    setView('country')
+  }, [])
 
-  const photosCount = timelineEntries.filter((e) => e.photo).length;
+  if (loading) return (
+    <div className="app-loading">
+      <div className="spinner" />
+      <p>Loading TravelVault...</p>
+    </div>
+  )
+
+  if (error) return (
+    <div className="app-error">
+      <h2>Could not connect</h2>
+      <p>{error}</p>
+      <button className="btn btn-primary" onClick={refresh}>Retry</button>
+    </div>
+  )
+
+  const breadcrumbs =
+    view === 'country' ? [{ label: 'Home', onClick: goHome }, { label: selectedCountry?.name }] :
+    view === 'album'   ? [{ label: 'Home', onClick: goHome }, { label: selectedCountry?.name, onClick: () => setView('country') }, { label: selectedAlbum?.name }] :
+    []
+
+  const totalPhotos = countries.reduce((s, c) => s + (c.photo_count || 0), 0)
+  const totalAlbums = countries.reduce((s, c) => s + (c.album_count || 0), 0)
 
   return (
     <div className="app">
-      {/* Header */}
-      <header className="app-header">
-        <div className="header-content">
-          <div className="header-flowers">🌸</div>
-          <div className="header-text">
-            <h1 className="app-title">Alysha's Journey</h1>
-            <p className="app-subtitle">
-              Born 25 April 2022 — a calendar of her earliest days 🌱
-            </p>
-          </div>
-          <div className="header-flowers">🌸</div>
-        </div>
-        <div className="header-stats">
-          <div className="stat">
-            <span className="stat-num">{timelineEntries.length}</span>
-            <span className="stat-label">Moments</span>
-          </div>
-          <div className="stat-divider" />
-          <div className="stat">
-            <span className="stat-num">{photosCount}</span>
-            <span className="stat-label">Photos</span>
-          </div>
-          <div className="stat-divider" />
-          <div className="stat">
-            <span className="stat-num">{timelineEntries.length - photosCount}</span>
-            <span className="stat-label">To add</span>
-          </div>
-        </div>
-      </header>
+      <Navbar breadcrumbs={breadcrumbs} onLogoClick={goHome} />
 
-      {/* Timeline bar */}
-      <GrowthTimeline
-        entries={timelineEntries}
-        activeId={activeEntry?.id}
-        onSelect={openModal}
-      />
+      {view === 'home' && (
+        <>
+          <Hero countriesCount={countries.length} photosCount={totalPhotos} albumsCount={totalAlbums} />
+          <WorldMap countries={countries} onCountryClick={goToCountry} />
+          <CountryGrid countries={countries} onCountryClick={goToCountry} />
+        </>
+      )}
 
-      {/* Filter tabs */}
-      <div className="filter-bar">
-        {filters.map((f) => (
-          <button
-            key={f.key}
-            className={`filter-btn ${filter === f.key ? "active" : ""}`}
-            onClick={() => setFilter(f.key)}
-          >
-            {f.label}
-          </button>
-        ))}
-      </div>
+      {view === 'country' && selectedCountry && (
+        <CountryPage
+          country={selectedCountry}
+          onBack={goHome}
+          onAlbumClick={goToAlbum}
+          onRefresh={refresh}
+        />
+      )}
 
-      {/* Grid */}
-      <main className="photo-grid-section">
-        {filteredEntries.length === 0 ? (
-          <div className="empty-state">
-            <span>🌷</span>
-            <p>No moments in this range yet.</p>
-          </div>
-        ) : (
-          <div className="photo-grid">
-            {filteredEntries.map((entry) => (
-              <PhotoCard
-                key={entry.id}
-                entry={entry}
-                index={timelineEntries.indexOf(entry)}
-                isActive={activeEntry?.id === entry.id}
-                onClick={openModal}
-              />
-            ))}
-          </div>
-        )}
-      </main>
-
-      {/* Drive notice */}
-      <div className="upload-hint">
-        <div className="hint-box">
-          <span>☁️</span>
-          <div>
-            <strong>Photos from Google Drive</strong> — loaded directly from
-            your Drive folder. Make sure you are signed into Google in this
-            browser so the images appear. To add more dates, add an entry in{" "}
-            <code>src/data/timelineData.js</code>.
-          </div>
-        </div>
-      </div>
-
-      {/* Footer */}
-      <footer className="app-footer">
-        Made with ❤️ for Alysha — every moment treasured
-      </footer>
-
-      {/* Lightbox */}
-      {activeEntry && (
-        <LightboxModal
-          entry={activeEntry}
-          onClose={closeModal}
-          onPrev={goPrev}
-          onNext={goNext}
-          hasPrev={activeIndex > 0}
-          hasNext={activeIndex < filteredEntries.length - 1}
+      {view === 'album' && selectedCountry && selectedAlbum && (
+        <AlbumPage
+          country={selectedCountry}
+          album={selectedAlbum}
+          onBack={backToCountry}
         />
       )}
     </div>
-  );
+  )
 }
-
