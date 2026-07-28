@@ -147,7 +147,7 @@ input[type="text"]{font-family:ui-monospace,monospace;font-size:11px;border:none
 <div id="root"></div>
 <script>
 /* ===== DATA ===== */
-const META={exercise:"ACS 2026",formation:"17 Fd Regt Artillery · 33 Artillery Brigade",classification:"RESTRICTED",serial:"ACS-2026",duration:"Field Fire Program 01–07 Aug 2026 · Test Fire 04 Aug 2026",role:"Artillery Course Shooting (ACS) 2026 — 17 Fd Regt Artillery's annual gun-fire qualification course: movement to the Artillery Centre & School (AC&S), test firing at Moneyabad Gun Position, and a daily Field Fire Program at Holudia Gun Position, organised by battery packets.",ammo:"CARTS QF 122 MM HOW HE PD T-83"};
+const META={exercise:"ACS 2026",formation:"17 Fd Regt Arty · 33 Arty Brigade",classification:"RESTRICTED",serial:"ACS-2026",duration:"Field Fire Program 01–07 Aug 2026 · Test Fire 04 Aug 2026",role:"Arty Course Shooting (ACS) 2026 — 17 Fd Regt Arty's annual gun-fire qualification course: movement to the Arty Centre & School (AC&S), test firing at Moneyabad Gun Position, and a daily Field Fire Program at Holudia Gun Position, organised by battery packets.",ammo:"CARTS QF 122 MM HOW HE PD T-83"};
 
 const KEY_DATES=[
 {label:"Move to AC&S (Man Load)",date:"29 Jul 2026",time:"0800 hrs"},
@@ -239,11 +239,11 @@ gun:{type:"122 MM Gun",catt:25,fd17:0,total:25},
 };
 
 const MOVEMENT={
-packet:"Packet No-01 (Romeo and Hotel-Kilo Battery)",
-unit:"17 Fd Regt Artillery",
+packet:"Packet No-01 (Romeo and HQ Battery)",
+unit:"17 Fd Regt Arty",
 comdr:"Maj Shadia Sultana",
 authority:"Date of departure: 01-08-2026",
-manLoad:{date:"29 Jul 2026",time:"0800 hrs",from:"Unit lines",to:"Artillery Centre & School (AC&S)"},
+manLoad:{date:"29 Jul 2026",time:"0800 hrs",from:"Unit lines",to:"Arty Centre & School (AC&S)"},
 };
 
 const PENDING_DOCS=[
@@ -332,7 +332,7 @@ updCd();countdownInterval=setInterval(updCd,1000);
 /* ===== COMD'S VISIT ===== */
 function rVisit(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
-w.appendChild(el(`<div class="hero-banner mb-3"><h2>🎖️ Visit Program — Comd 33 Arty Bde</h2><p>ACS-2026 · 17 Fd Regt Artillery · 03–05 Aug 2026</p></div>`));
+w.appendChild(el(`<div class="hero-banner mb-3"><h2>🎖️ Visit Program — Comd 33 Arty Bde</h2><p>ACS-2026 · 17 Fd Regt Arty · 03–05 Aug 2026</p></div>`));
 VISIT_PROGRAM.forEach(day=>{
 const card=el(`<div class="card mb-4"><div class="p-3 border-b" style="background:var(--paper-dark)"><h3 class="font-bold text-sm uppercase tracking-widest text-olive-dark" style="margin:0">${esc(day.date)}</h3></div><div style="overflow-x:auto"><table><thead><tr><th>Ser</th><th>Activity</th><th>Time</th><th>Rmks</th></tr></thead><tbody></tbody></table></div></div>`);
 const tbody=card.querySelector("tbody");
@@ -404,8 +404,8 @@ w.appendChild(el(`<section class="card p-5 mb-4">
 <div class="metric-row"><span class="text-sm text-ink-soft">To</span><span class="font-semibold">${esc(MOVEMENT.manLoad.to)}</span></div>
 </section>`));
 w.appendChild(el(`<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-2">⚠️ Pending — Legacy Bangla Font</h2>
-<p class="text-sm mb-3">The following content from the ACS 2026 Booklet is typed in a legacy Bangla font (<span class="mono">AdarshaLipiNormal</span>) that couldn't be safely auto-converted to Unicode — wrong guesses risk misnaming personnel or duties, so nothing below has been decoded yet.</p>
+<h2 class="text-lg font-bold mb-2">⚠️ Awaiting English Translation</h2>
+<p class="text-sm mb-3">The following content from the ACS 2026 Booklet is typed in a legacy Bangla font (<span class="mono">AdarshaLipiNormal</span>) that couldn't be safely auto-converted to English/Unicode — wrong guesses risk misnaming personnel or duties, so nothing below has been translated yet.</p>
 <div style="overflow-x:auto"><table><thead><tr><th>Document</th><th>Content pending</th></tr></thead><tbody>${PENDING_DOCS.map(p=>`<tr><td class="font-semibold">${esc(p.doc)}</td><td>${esc(p.content)}</td></tr>`).join("")}</tbody></table></div>
 <div class="directive-box mt-3">To unblock: paste the Bangla text directly (renders correctly wherever you're viewing the source), or have someone with the AdarshaLipi font print/export these docs to PDF so the text can be read via OCR instead of by character code.</div>
 </section>`));
