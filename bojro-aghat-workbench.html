@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>EX BOJRO AGHAT - THE RAVAGERS</title>
+<title>THE RAVAGERS</title>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
 <style>
@@ -149,7 +149,7 @@ input[type="text"]{font-family:ui-monospace,monospace;font-size:11px;border:none
 <div id="root"></div>
 <script>
 /* ===== DATA ===== */
-const META={exercise:"EX BOJRO AGHAT",formation:"TF-A · 33 Artillery Brigade Group",classification:"RESTRICTED",serial:"ST-2026",duration:"05–14 Jul 2026 (10 days)",role:"TF-A (En Ctrl) — 33 Arty Bde Gp depicting a div (-) in conventional defence in captured territory. TF-B (44 Inf Bde) and TF-C (101 Inf Bde) are players.",concept:"Bn defence (frontage 1500–2000m) depicted by battery strength; routine in-line activities and log build-up; player targets 8–10 km (SRP) / 15–20 km (LRP) from FB, avoiding main highways.",endState:"Realistic depiction of en def posn completed; 08 raids conducted; all TF-A tps participate in min 1 minor op; AAR submitted to Bde by 22 Jul."};
+const META={exercise:"THE RAVAGERS",formation:"TF-A · 33 Artillery Brigade Group",classification:"RESTRICTED",serial:"ST-2026",duration:"05–14 Jul 2026 (10 days)",role:"TF-A (En Ctrl) — 33 Arty Bde Gp depicting a div (-) in conventional defence in captured territory. TF-B (44 Inf Bde) and TF-C (101 Inf Bde) are players.",concept:"Bn defence (frontage 1500–2000m) depicted by battery strength; routine in-line activities and log build-up; player targets 8–10 km (SRP) / 15–20 km (LRP) from FB, avoiding main highways.",endState:"Realistic depiction of en def posn completed; 08 raids conducted; all TF-A tps participate in min 1 minor op; AAR submitted to Bde by 22 Jul."};
 
 const AMMO=[
 {loc:"Lt Fwd Bn",live_s:"1 Sealed Box",live_l:"100 rds",blank_s:"1 Sealed Box",blank_l:"320 rds"},
@@ -419,11 +419,6 @@ if(countdownInterval){clearInterval(countdownInterval);countdownInterval=null;}
 R.innerHTML="";
 const shell=el(`<div>
 <div class="classified-strip mono">${META.exercise}</div>
-<header style="border-bottom:1px solid var(--rule);background:var(--paper-light)">
-<div class="container" style="padding:10px 16px;display:flex;align-items:center;justify-content:center">
-<div class="mono text-olive-dark tracking-widest" style="font-size:22px;font-weight:700">THE RAVAGERS</div>
-</div>
-</header>
 <div class="tab-nav-wrap"><nav class="container"><div class="tab-nav" id="tn"></div></nav></div>
 <main id="main" style="padding-bottom:32px"></main></div>`);
 R.appendChild(shell);
