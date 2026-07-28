@@ -147,7 +147,7 @@ input[type="text"]{font-family:ui-monospace,monospace;font-size:11px;border:none
 <div id="root"></div>
 <script>
 /* ===== DATA ===== */
-const META={exercise:"ACS 2026",formation:"17 Fd Regt Arty · 33 Arty Brigade",classification:"RESTRICTED",serial:"ACS-2026",duration:"Field Fire Program 01–07 Aug 2026 · Test Fire 04 Aug 2026",role:"Arty Course Shooting (ACS) 2026 — 17 Fd Regt Arty's annual gun-fire qualification course: movement to the Arty Centre & School (AC&S), test firing at Moneyabad Gun Position, and a daily Field Fire Program at Holudia Gun Position, organised by battery packets.",ammo:"CARTS QF 122 MM HOW HE PD T-83"};
+const META={exercise:"ACS 2026",formation:"17 Fd Regt · 33 Arty Bde",classification:"RESTRICTED",serial:"ACS-2026",duration:"Field Fire Program 01–07 Aug 2026 · Test Fire 04 Aug 2026",role:"Arty Course Shooting (ACS) 2026 — 17 Fd Regt's annual gun-fire qualification course: movement to the Artillery Centre and School (AC&S), test firing at Moneyabad Gun Posn, and a daily Field Fire Program at Holudia Gun Posn, organised by battery packets.",ammo:"CARTS QF 122 MM HOW HE PD T-83"};
 
 const KEY_DATES=[
 {label:"Move to AC&S (Man Load)",date:"29 Jul 2026",time:"0800 hrs"},
@@ -240,10 +240,10 @@ gun:{type:"122 MM Gun",catt:25,fd17:0,total:25},
 
 const MOVEMENT={
 packet:"Packet No-01 (Romeo and HQ Battery)",
-unit:"17 Fd Regt Arty",
-comdr:"Maj Shadia Sultana",
+unit:"17 Fd Regt",
+comd:"Maj Shadia Sultana",
 authority:"Date of departure: 01-08-2026",
-manLoad:{date:"29 Jul 2026",time:"0800 hrs",from:"Unit lines",to:"Arty Centre & School (AC&S)"},
+manLoad:{date:"29 Jul 2026",time:"0800 hrs",from:"Unit lines",to:"Artillery Centre and School (AC&S)"},
 };
 
 const PENDING_DOCS=[
@@ -251,7 +251,7 @@ const PENDING_DOCS=[
 {doc:"2. Man Load Table – Gun Fire",content:"Vehicle-wise passenger manifest & equipment checklist"},
 {doc:"3. IN/OUT Form 2026",content:"Packet-wise movement roll (names) — service & contact numbers only are readable"},
 {doc:"4. Resp",content:"Duty / responsibility distribution by appointment"},
-{doc:"5. Anx G – Responsible Distribution",content:"Committee & responsibility distribution"},
+{doc:"5. Anx G – Responsible Distr",content:"Committee & responsibility distribution"},
 {doc:"8. Staff Note (partial)",content:"Test-fire committee membership (names/appointments) — schedule & ammo already extracted"},
 ];
 
@@ -318,7 +318,7 @@ ${KEY_DATES.map(k=>`<div class="info-tile"><div class="ic">🗓️</div><div cla
 </section>
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">Ammunition</h2><p class="mono text-base">${esc(META.ammo)}</p></section>
 <section class="grid-2 mb-4">
-${[["visit","Comd's Visit","33 Arty Bde Comd's day-by-day program, 03–05 Aug"],["firing","Test & Field Fire","Moneyabad test fire + daily Field Fire Program"],["parade","Parade State","17 Fd Regt Arty strength & equipment, 01 Aug 2026"],["pending","Roster, Duty & Movement","Personnel roster, duty distribution — pending decode"]].map(([id,t,d])=>`<button data-g="${id}" class="card p-4" style="text-align:left"><div class="font-bold">→ ${t}</div><div class="text-sm text-ink-soft">${d}</div></button>`).join("")}
+${[["visit","Comd's Visit","33 Arty Bde Comd's day-by-day program, 03–05 Aug"],["firing","Test & Field Fire","Moneyabad test fire + daily Field Fire Program"],["parade","Parade State","17 Fd Regt strength & equipment, 01 Aug 2026"],["pending","Roster, Duty & Movement","Personnel roster, duty distribution — pending decode"]].map(([id,t,d])=>`<button data-g="${id}" class="card p-4" style="text-align:left"><div class="font-bold">→ ${t}</div><div class="text-sm text-ink-soft">${d}</div></button>`).join("")}
 </section>
 <div class="warn-box">⚠️ Source: ACS 2026 Booklet (8 documents). Several documents are typed in a legacy Bangla font (AdarshaLipiNormal) that could not be safely decoded — see the "Roster, Duty & Movement" tab for exactly what's pending.</div>`;
 w.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{tab=b.dataset.g;render();});
@@ -332,7 +332,7 @@ updCd();countdownInterval=setInterval(updCd,1000);
 /* ===== COMD'S VISIT ===== */
 function rVisit(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
-w.appendChild(el(`<div class="hero-banner mb-3"><h2>🎖️ Visit Program — Comd 33 Arty Bde</h2><p>ACS-2026 · 17 Fd Regt Arty · 03–05 Aug 2026</p></div>`));
+w.appendChild(el(`<div class="hero-banner mb-3"><h2>🎖️ Visit Program — Comd 33 Arty Bde</h2><p>ACS-2026 · 17 Fd Regt · 03–05 Aug 2026</p></div>`));
 VISIT_PROGRAM.forEach(day=>{
 const card=el(`<div class="card mb-4"><div class="p-3 border-b" style="background:var(--paper-dark)"><h3 class="font-bold text-sm uppercase tracking-widest text-olive-dark" style="margin:0">${esc(day.date)}</h3></div><div style="overflow-x:auto"><table><thead><tr><th>Ser</th><th>Activity</th><th>Time</th><th>Rmks</th></tr></thead><tbody></tbody></table></div></div>`);
 const tbody=card.querySelector("tbody");
@@ -352,8 +352,8 @@ w.appendChild(el(`<section class="card p-5 mb-4">
 <div style="overflow-x:auto"><table><thead><tr><th>Time</th><th>Type of Shoot</th><th>No of Shoots</th><th>Ammo</th></tr></thead><tbody>${TEST_FIRE.schedule.map(s=>`<tr><td class="mono">${esc(s.time)}</td><td>${esc(s.type)}</td><td class="text-center">${esc(s.shoots)}</td><td>${esc(s.ammo)}</td></tr>`).join("")}</tbody></table></div>
 </section>`));
 w.appendChild(el(`<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-3">Op Responsibility</h2>
-<div style="overflow-x:auto"><table><thead><tr><th>Name</th><th>Responsibility</th></tr></thead><tbody>${TEST_FIRE.opResp.map(o=>`<tr><td class="font-semibold">${esc(o.name)}</td><td>${esc(o.resp)}</td></tr>`).join("")}</tbody></table></div>
+<h2 class="text-lg font-bold mb-3">Op Resp</h2>
+<div style="overflow-x:auto"><table><thead><tr><th>Name</th><th>Resp</th></tr></thead><tbody>${TEST_FIRE.opResp.map(o=>`<tr><td class="font-semibold">${esc(o.name)}</td><td>${esc(o.resp)}</td></tr>`).join("")}</tbody></table></div>
 <div class="text-xs text-ink-soft italic mt-2">Test-fire committee (chairman/members) and safety committee names in Doc 8 are typed in a legacy Bangla font — pending decode.</div>
 </section>`));
 w.appendChild(el(`<section class="card p-5 mb-4">
@@ -394,7 +394,7 @@ w.appendChild(el(`<section class="card p-5 mb-4">
 <h2 class="text-lg font-bold mb-3">Packet Structure</h2>
 <div class="metric-row"><span class="text-sm text-ink-soft">Packet</span><span class="font-semibold">${esc(MOVEMENT.packet)}</span></div>
 <div class="metric-row"><span class="text-sm text-ink-soft">Unit</span><span class="font-semibold">${esc(MOVEMENT.unit)}</span></div>
-<div class="metric-row"><span class="text-sm text-ink-soft">Packet Comdr</span><span class="font-semibold">${esc(MOVEMENT.comdr)}</span></div>
+<div class="metric-row"><span class="text-sm text-ink-soft">Packet Comd</span><span class="font-semibold">${esc(MOVEMENT.comd)}</span></div>
 <div class="metric-row"><span class="text-sm text-ink-soft">Authority</span><span class="font-semibold">${esc(MOVEMENT.authority)}</span></div>
 </section>`));
 w.appendChild(el(`<section class="card p-5 mb-4">
