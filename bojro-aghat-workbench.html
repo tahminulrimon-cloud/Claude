@@ -273,13 +273,98 @@ manLoad:{date:"29 Jul 2026",time:"0800 hrs",from:"Unit lines",to:"Artillery Cent
 };
 
 const PENDING_DOCS=[
-{doc:"1. ACS Full Name 2026",content:"Full personnel roster / nominal roll"},
 {doc:"2. Man Load Table – Gun Fire",content:"Vehicle-wise passenger manifest & equipment checklist"},
 {doc:"3. IN/OUT Form 2026",content:"Packet-wise movement roll (names) — service & contact numbers only are readable"},
 {doc:"4. Resp",content:"Duty / responsibility distribution by appointment"},
 {doc:"5. Anx G – Responsible Distr",content:"Committee & responsibility distribution"},
 {doc:"8. Staff Note (partial)",content:"Test-fire committee membership (names/appointments) — schedule & ammo already extracted"},
 ];
+
+const ROLL=[
+{p:"Gun Position (98)",g:[
+ {t:"Papa — Gun No-01",r:[["Sgt (Gnr)","Papa","Det Comd"],["Lcpl (Gnr)","Papa","Asst Det Comd / to act as No 6"],["Sldr (Gnr)","Papa","Layer-1"],["Sldr (Gnr)","Papa","Layer-1"],["Sldr (Gnr)","Papa","Loader / to act as No 5"]]},
+ {t:"Papa — Gun No-02",r:[["Sgt (Gnr)","Papa","Det Comd"],["Cpl (Gnr)","Papa","Asst Det Comd / to act as No 6"],["Sldr (Gnr)","Papa","Layer-1"],["Sldr (Gnr)","Papa","Layer-1"],["Sldr (Gnr)","BTT","Loader / to act as No 5"]]},
+ {t:"Papa — Gun No-03",r:[["Sgt (Gnr)","Papa","Det Comd"],["Cpl (Gnr)","Papa","Asst Det Comd / to act as No 6"],["Sldr (Gnr)","Papa","Layer-1"],["Sldr (Gnr)","Papa","Layer-1"],["Sldr (Gnr)","BTT","Loader / to act as No 5"]]},
+ {t:"Papa — Gun No-04",r:[["Sgt (Gnr)","Papa","Det Comd"],["Cpl (Gnr)","Papa","Asst Det Comd / to act as No 6"],["Sldr (Gnr)","Papa","Layer-1"],["Sldr (Gnr)","Papa","Layer-1"],["Sldr (Gnr)","BTT","Loader / to act as No 5"]]},
+ {t:"Papa — Gun No-05",r:[["Sgt (Gnr)","Papa","Det Comd"],["Cpl (Gnr)","HQ","Asst Det Comd / to act as No 6"],["Sldr (Gnr)","Papa","Layer-1"],["Sldr (Gnr)","Papa","Layer-1"],["Sldr (Gnr)","Papa","Loader / to act as No 5"]]},
+ {t:"Papa — Gun No-06",r:[["Sgt (Gnr)","Papa","Det Comd"],["Cpl (Gnr)","Papa","Asst Det Comd / to act as No 6"],["Lcpl (Gnr)","Papa","Layer-1"],["Sldr (Gnr)","Papa","Layer-1"],["Sldr (Gnr)","BTT","Loader / to act as No 5"]]},
+ {t:"Quebec — Gun No-01",r:[["Sgt (Gnr)","Quebec","Det Comd"],["Cpl (Gnr)","Quebec","Asst Det Comd / to act as No 6"],["Sldr (Gnr)","Quebec","Layer-1"],["Sldr (Gnr)","Quebec","Layer-1"],["Sldr (Gnr)","Quebec","Loader / to act as No 5"]]},
+ {t:"Quebec — Gun No-02",r:[["Sgt (Gnr)","Quebec","Det Comd"],["Cpl (Gnr)","Quebec","Asst Det Comd / to act as No 6"],["Cpl (Gnr)","Quebec","Layer-1"],["Lcpl (Gnr)","Quebec","Layer-1"],["Sldr (Gnr)","Quebec","Loader / to act as No 5"]]},
+ {t:"Quebec — Gun No-03",r:[["Sgt (Gnr)","Quebec","Det Comd"],["Cpl (Gnr)","Quebec","Asst Det Comd / to act as No 6"],["Sldr (Gnr)","Quebec","Layer-1"],["Sldr (Gnr)","Quebec","Layer-1"],["Sldr (Gnr)","Quebec","Loader"],["Sldr (Gnr)","Quebec","Ammo Preparer"]]},
+ {t:"Quebec — Gun No-04",r:[["Sgt (Gnr)","HQ","Det Comd"],["Cpl (Gnr)","Quebec","Asst Det Comd / to act as No 6"],["Sldr (Gnr)","Quebec","Layer-1"],["Sldr (Gnr)","Quebec","Layer-1"],["Sldr (Gnr)","BTT","Loader / to act as No 5"]]},
+ {t:"Quebec — Gun No-05",r:[["Sgt (Gnr)","Quebec","Det Comd"],["Cpl (Gnr)","Quebec","Asst Det Comd / to act as No 6"],["Lcpl (Gnr)","Quebec","Layer-1"],["Sldr (Gnr)","Quebec","Layer-1"],["Sldr (Gnr)","Quebec","Loader / to act as No 5"]]},
+ {t:"Quebec — Gun No-06",r:[["Cpl (Gnr)","Quebec","Det Comd"],["Cpl (Gnr)","Quebec","Asst Det Comd / to act as No 6"],["Sldr (Gnr)","Quebec","Layer-1"],["Sldr (Gnr)","Quebec","Layer-1"],["Sldr (Gnr)","Quebec","Loader / to act as No 5"]]},
+ {t:"Romeo — Gun No-01",r:[["Sgt (Gnr)","Romeo","Det Comd"],["Cpl (Gnr)","Romeo","Asst Det Comd / to act as No 6"],["Sldr (Gnr)","Romeo","Layer-1"],["Sldr (Gnr)","Romeo","Layer-1"],["Sldr (Gnr)","Romeo","Loader / to act as No 5"]]},
+ {t:"Romeo — Gun No-02",r:[["Sgt (Gnr)","Romeo","Det Comd"],["Cpl (Gnr)","HQ","Asst Det Comd / to act as No 6"],["Lcpl (Gnr)","Romeo","Layer-1"],["Sldr (Gnr)","Romeo","Layer-1"],["Sldr (Gnr)","Romeo","Loader / to act as No 5"]]},
+ {t:"Romeo — Gun No-03",r:[["Sgt (Gnr)","Romeo","Det Comd"],["Cpl (Gnr)","Romeo","Asst Det Comd / to act as No 6"],["Lcpl (Gnr)","Romeo","Layer-1"],["Sldr (Gnr)","Romeo","Layer-1"],["Sldr (Gnr)","Romeo","Loader / to act as No 5"]]},
+ {t:"Romeo — Gun No-04",r:[["Cpl (Gnr)","Romeo","Det Comd"],["Cpl (Gnr)","Romeo","Asst Det Comd / to act as No 6"],["Sldr (Gnr)","Romeo","Layer-1"],["Sldr (Gnr)","Romeo","Layer-1"],["Sldr (Gnr)","Romeo","Loader"],["Sldr (Gnr)","BTT","Ammo Preparer"]]},
+ {t:"Romeo — Gun No-05",r:[["Cpl (Gnr)","Romeo","Det Comd"],["Cpl (Gnr)","Romeo","Asst Det Comd / to act as No 6"],["Sldr (Gnr)","Romeo","Layer-1"],["Sldr (Gnr)","Romeo","Layer-1"],["Sldr (Gnr)","Romeo","Loader / to act as No 5"]]},
+ {t:"Romeo — Gun No-06",r:[["Sgt (Gnr)","Romeo","Det Comd"],["Cpl (Gnr)","Romeo","Asst Det Comd / to act as No 6"],["Sldr (Gnr)","Romeo","Layer-1"],["Sldr (Gnr)","Romeo","Layer-1"],["Lcpl (Gnr)","Romeo","Loader / to act as No 5"],["Sldr (Gnr)","BTT","Ammo Preparer"]]},
+ {t:"Section Commanders",r:[["Sr WO","Papa",""],["Sr WO","Quebec",""],["WO","Quebec",""],["WO","Romeo",""],["Sr WO","Romeo",""]]},
+]},
+{p:"Command Post (28)",g:[
+ {t:"Command Post — Papa",r:[["Lt","Papa","GPO"],["Sgt (TA)","HQ","TA Sgt"],["Cpl (TA)","Papa","A-1"],["Sldr (TA)","Papa","A-2"],["Sldr (TA)","Papa","A-3"],["Sldr (TA)","Papa","Safety"],["Cpl (OCU)","Papa","CP Incharge Op"],["Lcpl (OCU)","Papa","CP Op"],["Lcpl (OCU)","Papa","CP Op"]]},
+ {t:"Command Post — Quebec",r:[["Capt","HQ","GPO"],["Sgt (TA)","Quebec","TA Sgt / Sec Comd"],["Cpl (TA)","Quebec","A-1"],["Sldr (TA)","Quebec","A-2"],["Sldr (TA)","Quebec","A-3"],["Sldr (TA)","Quebec","Safety"],["Cpl (OCU)","Quebec","OCU Sgt"],["Lcpl (OCU)","Quebec","CP Op"],["Sldr (OCU)","Quebec","Asst CP Op"]]},
+ {t:"Command Post — Romeo",r:[["Capt","Romeo","GPO"],["Lt","",""],["Sgt (TA)","Romeo","TA Sgt"],["Cpl (TA)","Romeo","A-1"],["Sldr (TA)","Romeo","A-2"],["Sldr (TA)","Romeo","A-3"],["Lcpl (TA)","Romeo","Safety"],["Cpl (OCU)","Romeo","OCU Sgt"],["Lcpl (OCU)","Romeo","CP Op"],["Sldr (OCU)","Romeo","Asst CP Op"]]},
+]},
+{p:"RCP (9)",g:[
+ {t:"RCP",r:[["Maj","HQ","Safety Offr"],["Sgt (TA)","HQ","Safety Incharge"],["Cpl (TA)","HQ","Safety-01"],["Sldr (TA)","HQ","Safety-02"],["Sldr (TA)","Romeo","Safety-03"],["Sldr (TA)","HQ","CP / Safety-04"],["Cpl (OCU)","HQ","Op Incharge"],["Sldr (OCU)","HQ","Operator"],["Sldr (OCU)","HQ","Operator"]]},
+]},
+{p:"OP Party (20)",g:[
+ {t:"OP Admin Party",r:[["Sr WO","Romeo","OP JCO"],["WO","Papa","Admin OP JCO"],["Sgt (OCU)","HQ","OP NCO"],["Cpl (OCU)","Romeo",""],["Sldr (OCU)","HQ",""],["Sldr (OCU)","Papa",""],["Sldr (DMT)","Quebec",""],["Sldr (TA)","Romeo",""],["Lcpl (OCU)","Papa",""],["Sldr (OCU)","Papa",""]]},
+ {t:"OP Operator / TA",r:[["Cpl (OCU)","HQ",""],["Sldr (OCU)","Quebec",""],["Sldr (OCU)","Quebec",""],["Lcpl (OCU)","Romeo",""],["Lcpl (OCU)","Romeo",""],["Lcpl (OCU)","Papa",""],["Sldr (OCU)","Papa",""],["Cpl (TA)","HQ",""],["Sldr (TA)","Romeo",""],["Sldr (TA)","Papa",""]]},
+]},
+{p:"Survey Group (6)",g:[
+ {t:"Survey Group",r:[["Sgt (TA)","Papa",""],["Sgt (TA)","HQ",""],["Lcpl (TA)","Quebec",""],["Sldr (TA)","Quebec",""],["Sldr (TA)","Romeo",""],["Sldr (TA)","Quebec","To serve as OP TA after svy"]]},
+]},
+{p:"MT Section (35)",g:[
+ {t:"MT Section",r:[["Sgt (DMT)","Quebec","Gun Tower-01 / Observer"],["Cpl (DMT)","Quebec","Gun Tower-02"],["Cpl (DMT)","Quebec","Gun Tower-03"],["Lcpl (DMT)","Quebec","Gun Tower-04"],["Lcpl (DMT)","Quebec","Escort Pickup"],["Lcpl (DMT)","Quebec","Mess 3-Ton"],["Sgt (DMT)","Romeo","Gun Tower No-01"],["Sldr (DMT)","Quebec","Jeep"],["Cpl (DMT)","Romeo","Gun Tower No-02"],["Lcpl (DMT)","Papa","Gun Tower No-04"],["Cpl (DMT)","Romeo","Gun Tower No-05"],["Sldr (DMT)","Romeo","Spare Gun Tower"],["Lcpl (DMT)","Romeo","GS 3-Ton"],["Lcpl (DMT)","Romeo",""],["Lcpl (DMT)","Romeo","Pickup"],["Sldr (DMT)","Romeo","Jeep"],["Sgt (DMT)","HQ",""],["Cpl (DMT)","HQ",""],["Lcpl (DMT)","HQ",""],["Lcpl (DMT)","HQ",""],["Sldr (DMT)","HQ",""],["Sldr (DMT)","HQ",""],["Sldr (DMT)","HQ",""],["Sldr (DMT)","HQ",""],["Sldr (DMT)","HQ",""],["Sgt (DMT)","Papa",""],["Sgt (DMT)","Papa",""],["Cpl (DMT)","Papa",""],["Cpl (DMT)","Papa",""],["Lcpl (DMT)","Papa",""],["Lcpl (DMT)","Papa",""],["Sldr (DMT)","Papa",""],["Sldr (DMT)","Papa",""],["Sldr (DMT)","Quebec",""],["Sldr (DMT)","Quebec",""]]},
+]},
+{p:"Admin (68)",g:[
+ {t:"Admin Party",r:[["Hony Lt (DMT)","HQ","SM"],["Sr WO (AEC)","HQ",""],["Sr WO (TA)","HQ","Admin JCO"],["RCO","HQ","RCO"],["Sgt (Gnr)","HQ","BSM / Observer"],["Sgt (OCU)","HQ",""],["Sgt (Gnr)","HQ","RQMS / Observer"],["Sgt (OCU)","HQ","RSM / Observer"],["Sgt (OCU)","HQ","Barrack NCO / Observer"],["Sgt (Gnr)","HQ","Ammo NCO"],["Cpl (OCU)","HQ","Kote NCO"],["Sldr (DMT)","Papa","QM Runner"],["Sldr (Gnr)","Quebec","CO Runner"],["Sldr (Tailor)","HQ","SM Runner"],["Sgt (Gnr)","Quebec","Admin NCO"],["Cpl (OCU)","Quebec","Duty"],["Sldr (DMT)","Papa","Duty"],["Sldr (DMT)","Papa","Duty"],["Sldr (TA)","Papa","Duty"],["Sldr (TA)","Quebec","Duty"],["Sldr (TA)","Quebec","Duty"],["Sldr (DMT)","Quebec","Duty"],["Sldr (DMT)","Romeo","Duty"],["Sldr (DMT)","Romeo","Duty"],["Cpl (OCU)","Romeo","Duty"],["Sldr (DMT)","Romeo","Duty"],["Sldr (DMT)","Quebec","Duty"],["Sldr (OCU)","HQ","Canteen Gp"],["Sgt (MA)","HQ","MA"]]},
+ {t:"RP",r:[["Cpl (OCU)","Romeo","RP"],["Sldr (OCU)","Papa","RP"],["Sldr (DMT)","Papa","RP"],["Sldr (OCU)","Romeo","RP"],["Sldr (DMT)","Romeo","RP"],["Sldr (OCU)","HQ","RP"],["Sldr (E&BR)","HQ","RP"]]},
+ {t:"Office Group",r:[["WO (Clk)","HQ","Head Clk"],["Sgt (Clk)","HQ",""],["Cpl (Clk)","HQ",""],["Sldr (Clk)","HQ",""],["Sldr (Clk)","HQ",""],["Sldr (Clk)","HQ",""],["Sldr (Clk)","HQ",""],["Sldr (Clk)","HQ",""],["Sldr (Clk)","HQ",""]]},
+ {t:"Field Mess",r:[["Sgt (Gnr)","Papa","Fd Mess NCO"],["Sldr (DMT)","Quebec","Fd Mess Asst"],["Sldr (Cook Mess)","HQ","Fd Mess Cook"],["Sldr (Cook U)","HQ","Fd Mess Cook"],["Mess Waiter","HQ","Mess Waiter"],["Mashalchi","HQ","Mess Waiter"]]},
+ {t:"Mess Group",r:[["Sgt (Gnr)","HQ","BQMS / Observer"],["Cpl (OCU)","Papa","Ration NCO"],["Lcpl (OCU)","HQ","Mess Comd"],["Sldr (OCU)","HQ","Asst Mess Comd"],["Cpl (Cook U)","HQ","Mess Cook"],["Cpl (Cook U)","Quebec","Mess Cook"],["Cpl (Cook U)","Romeo","Mess Cook"],["Lcpl (Cook U)","Papa","Mess Cook"],["Sldr (Cook U)","Quebec","Mess Cook"],["Sldr (Cook U)","Romeo","Mess Cook"],["Sldr (Cook U)","Papa","Mess Cook"],["Sldr (Cook U)","Romeo","Mess Cook"],["Sldr (Cook U)","HQ","Mess Cook"]]},
+ {t:"NC(E)",r:[["NC(E)","HQ",""],["NC(E)","HQ",""],["NC(E)","HQ",""],["NC(E)","HQ",""]]},
+]},
+{p:"Line Mic (13)",g:[
+ {t:"Line Mic",r:[["Sgt (OCU)","Papa","Comd-1"],["Cpl (OCU)","Papa","Line Mic-1"],["Sldr (OCU)","Quebec","Line Mic-1"],["Sldr (OCU)","Papa","Line Mic-1"],["Sldr (OCU)","Romeo","Line Mic-1"],["Sldr (OCU)","Romeo","Line Mic-1"],["Sldr (OCU)","Romeo","Line Mic-1"],["Cpl (OCU)","Romeo","Comd-2"],["Sldr (OCU)","Quebec","Line Mic-2"],["Sldr (OCU)","HQ","Line Mic-2"],["Lcpl (OCU)","Romeo","Line Mic-2"],["Lcpl (OCU)","Papa","Line Mic-2"],["Lcpl (OCU)","HQ","Line Mic-2"]]},
+]},
+{p:"EME (8)",g:[
+ {t:"EME",r:[["WO","EME",""],["Cpl (TSA)","EME",""],["Cpl","EME",""],["Lcpl","EME",""],["Sldr","EME",""],["Sldr","EME",""],["Sldr","EME",""],["Sldr","EME",""]]},
+]},
+{p:"Observer Party (22)",g:[
+ {t:"Observer Party",r:[["Lt Col","HQ","CO"],["Maj","Romeo",""],["Capt","39 Locating",""],["Sr WO (OCU)","Romeo",""],["Sr WO (Gnr)","Romeo",""],["Sr WO (Gnr)","Papa",""],["Sr WO (Gnr)","Quebec",""],["Sr WO (TA)","HQ",""],["WO (DMT)","Romeo",""],["WO (DMT)","Papa",""],["WO (DMT)","Quebec",""],["Sgt (DMT)","Papa",""],["Sgt (Gnr)","Papa",""],["Sgt (Gnr)","Romeo",""],["Sgt (Gnr)","HQ",""],["Sgt (Gnr)","HQ",""],["Sgt (Gnr)","HQ",""],["Sgt (OCU)","HQ",""],["Sgt (OCU)","HQ",""],["Sgt (TA)","Papa",""],["Sgt (OCU)","Papa",""],["Sgt (DMT)","HQ",""]]},
+]},
+{p:"Ammo Collection (35)",g:[
+ {t:"Ammo Collection Party",r:[["Capt","Romeo",""],["Sr WO (OCU)","Romeo","BD-08 · Escort Comd"],["Sgt (Gnr)","HQ",""],["Sgt (Clk)","HQ",""],["Sldr (TA)","Quebec",""],["UP Lcpl (Gnr)","Papa",""],["Sldr (Gnr)","Papa",""],["Sldr (DMT)","Papa",""],["Sldr (Gnr)","Papa",""],["Sldr (Gnr)","Papa",""],["Sldr (OCU)","Quebec",""],["Sldr (DMT)","Quebec",""],["Cpl (Gnr)","Quebec",""],["Sldr (Gnr)","Quebec",""],["Sldr (TA)","Romeo",""],["Sldr (Gnr)","Romeo",""],["Sldr (DMT)","Romeo",""],["Sldr (OCU)","Romeo",""],["Sldr (DMT)","Papa",""],["Sldr (TA)","Quebec","BD-08 · Escort"],["Sldr (Gnr)","Romeo","BD-08 · Escort"],["Cpl (OCU)","Quebec","BD-08 · Escort"],["Sldr (Gnr)","Papa","BD-08 · Escort"],["Sldr (TA)","Papa","BD-08 · Escort"],["Sldr (DMT)","Quebec","LMG · Escort"],["Sldr (TA)","Quebec","BD-08 · Escort"],["Sldr (Gnr)","Quebec","BD-08 · Escort"],["Lcpl (DMT)","Quebec","Pickup Driver"],["Sldr (DMT)","Quebec","Pickup Driver"],["Lcpl (DMT)","Quebec","3-Ton"],["Lcpl (DMT)","Papa","3-Ton"],["Lcpl (DMT)","Quebec","3-Ton"],["Sldr","EME",""],["1 x Container Carrier (Driver)","",""],["1 x Container Carrier (2nd Seat)","",""]]},
+]},
+{p:"Road RP & Escort (26)",g:[
+ {t:"Road RP",r:[["Cpl (OCU)","Romeo",""],["Sldr (Gnr)","Quebec",""],["Sldr (OCU)","HQ",""],["Sldr (E&BR)","HQ",""],["Sldr (TA)","Papa",""],["Sldr (Gnr)","Quebec",""],["Sldr (TA)","Papa",""],["Sldr (Gnr)","Quebec",""],["Sldr (DMT)","Romeo",""],["Sldr (OCU)","Romeo",""]]},
+ {t:"Escort Party",r:[["Cpl (Gnr)","Quebec","BD-08 · Escort No-1 Comd"],["Sldr (Gnr)","Papa","BD-08 · Escort No-1"],["Sldr (Gnr)","Papa","BD-08 · Escort No-1"],["Sldr (OCU)","Quebec","BD-08 · Escort No-1"],["Sldr (Gnr)","Papa","BD-08 · Escort No-1"],["Lcpl (OCU)","Papa","LMG · Escort No-1"],["Sldr (Gnr)","Romeo","BD-08 · Escort No-1"],["Sldr (TA)","Papa","BD-08 · Escort No-1"],["Cpl (Gnr)","Papa","BD-08 · Escort No-2 Comd"],["Sldr (TA)","Quebec","BD-08 · Escort No-2"],["Sldr (Gnr)","Quebec","BD-08 · Escort No-2"],["Sldr (Gnr)","Romeo","BD-08 · Escort No-2"],["Sldr (DMT)","Romeo","BD-08 · Escort No-2"],["Lcpl (TA)","Romeo","LMG · Escort No-2"],["Sldr (OCU)","Romeo","BD-08 · Escort No-2"],["Sldr (Gnr)","Romeo","BD-08 · Escort No-2"]]},
+]},
+{p:"Rear Party (70)",g:[
+ {t:"Rear Party",r:[["Sr WO","HQ","Rear JCO"],["Sgt (OCU)","Quebec","Rear NCO & Ammo NCO"],["Cpl (TA)","Papa","Quarter Gd"],["Sldr (TA)","Papa","Quarter Gd"],["Sldr (TA)","Papa","Quarter Gd"],["Sldr (OCU)","Papa","Quarter Gd"],["Cpl (Gnr)","Papa","Quarter Gd"],["Lcpl (DMT)","Papa","Quarter Gd"],["Cpl (Gnr)","Papa","RP Post-1 & Ration NCO"],["Sldr (DMT)","Quebec","RP Post-1"],["Sldr (DMT)","Papa","RP Post-1 · Muazzin, Garrison Mosque-6"],["Sldr (DMT)","Papa","RP Post-1"],["Sldr (DMT)","Papa","RP Post-1"],["Sldr (DMT)","Papa","RP Post-1"],["Sldr (DMT)","Papa","RP Post-2"],["Sldr (DMT)","Papa","RP Post-2"],["Sldr (DMT)","Papa","RP Post-2"],["Lcpl (OCU)","Romeo","Office RP & Kote NCO"],["Sldr (OCU)","Romeo","Office RP"],["Sldr (OCU)","Romeo","Office RP"],["Sgt (Gnr)","HQ","MT Duty"],["Lcpl (DMT)","Romeo","MT Duty"],["Sldr (DMT)","Romeo","MT Duty"],["Sldr (DMT)","Romeo","MT Duty"],["Sldr (DMT)","Romeo","MT Duty"],["Sldr (TA)","HQ","MT RP"],["UP Lcpl (TA)","HQ","MT RP"],["Sldr (DMT)","Romeo","Old Magazine Post Duty"],["Sgt (Gnr)","Papa","Old Magazine Post Duty"],["Sldr (DMT)","Romeo","Old Magazine Post Duty"],["Sgt (Gnr)","Romeo","Old Magazine Post Duty"],["Lcpl (OCU)","Papa","Old Magazine Post Duty"],["Sldr (OCU)","Quebec","Old Magazine Post Duty"],["Sldr (TA)","HQ","Unit CCTV"],["Sldr (TA)","Quebec","Unit CCTV"],["Sldr","EME","Unit CCTV"],["Sldr (DMT)","HQ","Unit CCTV"],["Sldr (DMT)","Quebec","Unit Canteen"],["Cpl (OCU)","Quebec","Unit Canteen"],["Cpl (MA)","HQ","MA"],["Sldr (OCU)","Romeo","Duty Runner"],["Cpl (Clk)","HQ","Duty Clk"],["Lcpl (DMT)","Quebec","DR"],["Lcpl (DMT)","Quebec","Admin Driver"],["Sldr (DMT)","Quebec","Admin Driver"],["Sldr (DMT)","Quebec","Admin Driver"],["Sldr (DMT)","Quebec","Admin Driver"],["Sldr (Cook U)","Papa","Sldr Mess"],["Sldr (Cook U)","Quebec","Sldr Mess"],["Cpl (Gnr)","Papa","Sldr Mess"],["NC(E)","HQ","NC(E)"],["NC(E)","HQ","NC(E)"]]},
+ {t:"Station Duty",r:[["Lcpl (OCU)","HQ","Coffee & Cool"],["Sldr (OCU)","Quebec","Coffee & Cool"],["Cpl (DMT)","Quebec","Gymnasium"],["Sldr (Gnr)","Quebec","Gymnasium"],["Lcpl (Gnr)","HQ","Ladies Club"],["Sldr (Clk)","HQ","Ladies Club"],["Lcpl (OCU)","Quebec","Ananda Rajar Dighi"],["Sldr (DMT)","HQ","Ananda Rajar Dighi"],["Sldr (Gnr)","Papa","Ananda Rajar Dighi"],["Sldr","EME","Ananda Rajar Dighi"],["Sldr (DMT)","Romeo","Ananda Rajar Dighi"],["Sldr (DMT)","HQ","Ananda Rajar Dighi"],["Lcpl (OCU)","Papa","JQ Storeman"],["Sldr (DMT)","Romeo","Ananda Rajar Dighi"],["Sldr (TA)","Romeo","Ananda Rajar Dighi"],["Sldr (Gnr)","Papa","Ananda Rajar Dighi"],["Sldr (OCU)","Romeo","Ananda Rajar Dighi"],["Sldr (OCU)","HQ","Ananda Rajar Dighi"]]},
+]},
+{p:"Not Available (140)",g:[
+ {t:"Mission",r:[["Lcpl (TA)","Papa",""],["Sgt (OCU)","Papa",""],["Lcpl (OCU)","Papa",""],["Sldr (OCU)","Quebec",""],["Cpl (Gnr)","Quebec",""],["Lcpl (OCU)","Quebec",""],["Cpl (TA)","Romeo",""],["Lcpl (OCU)","Romeo",""],["Lcpl (DMT)","Romeo",""],["Lcpl (DMT)","HQ",""],["Lcpl (DMT)","HQ",""],["NC(E)","HQ",""],["Lcpl (OCU)","HQ",""],["Mess Waiter","HQ",""]]},
+ {t:"Attached",r:[["WO","Papa","MLRS"],["Sgt (OCU)","Papa",""],["Sldr (DMT)","Papa",""],["Sgt (Gnr)","Papa",""],["Sgt (Gnr)","Papa",""],["Cpl (DMT)","Papa",""],["Cpl (Gnr)","Romeo",""],["Cpl (DMT)","HQ",""],["Lcpl (DMT)","Romeo",""],["Cpl (DMT)","Romeo",""],["Sgt (DMT)","Romeo",""],["Sgt (OCU)","Quebec",""],["Sgt (OCU)","Quebec",""],["Lcpl (OCU)","Quebec",""],["Lcpl (DMT)","Quebec",""],["Sgt (Gnr)","Quebec",""],["WO (Gnr)","Quebec",""],["Lcpl (TA)","Romeo",""],["Sldr (OCU)","HQ","47 Mortar"],["Sldr (OCU)","HQ",""],["NC(E)","HQ",""],["Sldr (Cook)","HQ",""],["Sldr (Gnr)","Romeo",""],["Sgt (OCU)","Romeo",""],["Lcpl (OCU)","Romeo",""],["Sldr (OCU)","Romeo",""],["Cpl (DMT)","Romeo",""],["Sldr (DMT)","Romeo",""],["Sgt (Gnr)","Romeo",""],["WO (Gnr)","Romeo",""],["Sldr (Gnr)","Quebec",""],["Lcpl (DMT)","Quebec",""],["Sgt (Gnr)","Quebec",""],["Cpl (Gnr)","Quebec",""],["Sgt (DMT)","Quebec",""],["Sldr (DMT)","Papa",""],["Sgt (Gnr)","Papa",""],["Cpl (Gnr)","Papa",""],["Sldr (Gnr)","Papa",""],["Cpl (TA)","Quebec",""],["Cpl (OCU)","Papa","Arty Orchestra"],["Cpl (OCU)","Papa","Artillery Centre and School"],["Sgt (TA)","Romeo",""],["Cpl (Gnr)","Romeo",""],["Cpl (Gnr)","Papa",""],["Sldr (DMT)","Papa",""],["Cpl (TA)","Papa","BMTA"],["Cpl (Gnr)","Papa",""],["Cpl (DMT)","Quebec","Attached DGFI"],["Sldr (TA)","Papa","BMTA"],["Lcpl (Gnr)","Quebec","55 Ad"],["Sldr (Gnr)","Quebec","ASPTS"],["Cpl (Gnr)","Quebec","BMA"],["Lcpl (Gnr)","Romeo",""],["NC(E)","HQ",""]]},
+ {t:"Command",r:[["Cpl (Cook)","HQ","Attached GOC Bungalow"],["UP Lcpl","HQ","Div Kabaddi Team"],["Sgt (DMT)","Romeo","Div Kabaddi Team"],["Lcpl (DMT)","Romeo","Div Kabaddi Team"],["Sldr (Gnr)","Papa","Div Kabaddi"],["Lcpl (DMT)","Papa","Div Kabaddi"],["Sldr (Gnr)","Quebec","Div Team (Kabaddi)"],["Sldr (Gnr)","Quebec","Div Team (Kabaddi)"],["UP Cpl (DMT)","Quebec","Div Team (Kabaddi)"],["Sldr (OCU)","Papa","Div Cricket"],["Lcpl (Gnr)","Papa","Div Cricket"],["Sldr (DMT)","Quebec","Div Team (Cricket)"],["Sldr (DMT)","HQ","Div Boxing"],["Sldr (OCU)","Romeo","GMP"],["Sldr (OCU)","Papa","GMP"],["Sldr (DMT)","Romeo","GMP"],["Sldr (OCU)","Quebec","GMP"],["Sldr (DMT)","Papa","GMP"],["Sldr (OCU)","Quebec","33 FIU"],["Sldr (DMT)","Papa","902 Central Workshop"],["Sldr (DMT)","Papa","902 Central Workshop"],["Sldr (Clk)","HQ","Attached 33 Div"],["Sldr (Gnr)","Papa","Div HQ"],["Mess Waiter","HQ","Attached 33 Arty Bde"],["Lcpl (TA)","HQ","Attached 33 Arty Bde"],["Sldr (DMT)","HQ","127 Field Wksp"],["Sldr (DMT)","Quebec","Swarnadwip"],["Sldr (DMT)","Quebec","Army Shooting"],["Sldr (OCU)","Papa","Army War Game"],["Sldr (Cook U)","Quebec","Army Football Team"],["Sldr (Gnr)","Papa","Artillery Centre"],["Sldr (Gnr)","Romeo","Div Kabaddi Team"]]},
+ {t:"Class / Cadre",r:[["Maj","HQ","OGSC-24"],["Capt","Quebec","JCSC-79"],["Capt","HQ",""],["Lt","Quebec","OBC-43"],["Lt","Romeo","Picket-15"],["WO (Gnr)","Romeo","JCOC"],["Sgt (Clk)","HQ","OSC"],["Lcpl (Clk)","HQ","PC"],["Lcpl (DMT)","Papa","ARIC (DMT)"],["Lcpl (OCU)","Papa","AMC"],["Sldr (OCU)","Quebec","BTT"],["Sldr (DMT)","Quebec","MT Cadre"],["Sldr (DMT)","Quebec",""],["Sldr (DMT)","Quebec","BTT"],["Sldr (DMT)","Quebec",""],["Cpl (Gnr)","Quebec","JNGSC"],["Sgt (TA)","Romeo",""],["Lcpl (Gnr)","Romeo",""],["Sldr (Gnr)","Romeo","Drill Course"],["Sldr (TA)","HQ","SAC"],["Lcpl (OCU)","Quebec","PC"],["Lcpl (DMT)","HQ",""],["Lcpl (Gnr)","Romeo",""],["Sldr (OCU)","Quebec","Commando"],["Sldr (Gnr)","Quebec",""],["Sldr (TA)","Romeo",""],["Sldr (DMT)","Romeo",""],["Sldr (DMT)","Papa",""],["Sldr (Gnr)","Romeo",""],["Sldr (Gnr)","Romeo",""],["Sldr (Gnr)","Romeo",""],["Cpl (DMT)","Papa","MIT"],["Lcpl (OCU)","Quebec",""],["Lcpl (OCU)","Quebec",""],["Lcpl (OCU)","HQ","MIC"]]},
+ {t:"CMH",r:[["Sldr (Gnr)","Papa","CMH Cumilla"]]},
+ {t:"Medical Leave",r:[["Sldr (DMT)","HQ",""],["Sldr (OCU)","HQ",""]]},
+ {t:"OSL",r:[["Sldr (Gnr)","Papa",""]]},
+]},
+];
+
+const STRENGTH={
+deployed:[["Gun Detachments",93],["Section Commanders",5],["Command Post",28],["RCP",9],["OP",20],["MT",35],["Admin",68],["Line Mic",13],["Survey",6],["EME",8]],
+depTotal:285,
+na:[["Mission",14],["Attached",55],["Command",32],["Class / Cadre",35],["CMH",1],["OSL",1],["Medical Leave",2]],
+naTotal:140,
+};
 
 /* ===== STATE ===== */
 let tab="overview",countdownInterval=null;
@@ -323,11 +408,11 @@ ${CREST_SVG}
 <div class="tab-nav-wrap"><nav class="container"><div class="tab-nav" id="tn"></div></nav></div>
 <main id="main" style="padding-bottom:32px"></main></div>`);
 R.appendChild(shell);
-const tabs=[{id:"overview",l:"📋 Overview"},{id:"visit",l:"🎖️ Comd's Visit"},{id:"firing",l:"💥 Test & Field Fire"},{id:"parade",l:"📊 Parade State"},{id:"pending",l:"📇 Roster, Duty & Movement"}];
+const tabs=[{id:"overview",l:"📋 Overview"},{id:"visit",l:"🎖️ Comd's Visit"},{id:"firing",l:"💥 Test & Field Fire"},{id:"parade",l:"📊 Parade State"},{id:"roll",l:"👥 Unit Strength"},{id:"pending",l:"📇 Roster, Duty & Movement"}];
 const tn=document.getElementById("tn");
 tabs.forEach(t=>{const b=el(`<button class="tab ${t.id===tab?'active':''}">${t.l}</button>`);b.onclick=()=>{tab=t.id;render();};tn.appendChild(b);});
 const m=document.getElementById("main");
-({overview:rOverview,visit:rVisit,firing:rFiring,parade:rParade,pending:rPending})[tab](m);
+({overview:rOverview,visit:rVisit,firing:rFiring,parade:rParade,roll:rRoll,pending:rPending})[tab](m);
 }
 
 /* ===== OVERVIEW ===== */
@@ -418,6 +503,53 @@ w.appendChild(el(`<section class="card p-5 mb-4">
 m.appendChild(w);
 }
 
+/* ===== UNIT STRENGTH (STRUCTURE — NAMES OMITTED) ===== */
+let rollQ="";
+const ROLL_TOTAL=ROLL.reduce((a,p)=>a+p.g.reduce((b,g)=>b+g.r.length,0),0);
+function hlite(v,q){const e=esc(v||"—");if(!q)return e;const i=e.toLowerCase().indexOf(q);if(i<0)return e;
+return e.slice(0,i)+'<mark class="ops-hit">'+e.slice(i,i+q.length)+'</mark>'+e.slice(i+q.length);}
+function strTable(rows,total,label){
+return `<div style="overflow-x:auto"><table><thead><tr><th>${esc(label)}</th><th>Str</th></tr></thead><tbody>`
++rows.map(r=>`<tr><td class="font-semibold">${esc(r[0])}</td><td class="text-center mono">${r[1]}</td></tr>`).join("")
++`<tr><td class="font-bold">TOTAL</td><td class="text-center font-bold mono">${total}</td></tr></tbody></table></div>`;}
+function rRoll(m){
+const w=el(`<div class="container" style="padding:20px 16px"></div>`);
+w.appendChild(el(`<div class="hero-banner mb-3"><h2>👥 ACS Unit Strength</h2><p>17 Fd Regt · ${STRENGTH.depTotal} deployed · ${STRENGTH.naTotal} not available</p></div>`));
+w.appendChild(el(`<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-3">Strength Summary</h2>
+<div class="grid grid-2">
+<div>${strTable(STRENGTH.deployed,STRENGTH.depTotal,"Deployed on ACS")}</div>
+<div>${strTable(STRENGTH.na,STRENGTH.naTotal,"Not available")}</div>
+</div>
+<div class="text-xs text-ink-soft italic mt-2">Structure translated from the ACS 2026 nominal roll (<span class="mono">1. ACS Full Name 2026</span>), which is typed in the legacy <span class="mono">AdarshaLipiNormal</span> Bangla font. Individual names are omitted from this view — sub-unit totals reconcile exactly with the source document's own summary tables.</div>
+</section>`));
+const search=el(`<input class="ops-search" type="search" placeholder="Search rank, battery or appointment…"/>`);
+search.value=rollQ;
+const stat=el(`<div class="text-xs text-ink-soft mb-3"></div>`);
+const list=el(`<div></div>`);
+w.appendChild(search);w.appendChild(stat);w.appendChild(list);
+function draw(){
+const q=rollQ.trim().toLowerCase();
+list.innerHTML="";let shown=0;
+ROLL.forEach(part=>{
+const gs=part.g.map(g=>({t:g.t,r:q?g.r.filter(row=>row.join(" ").toLowerCase().indexOf(q)>=0):g.r})).filter(g=>g.r.length);
+if(!gs.length)return;
+const n=gs.reduce((a,g)=>a+g.r.length,0);shown+=n;
+const card=el(`<section class="card mb-4"><div class="p-3 border-b" style="background:var(--paper-dark);display:flex;justify-content:space-between;align-items:center;gap:10px"><h3 class="font-bold text-sm uppercase tracking-widest text-olive-dark" style="margin:0">${esc(part.p)}</h3><span class="mono text-xs text-ink-soft">${n} pers</span></div><div class="gbody"></div></section>`);
+const body=card.querySelector(".gbody");
+gs.forEach(g=>{
+body.appendChild(el(`<details${q?" open":""} style="border-bottom:1px solid var(--rule)"><summary><span style="flex:1">${esc(g.t)}</span><span class="mono text-xs text-ink-soft">${g.r.length}</span></summary>`
++`<div style="overflow-x:auto;padding:0 0 10px"><table><thead><tr><th>Rank (Trade)</th><th>Bty</th><th>Appt / Rmks</th></tr></thead><tbody>`
++g.r.map(row=>`<tr><td class="mono text-xs" style="white-space:nowrap">${hlite(row[0],q)}</td><td class="text-center text-xs">${hlite(row[1],q)}</td><td class="text-xs">${hlite(row[2],q)}</td></tr>`).join("")
++`</tbody></table></div></details>`));});
+list.appendChild(card);});
+stat.textContent=q?`${shown} of ${ROLL_TOTAL} positions match “${rollQ.trim()}”`:`${ROLL_TOTAL} positions on establishment — tap a group to expand`;
+if(q&&!shown)list.appendChild(el(`<div class="card p-5 text-center text-ink-soft">No positions match that search.</div>`));}
+search.addEventListener("input",e=>{rollQ=e.target.value;draw();});
+draw();
+m.appendChild(w);
+}
+
 /* ===== ROSTER, DUTY & MOVEMENT (PENDING) ===== */
 function rPending(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
@@ -437,9 +569,9 @@ w.appendChild(el(`<section class="card p-5 mb-4">
 </section>`));
 w.appendChild(el(`<section class="card p-5 mb-4">
 <h2 class="text-lg font-bold mb-2">⚠️ Awaiting English Translation</h2>
-<p class="text-sm mb-3">The following content from the ACS 2026 Booklet is typed in a legacy Bangla font (<span class="mono">AdarshaLipiNormal</span>) that couldn't be safely auto-converted to English/Unicode — wrong guesses risk misnaming personnel or duties, so nothing below has been translated yet.</p>
+<p class="text-sm mb-3">The ACS 2026 Booklet is typed in the legacy <span class="mono">AdarshaLipiNormal</span> Bangla font. The nominal roll has since been decoded — see the <strong>Unit Strength</strong> tab (structure/appointments only; individual names withheld since this workbench is on a public repo). The documents below are still pending: they carry tabular layouts (vehicle manifests, committee lists) that need the same treatment.</p>
 <div style="overflow-x:auto"><table><thead><tr><th>Document</th><th>Content pending</th></tr></thead><tbody>${PENDING_DOCS.map(p=>`<tr><td class="font-semibold">${esc(p.doc)}</td><td>${esc(p.content)}</td></tr>`).join("")}</tbody></table></div>
-<div class="directive-box mt-3">To unblock: paste the Bangla text directly (renders correctly wherever you're viewing the source), or have someone with the AdarshaLipi font print/export these docs to PDF so the text can be read via OCR instead of by character code.</div>
+<div class="directive-box mt-3">To unblock: send these <span class="mono">.docx</span> files over and they can be decoded the same way the nominal roll was — the AdarshaLipi glyph mapping is now solved, so no OCR or re-typing is needed.</div>
 </section>`));
 m.appendChild(w);
 }
