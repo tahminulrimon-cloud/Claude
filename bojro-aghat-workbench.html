@@ -3,9 +3,7 @@
 <head>
 <meta charset="UTF-8"/>
 <meta name="viewport" content="width=device-width,initial-scale=1.0"/>
-<title>THE RAVAGERS</title>
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<title>ACS 2026</title>
 <style>
 :root{--paper:#F3F0E6;--paper-dark:#E6E1CE;--paper-light:#FBF9F2;--ink:#21261F;--ink-soft:#4C5142;--olive:#45592F;--olive-dark:#2B3A1D;--khaki:#A8996A;--red:#A6332F;--red-dk:#7C2521;--blue:#1F4E79;--rule:#C7BC9C;--amber:#AD7C1B;}
 :root[data-theme="dark"]{--paper:#171A14;--paper-dark:#252A1F;--paper-light:#20241B;--ink:#E8E5D8;--ink-soft:#A2A892;--olive:#6E8A45;--olive-dark:#3A4D26;--khaki:#A8996A;--red:#D45A54;--red-dk:#9E3733;--blue:#5B8FC4;--rule:#3B4230;--amber:#D9AC4E;}
@@ -149,245 +147,116 @@ input[type="text"]{font-family:ui-monospace,monospace;font-size:11px;border:none
 <div id="root"></div>
 <script>
 /* ===== DATA ===== */
-const META={exercise:"THE RAVAGERS",formation:"TF-A · 33 Artillery Brigade Group",classification:"RESTRICTED",serial:"ST-2026",duration:"05–14 Jul 2026 (10 days)",role:"TF-A (En Ctrl) — 33 Arty Bde Gp depicting a div (-) in conventional defence in captured territory. TF-B (44 Inf Bde) and TF-C (101 Inf Bde) are players.",concept:"Bn defence (frontage 1500–2000m) depicted by battery strength; routine in-line activities and log build-up; player targets 8–10 km (SRP) / 15–20 km (LRP) from FB, avoiding main highways.",endState:"Realistic depiction of en def posn completed; 08 raids conducted; all TF-A tps participate in min 1 minor op; AAR submitted to Bde by 22 Jul."};
+const META={exercise:"ACS 2026",formation:"17 Fd Regt Artillery · 33 Artillery Brigade",classification:"RESTRICTED",serial:"ACS-2026",duration:"Field Fire Program 01–07 Aug 2026 · Test Fire 04 Aug 2026",role:"Artillery Course Shooting (ACS) 2026 — 17 Fd Regt Artillery's annual gun-fire qualification course: movement to the Artillery Centre & School (AC&S), test firing at Moneyabad Gun Position, and a daily Field Fire Program at Holudia Gun Position, organised by battery packets.",ammo:"CARTS QF 122 MM HOW HE PD T-83"};
 
-const AMMO=[
-{loc:"Lt Fwd Bn",live_s:"1 Sealed Box",live_l:"100 rds",blank_s:"1 Sealed Box",blank_l:"320 rds"},
-{loc:"Rt Fwd Bn",live_s:"1 Sealed Box",live_l:"100 rds",blank_s:"1 Sealed Box",blank_l:"120 rds"},
-{loc:"Gun Position",live_s:"1 Sealed Box",live_l:"100 rds",blank_s:"—",blank_l:"1000 rds"},
+const KEY_DATES=[
+{label:"Move to AC&S (Man Load)",date:"29 Jul 2026",time:"0800 hrs"},
+{label:"Comd 33 Arty Bde Visit",date:"03–05 Aug 2026",time:"—"},
+{label:"Moneyabad Test Fire",date:"04 Aug 2026",time:"0600–1400 hrs"},
+{label:"Field Fire Program",date:"01–07 Aug 2026",time:"Daily"},
 ];
 
-const LOCATIONS=[
-{id:"CANTT",name:"17 Fd Regt Arty, Cumilla Cantt",type:"base",lat:23.3121274,lng:90.9522281,note:"Home station. Convoy departs 0600 hrs, 05 Jul in 3 packets."},
-{id:"DIVHQ",name:"Div HQ — Poduar Bazar (GR-2090)",type:"hq",lat:23.4204,lng:91.1721,note:"Non-tac. Ex Dir (GOC), Ex Chief Coord (Col Staff)."},
-{id:"TFAHQ",name:"TF-A HQ — Burichong (GR-1504)",type:"hq",lat:23.5350,lng:91.1150,note:"Non-tac. 33 Arty Bde Gp command post."},
-{id:"KACHUA",name:"Lt Fwd Bn + Bn HQ — Kachua",type:"unit",lat:23.3940,lng:91.0180,note:"Str 120. Map 79 I/15. Debus: Deora Central Mosque (GR-048859)."},
-{id:"MADHAIYA",name:"Rt Fwd Bn + Bn HQ — Madhaiya",type:"unit",lat:23.4160,lng:91.0390,note:"Str 125. Map 79 I/15. Debus: Khushbash High School (GR-059918)."},
-{id:"BARURA",name:"01 x Gun Position — Barura",type:"gun",lat:23.3720,lng:91.0580,note:"Str 60. Map 79 M/3. Six-gun position."},
+const VISIT_PROGRAM=[
+{date:"03 Aug 2026",items:[
+{ser:1,activity:"Mov to AC&S",time:"—",rmks:"—"},
+{ser:2,activity:"Ni stay at Gnr Offrs' Mess",time:"—",rmks:"—"},
+]},
+{date:"04 Aug 2026",items:[
+{ser:3,activity:"Mov to 69 Inf Bde Offrs' Mess",time:"0630–0900",rmks:"1x Escort – 17 Fd Regt"},
+{ser:4,activity:"Mov to Moneyabad Gun Posn",time:"0930–1030",rmks:"—"},
+{ser:5,activity:"Witness Test Firing",time:"1030–1130",rmks:"—"},
+{ser:6,activity:"Mov to Holudia Gun Posn",time:"1140–1200",rmks:"—"},
+{ser:7,activity:"Witness Firing and Interaction with Tps",time:"1200–1230",rmks:"—"},
+{ser:8,activity:"Mov to OP",time:"1230–1300",rmks:"—"},
+{ser:9,activity:"Witness Smk Shoot at OP",time:"1300–1330",rmks:"—"},
+{ser:10,activity:"Lunch at OP",time:"1330–1400",rmks:"—"},
+{ser:11,activity:"Mov to 69 Inf Bde Offrs' Mess",time:"1400–1500",rmks:"—"},
+]},
+{date:"05 Aug 2026",items:[
+{ser:12,activity:"Mov to AC&S",time:"—",rmks:"1x Escort – 17 Fd Regt"},
+]},
 ];
 
-const TYPE_STYLE={base:{fill:"#4C5142",icon:"HQ"},hq:{fill:"#1F4E79",icon:"CTL"},unit:{fill:"#45592F",icon:"BN"},gun:{fill:"#A6332F",icon:"GUN"}};
+const TEST_FIRE={
+date:"04 Aug 2026",
+ammo:"CARTS QF 122 MM HOW HE PD T-83 — 20 Rds",
+manpower:[{unit:"Gun Detachment",qty:"2 x (15)"},{unit:"Command Post",qty:"1 x (10)"}],
+schedule:[
+{time:"0600–1000",type:"Sight Test / Prep of Gun Posn, OP & Tgt Area Svy",shoots:"—",ammo:"—"},
+{time:"1030–1100",type:"Sec Regn Tgt",shoots:"1",ammo:"HE-10 (10 Rds)"},
+{time:"1101–1130",type:"IN Shoot (Bty Tgt)",shoots:"2",ammo:"HE-10 (10 Rds)"},
+],
+opResp:[
+{name:"Maj Shadia Sultana",resp:"Op Incharge"},
+{name:"SWO Masud",resp:"JCO Incharge"},
+{name:"WO Amimul",resp:"OP Admin JCO"},
+{name:"Sgt Uttam",resp:"NCO Incharge"},
+]
+};
 
-const CODE_WORDS=[["NODUF","Real message","All"],["BIJLI","Real emergency","All"],["DURBIN","Ex temporarily called off","Ctrl HQ"],["GORJON","Ex resumes","Ctrl HQ"],["ULLASH","Ex terminates","Ctrl HQ"]];
+const FIELD_FIRE={
+window:"01–07 Aug 2026",
+note:"Daily Field Fire Program at Holudia Gun Position, per Field Fire Program 2026.",
+sample:{
+date:"04-08-26",
+schedule:[
+{time:"0600–1000",type:"Sight Test / Prep of Gun Posn, OP & Tgt Area Svy",shoots:"—",ammo:"—"},
+{time:"1000–1100",type:"Sec Regn (Datum Pt)",shoots:"1",ammo:"HE-10 (10 Rds)"},
+{time:"1130–1230",type:"IN Shoot (Bty Tgt)",shoots:"2",ammo:"HE-10 (20 Rds)"},
+],
+total:"02 shoots / 20 rds"
+}
+};
 
-const RADIO_SILENCE=[["BADAL","Impose radio silence"],["JHANKAR","Break radio silence"],["BIJLI","Real emergency / cancel silence"]];
+const PARADE_STATE={
+unit:"17 FD REGT ARTY",dt:"01/08/2026",
+attPersonnel:[
+{unit:"33 MP Unit / CIT / AMC",offr:1,or:5,total:6},
+{unit:"18 ENG / ATO / 35 ST",offr:1,or:8,total:9},
+{unit:"ASU / FIU",offr:0,or:2,total:2},
+{unit:"9 FD / 39 LOC",offr:1,or:9,total:10},
+{unit:"BTT / 5 SIG",offr:0,or:8,total:8},
+],
+attPersonnelTotal:{offr:3,or:32,total:35},
+manpower:[
+{rank:"OFFR's",catt:7,fd17:3,total:10},
+{rank:"JCO's",catt:12,fd17:0,total:12},
+{rank:"OR's",catt:254,fd17:32,total:286},
+{rank:"RT",catt:1,fd17:0,total:1},
+{rank:"NCE/U",catt:6,fd17:0,total:6},
+{rank:"CIV",catt:0,fd17:0,total:0},
+],
+manpowerTotal:{catt:280,fd17:35,total:315},
+arms:[
+{type:"Pistol",catt:0,total:0},
+{type:"SMG",catt:0,total:0},
+{type:"LMG",catt:3,total:3},
+{type:"BD-08",catt:22,total:22},
+{type:"12.7 ADMG",catt:0,total:0},
+],
+armsTotal:{catt:25,total:25},
+gun:{type:"122 MM Gun",catt:25,fd17:0,total:25},
+};
 
-const COMMS={freqs:"1st Circuit: 60-65 | 2nd Circuit: 60-70",freqChange:"Parul → Champa",commsBy:"061500 Jul 2026",hfLink:"Ctrl HQ (Div) ↔ Bdes/Div units",vhfLink:"Bde HQ ↔ Units; within units/sub-units",sds:"Managed by 5 Sig Bn"};
+const MOVEMENT={
+packet:"Packet No-01 (Romeo and Hotel-Kilo Battery)",
+unit:"17 Fd Regt Artillery",
+comdr:"Maj Shadia Sultana",
+authority:"Date of departure: 01-08-2026",
+manLoad:{date:"29 Jul 2026",time:"0800 hrs",from:"Unit lines",to:"Artillery Centre & School (AC&S)"},
+};
 
-const CO_DIRECTIVES=[
-{title:"🍽️ Fresh Supply — Line of March",date:"09 Jul 2026",points:[
-"From 10 Jul onwards, fresh rations will be supplied through Line of March instead of FRA/Cost to Cost",
-"Required number of Supply Points (Sup P) will be opened by 35 ST Bn",
-"Units/FBs are required to collect from the designated Sup P by own means",
-"Detailed instructions will be issued by 35 ST Bn"]},
-{title:"🚫 Violation of SOP during the Conduct of ST",date:"09 Jul 2026",points:[
-"Observed with great concern that violations/disregard to SOP/instructions are on the rise. Examples include:",
-"Using civ/mil vehicles for op or recce",
-"Conducting recce in civ dress",
-"Using unauthorised items in the FBs",
-"Using civ accommodation instead of tents",
-"All ranks: maintain the sanctity of the ST and thereby avoid unpleasant interventions from Ctrl HQ"]},
-{title:"⚠️ Electrical Safety — Electrocution Prevention",date:"07 Jul 2026",points:[
-"Background: A tragic electrocution incident during the ensuing ST has resulted in the loss of a soldier. Preliminary info indicates power was drawn from an unauthorised exposed (naked) source; heavy rainfall and persistent wet conditions significantly increased the risk and acted as a catalyst",
-"Comds at all levels: exercise strict supervision and ensure the following with immediate effect to prevent any recurrence",
-"No unauthorised or exposed electrical connections are used under any circumstances",
-"During the ongoing rainy weather, all electrical installations, generators, extension cables, and equipment must be kept dry, properly insulated, and protected from water ingress",
-"Avoid the use of electrical equipment in waterlogged or wet areas unless adequate safety measures are in place",
-"Conduct mandatory safety checks of all electrical arrangements before and during outdoor activities",
-"Brief all ranks on the heightened risk of electrocution in wet conditions and ensure immediate rectification of any unsafe practices"]},
-{title:"Anti-Snake Trench — Universal",date:"06 Jul 2026",points:[
-"Dig anti-snake trenches around every individual tent/bivouac at all locations (Fwd Bns, Gun Posn, admin/HQ areas)",
-"Not limited to defence locations only"]},
-{title:"Contact/Sighting Reaction + SITREP",date:"06 Jul 2026",points:[
-"If own troops sight the enemy (TF-B/TF-C) during routine work or en recce, react per normal battle drill",
-"CO personally submits SITREP to Div Ctrl HQ following any such sighting/contact",
-"All ranks: react and report up immediately"]},
-{title:"Sick Soldier Reporting",date:"06 Jul 2026",points:[
-"Whenever any soldier falls sick, Adjutant must inform TF-A HQ immediately",
-"Medical Asst/CLS at each location is the first informant and feeds the Adjutant without delay"]},
+const PENDING_DOCS=[
+{doc:"1. ACS Full Name 2026",content:"Full personnel roster / nominal roll"},
+{doc:"2. Man Load Table – Gun Fire",content:"Vehicle-wise passenger manifest & equipment checklist"},
+{doc:"3. IN/OUT Form 2026",content:"Packet-wise movement roll (names) — service & contact numbers only are readable"},
+{doc:"4. Resp",content:"Duty / responsibility distribution by appointment"},
+{doc:"5. Anx G – Responsible Distribution",content:"Committee & responsibility distribution"},
+{doc:"8. Staff Note (partial)",content:"Test-fire committee membership (names/appointments) — schedule & ammo already extracted"},
 ];
-
-const TIMELINE_DURING=[
-{tag:"H-Hour",e:"All radio comms established (HF/VHF/SDS) by 061500"},
-{tag:"Daily",e:"Password promulgated; Rear OC reports 0700 & 2000 hrs; anti-snake trenches (ALL tents), thunder arresters, RPs, sentries checked"},
-{tag:"Daily",e:"Ammo state and segregation verified at each location"},
-{tag:"Daily",e:"Minor-ops execution tracked against unit's 08-raid target"},
-{tag:"Continuous",e:"Realistic target depiction; recce/execution at night; ptl comd briefing before any party leaves def loc"},
-{tag:"Continuous",e:"Every engagement covered by 2 umpires (en ctrl + player ctrl); every soldier in min 1 minor op; min 20 pax at isolated targets"},
-{tag:"Continuous",e:"React per battle drill if en sighted during routine work; CO submits SITREP to Div Ctrl HQ (CO's Directive #2)"},
-{tag:"Continuous",e:"Adjutant informs TF-A HQ immediately of any soldier falling sick (CO's Directive #3)"},
-{tag:"Immediate",e:"Report MT accidents (Anx L / AR(I) 260), location changes, helipad changes"},
-];
-
-const DOS=["Individual must know and carry his charter of duties","Personal weapon always carried by authorised individual; sling and chain for all SA","Local PS and population informed of explosive/blank firing before commencement","Strength of group employed in isolation not less than 20 personnel","Obtain NOC from local authority before leaving ex area","Limited cooking utensils; mug (enamel) and mess tin only","Always carry anti-snake bite kit","Use natural cover and C/C; utilise drones, NVG, hand-to-hand comm sets, range finders effectively","One magazine per weapon; secure weapons crossing water obstacles","Adequate socks; compensate crop damage; helipad with wind socks, red/yellow flags, GPS"];
-const DONTS=["No comfort items (fans, fridges, fancy furniture)","No hindrance to local educational institutions","Officers/unauthorised persons must not drive any military vehicle","No Field Kote in exercise area","No spotter on target","No deployment within 8 km of actual IB","No physical contact between players and enemy troops","No occupation of civilian dwellings (yards, backyards, rooftops)","Civilian houses/persons not used for cooking","Troops will not visit market, shop, or civilian houses","No blank ammo firing within 30 yds of any individual or poultry farm","No local transport (CNG, Nosimon, easy bikes, vans) for recce/ops","No water from unauthorised/unsafe sources","No glass/ceramic crockery","No map board or chart below Bn HQ level","No bayonet; no civilian dress","No traps in FB (demo traps only in hideouts, physically guarded)","No 'living off the land' / jungle survival","No bamboo-made forks, spoons, mugs","No use of Dhaka–Ctg highway for recce/ops","No posting/sharing of any event or photo on social media","No leave except extreme emergency (TF Comd approval only)","No live ammo for exercise purpose","No mobile phones except officers, JCOs, and ump org (temp call centres established instead)","No rotation of rear duty party"];
-
-const DAILY_OPS=[{
-date:"06 Jul 2026",title:"Maj Cmt",
-subunits:[
-{name:"LT FWD BN",tasks:[
-{ser:1,task:"Estb B Ech",timing:"062300–070200 & 070200–070400",loc:"SQ 0740",brief:"—",comd:"Sgt Gnr Kamrul",str:"20",veh:"1x P/Up, 1x 3-Ton",ump:"Sgt Shah Alam (41 Med)",basis:"114 Jat Ser-1 & Ser-3: Bn B Ech at Barura (Sq-0780) for vehicle security. ⚠ Grid mismatch: Maj Cmt=0740, Bornona=0780."},
-{ser:2,task:"Estb POL Pt",timing:"062300–070200",loc:"SQ 0675",brief:"—",comd:"Cpl DMT Tofail",str:"10",veh:"1x P/Up",ump:"Sgt Gnr Sharif",basis:"114 Jat Ser-2: POL point at Modaffargonj (Sq-0675)."},
-{ser:3,task:"Ambush on Rat Carr Convoy",timing:"070100–070200 & 070230–070330",loc:"GR 075775/085781/085789",brief:"1630 hrs",comd:"Cpl Gnr Faruk",str:"15",veh:"2x P/Up",ump:"Sgt Bashar (41 Med)",basis:"114 Jat Ser-4 & Ser-5: Ration convoy (min C+) via Bijra to collect from supply point."},
-]},
-{name:"RT FWD BN",tasks:[
-{ser:1,task:"Ambush on Rat Carr Convoy",timing:"062300–062359",loc:"GR 981949, 995955",brief:"1630 hrs",comd:"Sgt Ocu Nuruzzaman",str:"12",veh:"1x P/Up, 1x 3-Ton",ump:"Sgt Baharul, 16 Fd",basis:"119 Punjab Ser-1: Ration convoy (min C+) via Mohichal."},
-{ser:2,task:"Ambush on Dom Ptl",timing:"070100–070200",loc:"GR 971899–988899",brief:"1630 hrs",comd:"Sgt Ocu Nuruzzaman",str:"12",veh:"1x P/Up, 1x 3-Ton",ump:"Sgt Baharul, 16 Fd",basis:"119 Punjab Ser-2: Domination Patrol (min C+) from def posn to Nurpur."},
-{ser:3,task:"Estb of POL Dump",timing:"062300–070200",loc:"SQ 9490",brief:"—",comd:"Sgt Gnr Mozammel",str:"15",veh:"1x P/Up, 1x 3-Ton",ump:"Cpl Kausar, 16 Fd",basis:"119 Punjab Ser-3: POL point at Nurpur (Sq-9490)."},
-{ser:4,task:"Ambush on Ftg Ptl",timing:"070200–070300",loc:"GR 914874-918889-929892",brief:"1630 hrs",comd:"Sgt Gnr Mozammel",str:"15",veh:"1x P/Up, 1x 3-Ton",ump:"Cpl Kausar",basis:"119 Punjab Ser-8: Fighting Patrol (min C+) to Kachua area."},
-]},
-{name:"GUN POSN",tasks:[
-{ser:1,task:"Estb of (POL Dump) DP",timing:"062300–070100",loc:"SQ 0675",brief:"—",comd:"SWO Aslam, 35 ST Bn",str:"1 JCO, 14 OR",veh:"—",ump:"Sgt Nannu, 39 Div Loc",basis:"114 Jat Ser-2 (shared POL point with Lt Fwd Bn Ser 2). Confirmed intentional — offset end times."},
-]},
-]},
-{
-date:"07 Jul 2026",title:"Maj Cmt",
-subunits:[
-{name:"LT FWD BN",tasks:[
-{ser:1,task:"Raid — 2 x B Ech",timing:"072300–080400",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:2,task:"Exec — 2 x POL Pt (both bns)",timing:"072300–080200",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:3,task:"Ambush — 3 x Rat Carr Convoy (both bns)",timing:"072300–080230",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:4,task:"Recce — Ftg Ptl (Ft Colm)",timing:"—",loc:"—",brief:"1530 hrs",comd:"SWO Delwar",str:"—",veh:"—",ump:"—"},
-{ser:5,task:"Recce — Ftg Ptl (Ft Colm)",timing:"—",loc:"—",brief:"1600 hrs",comd:"Sgt Sharif",str:"—",veh:"—",ump:"—"},
-{ser:6,task:"Recce — Ftg Ptl (Ft Colm)",timing:"—",loc:"—",brief:"1630 hrs",comd:"Lt Hasan",str:"—",veh:"—",ump:"—"},
-]},
-{name:"RT FWD BN",tasks:[
-{ser:1,task:"Exec — 2 x POL Pt (both bns)",timing:"072300–080200",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:2,task:"Ambush — 3 x Rat Carr Convoy (both bns)",timing:"072300–080230",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:3,task:"Ambush — 1 x Domination Ptl",timing:"080100–080200",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:4,task:"Ambush — 1 x Ftg Ptl",timing:"080200–080300",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:5,task:"Recce — 1 x Ftg Ptl (Ft Colm)",timing:"—",loc:"—",brief:"1630 hrs",comd:"Sgt Yousuf",str:"—",veh:"—",ump:"—"},
-]},
-]},
-{
-date:"08 Jul 2026",title:"Maj Cmt",
-subunits:[
-{name:"LT FWD BN",tasks:[
-{ser:1,task:"Exec on Ftg Ptl (F Column)",timing:"082300–082359",loc:"GR 171788-188772-195774",brief:"—",comd:"Cpl Gnr Anwar",str:"10",veh:"1x P/Up",ump:"Sgt Gnr Anwar"},
-{ser:2,task:"Raid on 21 BIR FB-1 (Minor Op)",timing:"081800–082300",loc:"SQ 0277",brief:"1600 hrs",comd:"Lt Fuad",str:"40",veh:"—",ump:"Sgt Sahadat (41 Med)"},
-{ser:3,task:"Raid on 21 BIR FB-2 (Minor Op)",timing:"081800–082300",loc:"SQ 0175",brief:"1630 hrs",comd:"Sgt Towfiq",str:"10",veh:"1x P/Up",ump:"Sgt Bashar (41 Med)"},
-{ser:4,task:"Exec Raid on Bn HQ",timing:"082300–082359",loc:"SQ 9680",brief:"—",comd:"Sgt Ocu Uttom",str:"15",veh:"1x P/Up",ump:"Cpl Ta Salauddin"},
-{ser:5,task:"Ambush — 1 x Ftg Ptl (both bns)",timing:"082300–090200",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:6,task:"Raid — Gun Posn (tgt not spec)",timing:"Time Upon Cfm",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:7,task:"Recce — Bn HQ (both bns, tgt not spec)",timing:"Time Upon Cfm",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:8,task:"Recce — Gun Posn (tgt not spec)",timing:"Time Upon Cfm",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-]},
-{name:"RT FWD BN",tasks:[
-{ser:1,task:"Recce Raid on B Ech",timing:"082300–090100",loc:"SQ 0296",brief:"—",comd:"Sgt Ocu Sanoar",str:"20",veh:"1x P/Up, 1x 3-Ton",ump:"WO Shams"},
-{ser:2,task:"Recce Raid on B Ech",timing:"090200–090400",loc:"SQ 0296",brief:"—",comd:"Sgt Ocu Sanoar",str:"20",veh:"1x P/Up, 1x 3-Ton",ump:"WO Shams"},
-{ser:3,task:"Recce Raid on POL Dump",timing:"082300–090200",loc:"SQ 9490",brief:"—",comd:"Cpl Gnr Shakhawat",str:"15",veh:"1x 3-Ton",ump:"Sgt Gnr Baharul"},
-{ser:4,task:"Ambush Exec on Ftg Ptl",timing:"082300–090200",loc:"GR 988899-972899",brief:"1630 hrs",comd:"Sgt Gnr Yousuf",str:"10",veh:"1x P/Up",ump:"SWO Moinul"},
-{ser:5,task:"Recce Raid on Bn HQ",timing:"080001–080200",loc:"SQ 9796",brief:"—",comd:"Sgt Selim",str:"15",veh:"1x 3-Ton",ump:"WO Amimul"},
-{ser:6,task:"Recce Raid on Bn HQ",timing:"080200–080400",loc:"SQ 9796",brief:"—",comd:"Sgt Selim",str:"15",veh:"1x 3-Ton",ump:"WO Amimul"},
-{ser:7,task:"Raid — Bn HQ (tgt not spec)",timing:"Time Upon Cfm",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-]},
-{name:"GUN POSN",tasks:[
-{ser:1,task:"No planned recce or exec",timing:"—",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-]},
-]},
-{
-date:"09 Jul 2026",title:"Maj Cmt",
-subunits:[
-{name:"LT FWD BN",tasks:[
-{ser:1,task:"Recce on B Ech (Static)",timing:"092300–100200 & 100200–100500",loc:"SQ 0780",brief:"—",comd:"Sgt Gnr Shopon",str:"15",veh:"1x 3-Ton",ump:"Sgt Gnr Anwar"},
-{ser:2,task:"Recce — En Bn Comd Atnd Conf (V Col)",timing:"092300–100200",loc:"GR 197759, 208749",brief:"—",comd:"Sgt Gnr Forid",str:"12",veh:"1x Jeep, 1x P/Up",ump:"Sgt Gnr Raihan"},
-{ser:3,task:"Recce — En Bn Comd Atnd Conf (V Col)",timing:"092300–100200",loc:"GR 051872, 065875",brief:"—",comd:"Cpl Ocu Tonmoy",str:"12",veh:"1x P/Up",ump:"Cpl Ocu Jalal"},
-{ser:4,task:"Exec on Ftg Ptl (F Col)",timing:"092300–092359",loc:"GR 041785, 069788",brief:"—",comd:"Cpl Gnr Abbas",str:"10",veh:"1x P/Up",ump:"Sgt Gnr Shorif"},
-{ser:5,task:"Recce Raid Minor Ops on B Ech (Own)",timing:"Time Upon Cfm",loc:"SQ 0780",brief:"—",comd:"Sgt Ocu Uttom",str:"10",veh:"1x P/Up",ump:"SWO Delower"},
-{ser:6,task:"Recce — Rat Carr Convoy",timing:"2300–2359",loc:"GR 084799-081785-075775",brief:"—",comd:"Sgt Gnr Anwar",str:"10",veh:"1x P/Up",ump:"SWO Morad"},
-]},
-{name:"RT FWD BN",tasks:[
-{ser:1,task:"Exec Raid on Bn HQ",timing:"082300–091230",loc:"SQ 9796",brief:"—",comd:"Sgt Tofael",str:"25",veh:"—",ump:"WO Amimul"},
-{ser:2,task:"Exec Raid on Bn HQ",timing:"090200–090400",loc:"SQ 9796",brief:"—",comd:"Sgt Tofael",str:"25",veh:"—",ump:"WO Amimul"},
-{ser:3,task:"Exec Raid on POL Pt",timing:"100200–100500",loc:"SQ 9490",brief:"—",comd:"Sgt Korim",str:"15",veh:"1x P/Up, 1x 3-Ton",ump:"Sgt Baharul (16 Fd)"},
-{ser:4,task:"Recce Ambush on Rat Carr Convoy",timing:"092300–100200",loc:"GR 084799-081785-075775",brief:"—",comd:"Sgt Clk Selim",str:"10",veh:"2x P/Up",ump:"Sgt Kauser"},
-{ser:5,task:"Recce Ambush on Rat Carr Convoy",timing:"092300–100200",loc:"GR 934895-949885",brief:"—",comd:"Sgt TA Bodiul",str:"10",veh:"1x P/Up, 1x 3-Ton",ump:"WO Moinul"},
-{ser:6,task:"Recce and Exec of Raid on POL Pt (Own Minor Ops)",timing:"092300–100200",loc:"SQ 9490",brief:"—",comd:"Sgt Alauddin",str:"50",veh:"—",ump:"WO Shams"},
-]},
-{name:"GUN POSN",tasks:[
-{ser:1,task:"Recce or exec anytime 2300–0400 hrs",timing:"2300–0400",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:2,task:"Recce — POL Pt",timing:"092300–092359",loc:"GR 034814",brief:"—",comd:"Sgt Gnr Anwar",str:"10",veh:"1x P/Up",ump:"SWO Mahmud"},
-{ser:3,task:"Raid — Recce (Own) on Bn HQ",timing:"100200–100300",loc:"GR 968773",brief:"—",comd:"Sgt Gnr Faruk",str:"10",veh:"On foot",ump:"Sgt Nannu"},
-]},
-]},
-{
-date:"10 Jul 2026",title:"Maj Cmt",
-subunits:[
-{name:"LT FWD BN",tasks:[
-{ser:1,task:"Exec on B Ech (Static)",timing:"102300–110200 & 110200–110500",loc:"SQ 0780",brief:"—",comd:"Sgt Gnr Shopon",str:"15",veh:"1x 3-Ton",ump:"Sgt Gnr Shorif"},
-{ser:2,task:"Exec — En Bn Comd Atnd Conf (V Col)",timing:"102300–110200",loc:"GR 197759, 208749",brief:"—",comd:"Sgt Gnr Forid",str:"12",veh:"1x Jeep, 1x P/Up",ump:"Sgt Gnr Toufiq"},
-{ser:3,task:"Exec — En Bn Comd Atnd Conf (V Col)",timing:"102300–110200",loc:"GR 051872, 065875",brief:"—",comd:"Cpl Ocu Tonmoy",str:"12",veh:"1x P/Up",ump:"Sgt Dmt Mosharrof"},
-{ser:4,task:"Exec on Rat Carr Convoy",timing:"2300–2359",loc:"GR 084799-081785-075775",brief:"—",comd:"Sgt Gnr Anwar",str:"10",veh:"1x P/Up",ump:"SWO Morad"},
-{ser:5,task:"Exec on Bn HQ (Static)",timing:"102300–110500",loc:"SQ 9780",brief:"—",comd:"Sgt Uttom",str:"15",veh:"1x 3-Ton",ump:"Sgt Gnr Rayhan"},
-{ser:6,task:"Exec Raid Minor Ops on POL Dump (Own)",timing:"102000–102100",loc:"SQ 0780",brief:"—",comd:"SWO Masud",str:"25",veh:"—",ump:"Sgt Shahadat (41 Med)"},
-{ser:7,task:"Recce on FB (Minor Ops)",timing:"1800–2300 hrs",loc:"SQ 1281",brief:"—",comd:"Lt Hasan",str:"06",veh:"—",ump:"Sgt Bashar (41 Med)"},
-]},
-]},
-{
-date:"11 Jul 2026",title:"Maj Cmt",
-subunits:[
-{name:"LT FWD BN",tasks:[
-{ser:1,task:"Raid — Gun Posn",timing:"112330 hrs",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:2,task:"Raid — Bn HQ (both bns, tgt not spec)",timing:"Time Upon Cfm",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:3,task:"Recce — Gun Posn (tgt not spec)",timing:"Time Upon Cfm",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:4,task:"Recce — Bn HQ (both bns, tgt not spec)",timing:"Time Upon Cfm",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:5,task:"Recce Ambush — 6 x Ftg Ptl (Foot Ptl, both bns)",timing:"112300–120200",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:6,task:"Raid on FB (Own Minor Op)",timing:"111800–112300",loc:"—",brief:"1630 hrs",comd:"Lt Hasan",str:"—",veh:"—",ump:"—"},
-]},
-{name:"RT FWD BN",tasks:[
-{ser:1,task:"Ambush — Ftg Ptl (Foot Ptl)",timing:"112300–122359",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:2,task:"Raid — Bn HQ (both bns, tgt not spec)",timing:"Time Upon Cfm",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:3,task:"Recce Raid — B Ech",timing:"112300–120100",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:4,task:"Recce — Bn HQ (both bns, tgt not spec)",timing:"Time Upon Cfm",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:5,task:"Recce Ambush — 6 x Ftg Ptl (Foot Ptl, both bns)",timing:"112300–120200",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:6,task:"Recce Ambush — V Col (En Bn Comd Atnd Conf)",timing:"120100–120200",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:7,task:"Raid on FB (Own Minor Op)",timing:"111800–112300",loc:"—",brief:"1630 hrs",comd:"Lt Abid",str:"—",veh:"—",ump:"—"},
-]},
-]},
-{
-date:"12 Jul 2026",title:"Maj Cmt",
-subunits:[
-{name:"LT FWD BN",tasks:[
-{ser:1,task:"Exec On Bn HQ (Static)",timing:"122300–130500",loc:"SQ 9780",brief:"—",comd:"Sgt Uttom",str:"15",veh:"1x 3-Ton",ump:"Sgt Sahadat, 41 Med"},
-{ser:2,task:"Exec On Ftg Ptl",timing:"122300–122359",loc:"GR 938759–945758–955769",brief:"—",comd:"Sgt Dmt Siddik",str:"10",veh:"1x P/Up",ump:"Sgt Gnr Toufiq"},
-{ser:3,task:"Exec On Ftg Ptl",timing:"122300–122359",loc:"GR 085799–081785–075775",brief:"—",comd:"Cpl Ocu Rasel",str:"10",veh:"1x P/Up",ump:"Sgt Gnr Raihan"},
-{ser:4,task:"Exec On Ftg Ptl",timing:"122300–122359",loc:"GR 011859–029855–039857",brief:"—",comd:"Cpl Gnr Balal",str:"10",veh:"1x P/Up",ump:"Sgt Bashar, 41 Med"},
-]},
-{name:"RT FWD BN",tasks:[
-{ser:1,task:"Exec Raid On B Ech (Own Minor Ops)",timing:"122300–130100",loc:"SQ 9896",brief:"—",comd:"Sgt Mozammel",str:"15",veh:"1x P/Up",ump:"Maj Rahat"},
-{ser:2,task:"Exec Raid On B Ech (Minor Ops)",timing:"122300–130100",loc:"SQ 9896",brief:"1630 hrs",comd:"Sgt Moksed",str:"35",veh:"—",ump:"Maj Rahat"},
-{ser:3,task:"Exec Ambush On Ftg Ptl (Foot Ptl)",timing:"122300–122359",loc:"GR 933922–949928–959935",brief:"1630 hrs",comd:"Sgt Karim",str:"10",veh:"1x P/Up",ump:"WO Amimul"},
-{ser:4,task:"Exec Ambush On Ftg Ptl (Foot Ptl)",timing:"130100–130200",loc:"GR 915874–918889–929889",brief:"1630 hrs",comd:"Sgt Karim",str:"10",veh:"1x P/Up",ump:"WO Amimul"},
-{ser:5,task:"Exec Ambush On Ftg Ptl (Foot Ptl)",timing:"122300–122359",loc:"GR 037963–045951",brief:"1630 hrs",comd:"Sgt Bodiul",str:"10",veh:"1x P/Up",ump:"WO Shams"},
-{ser:6,task:"Exec Ambush On Comd Atnd Conf",timing:"130100–130200",loc:"GR 028959–029949",brief:"1630 hrs",comd:"Sgt Bodiul",str:"10",veh:"1x P/Up",ump:"WO Shams"},
-{ser:7,task:"Exec Raid On Bn HQ",timing:"122300–130100",loc:"SQ 9796",brief:"—",comd:"Sgt Yousuf",str:"15",veh:"1x 3-Ton",ump:"Cpl Kauser"},
-]},
-{name:"GUN POSN",tasks:[
-{ser:1,task:"Exec Ambush On Ftg Ptl (Minor Ops)",timing:"122300–122359",loc:"GR 031857",brief:"1700 hrs",comd:"Sgt Halim",str:"25",veh:"On foot",ump:"Sgt Nannu"},
-]},
-]},
-{
-date:"13 Jul 2026",title:"Admin Mov & Exfil",
-subunits:[
-{name:"17 FD REGT",tasks:[
-{ser:1,task:"Mov of Tps Lifting Veh from Cantt to Embussing Pt",timing:"1600 hrs",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:2,task:"Admin Mov from Ex Area to Embussing Pt",timing:"1700 hrs",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:3,task:"Exfil from Ex Area",timing:"2000 hrs",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:4,task:"ETA at Embussing Pt",timing:"2359 hrs",loc:"Jhalam High School & College",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-]},
-]},
-{
-date:"14 Jul 2026",title:"Admin Mov & Exfil",
-subunits:[
-{name:"17 FD REGT",tasks:[
-{ser:1,task:"Debriefing Session",timing:"0700 hrs",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:2,task:"Mov from Embussing Pt to Cantt",timing:"0800 hrs",loc:"—",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-{ser:3,task:"ETA at Cml Cantt",timing:"0930 hrs",loc:"Cml Cantt",brief:"—",comd:"—",str:"—",veh:"—",ump:"—"},
-]},
-]}];
 
 /* ===== STATE ===== */
-let tab="flood",leafletMap=null,countdownInterval=null;
+let tab="overview",countdownInterval=null;
 let theme="light";try{theme=localStorage.getItem("ba_theme")||"light";}catch(e){}
 const R=document.getElementById("root");
 function esc(s){return String(s).replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");}
@@ -399,12 +268,12 @@ function copyText(str,elem){const done=()=>{showToast("✓ Copied: "+str);if(ele
 if(navigator.clipboard&&navigator.clipboard.writeText){navigator.clipboard.writeText(str).then(done).catch(()=>fallbackCopy(str,done));}else{fallbackCopy(str,done);}}
 function fallbackCopy(str,cb){const ta=document.createElement("textarea");ta.value=str;ta.style.position="fixed";ta.style.opacity="0";document.body.appendChild(ta);ta.select();try{document.execCommand("copy");cb();}catch(e){}document.body.removeChild(ta);}
 function getExDayStatus(){
-const start=new Date(2026,6,5,0,0,0),end=new Date(2026,6,14,23,59,59),now=new Date();
-if(now<start)return{label:"Exercise starts 05 Jul 2026",pct:0,target:start,targetLabel:"Exercise Start"};
-if(now>end)return{label:"Exercise complete — AAR due 22 Jul",pct:100,target:null,targetLabel:null};
-const day=Math.min(10,Math.floor((now-start)/86400000)+1);
-if(day>=10)return{label:`Day ${day} of 10`,pct:100,target:end,targetLabel:"Exercise End"};
-return{label:`Day ${day} of 10`,pct:(day/10)*100,target:new Date(2026,6,5+day,0,0,0),targetLabel:`Day ${day+1}`};
+const start=new Date(2026,7,1,0,0,0),end=new Date(2026,7,7,23,59,59),now=new Date();
+if(now<start)return{label:"Field Fire Program starts 01 Aug 2026",pct:0,target:start,targetLabel:"Program Start"};
+if(now>end)return{label:"ACS 2026 complete",pct:100,target:null,targetLabel:null};
+const day=Math.min(7,Math.floor((now-start)/86400000)+1);
+if(day>=7)return{label:`Day ${day} of 7`,pct:100,target:end,targetLabel:"Program End"};
+return{label:`Day ${day} of 7`,pct:(day/7)*100,target:new Date(2026,7,1+day,0,0,0),targetLabel:`Day ${day+1}`};
 }
 function fmtCountdown(ms){
 if(ms<=0)return"00:00:00:00";
@@ -422,11 +291,11 @@ const shell=el(`<div>
 <div class="tab-nav-wrap"><nav class="container"><div class="tab-nav" id="tn"></div></nav></div>
 <main id="main" style="padding-bottom:32px"></main></div>`);
 R.appendChild(shell);
-const tabs=[{id:"flood",l:"🌧️ Flood Watch"},{id:"overview",l:"📋 Overview"},{id:"map",l:"🗺️ Map"},{id:"timeline",l:"🕐 Timeline"},{id:"comms",l:"📡 Comms & Rules"},{id:"dailyops",l:"🎯 Daily Ops"},{id:"codirectives",l:"⚡ CO's Directives"}];
+const tabs=[{id:"overview",l:"📋 Overview"},{id:"visit",l:"🎖️ Comd's Visit"},{id:"firing",l:"💥 Test & Field Fire"},{id:"parade",l:"📊 Parade State"},{id:"pending",l:"📇 Roster, Duty & Movement"}];
 const tn=document.getElementById("tn");
 tabs.forEach(t=>{const b=el(`<button class="tab ${t.id===tab?'active':''}">${t.l}</button>`);b.onclick=()=>{tab=t.id;render();};tn.appendChild(b);});
 const m=document.getElementById("main");
-({overview:rOverview,map:rMap,timeline:rTimeline,comms:rComms,dailyops:rDailyOps,codirectives:rCoDirectives,flood:rFlood})[tab](m);
+({overview:rOverview,visit:rVisit,firing:rFiring,parade:rParade,pending:rPending})[tab](m);
 }
 
 /* ===== OVERVIEW ===== */
@@ -443,17 +312,15 @@ w.innerHTML=`
 <span class="mono text-xs" id="countdown" style="opacity:.9;letter-spacing:.08em"></span>
 </div>
 </div>
-<section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">Our Role</h2><p class="text-base">${META.role}</p></section>
-<section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">Concept</h2><p class="text-base">${META.concept}</p></section>
-<section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">End State</h2><p class="text-base">${META.endState}</p></section>
-<section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-3">Ammo Allocation per Location</h2>
-<table><thead><tr><th>Location</th><th>Live (Sealed)</th><th>Live (Loose)</th><th>Blank (Sealed)</th><th>Blank (Loose)</th></tr></thead><tbody>${AMMO.map(a=>`<tr><td>${esc(a.loc)}</td><td>${esc(a.live_s)}</td><td>${esc(a.live_l)}</td><td>${esc(a.blank_s)}</td><td>${esc(a.blank_l)}</td></tr>`).join("")}</tbody></table>
-<p class="text-xs text-red mt-2 font-semibold">Live and blank ammunition must NEVER be stored together. Live ammo boxes marked with red scotch tape cross.</p></section>
-<section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-3">Code Words</h2>
-<table><thead><tr><th>Word</th><th>Meaning</th><th>Used By</th></tr></thead><tbody>${CODE_WORDS.map(c=>`<tr><td class="mono font-semibold">${c[0]}</td><td>${c[1]}</td><td>${c[2]}</td></tr>`).join("")}</tbody></table></section>
+<section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">Role & Concept</h2><p class="text-base">${esc(META.role)}</p></section>
+<section class="grid-4 mb-4">
+${KEY_DATES.map(k=>`<div class="info-tile"><div class="ic">🗓️</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">${esc(k.label)}</div><div class="mono text-sm mt-1 font-semibold">${esc(k.date)}</div><div class="text-xs text-ink-soft">${esc(k.time)}</div></div>`).join("")}
+</section>
+<section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">Ammunition</h2><p class="mono text-base">${esc(META.ammo)}</p></section>
 <section class="grid-2 mb-4">
-${[["map","Map","Deployment areas with GPS pins"],["timeline","Timeline","Exercise-duration tasks by Daily / Continuous / Immediate"],["comms","Comms & Rules","Frequencies, code words, Do's/Don'ts"],["dailyops","Daily Ops","Maj Cmt + Bornona narratives"],["codirectives","CO's Directives","Key command directives (06 Jul 2026)"]].map(([id,t,d])=>`<button data-g="${id}" class="card p-4" style="text-align:left"><div class="font-bold">→ ${t}</div><div class="text-sm text-ink-soft">${d}</div></button>`).join("")}
-</section>`;
+${[["visit","Comd's Visit","33 Arty Bde Comd's day-by-day program, 03–05 Aug"],["firing","Test & Field Fire","Moneyabad test fire + daily Field Fire Program"],["parade","Parade State","17 Fd Regt Arty strength & equipment, 01 Aug 2026"],["pending","Roster, Duty & Movement","Personnel roster, duty distribution — pending decode"]].map(([id,t,d])=>`<button data-g="${id}" class="card p-4" style="text-align:left"><div class="font-bold">→ ${t}</div><div class="text-sm text-ink-soft">${d}</div></button>`).join("")}
+</section>
+<div class="warn-box">⚠️ Source: ACS 2026 Booklet (8 documents). Several documents are typed in a legacy Bangla font (AdarshaLipiNormal) that could not be safely decoded — see the "Roster, Duty & Movement" tab for exactly what's pending.</div>`;
 w.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{tab=b.dataset.g;render();});
 m.appendChild(w);
 if(exStatus.target){
@@ -462,357 +329,87 @@ updCd();countdownInterval=setInterval(updCd,1000);
 }
 }
 
-/* ===== MAP ===== */
-function rMap(m){
-const w=el(`<div class="container" style="padding:16px"><div class="card"><div class="map-layout"><div><div id="mapdiv" class="map-container"></div></div><aside class="map-sidebar"><div class="text-xs uppercase tracking-widest text-ink-soft">Selected feature</div><div id="mapinfo" class="mt-2 text-sm text-ink-soft">Tap any marker to see details.</div><hr style="border:none;border-top:1px solid var(--rule);margin:14px 0"/><div class="text-xs uppercase tracking-widest text-ink-soft mb-2">Legend</div><div class="space-y-2" style="font-size:12px"><div><span class="ord-marker" style="background:#4C5142;margin-right:6px">HQ</span>Home station</div><div><span class="ord-marker" style="background:#1F4E79;margin-right:6px">CTL</span>Control HQ</div><div><span class="ord-marker" style="background:#45592F;margin-right:6px">BN</span>Forward Bn</div><div><span class="ord-marker" style="background:#A6332F;margin-right:6px">GUN</span>Gun Position</div></div><p class="text-xs text-ink-soft italic mt-4">Coordinates approximate/illustrative. Authoritative grids on map sheets 79 I/15 and 79 M/3.</p></aside></div></div></div>`);
-m.appendChild(w);
-setTimeout(()=>{
-const md=document.getElementById("mapdiv"),info=document.getElementById("mapinfo");
-if(!md||typeof L==="undefined")return;
-if(leafletMap){leafletMap.remove();leafletMap=null;}
-leafletMap=L.map(md,{center:[23.43,91.08],zoom:11});
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{attribution:'© OSM',maxZoom:18}).addTo(leafletMap);
-setTimeout(()=>leafletMap.invalidateSize(),100);
-LOCATIONS.forEach(loc=>{
-const s=TYPE_STYLE[loc.type];
-const ic=L.divIcon({className:'',html:'<div style="background:'+s.fill+';color:#fff;border:2px solid #fff;box-shadow:0 1px 4px rgba(0,0,0,.5);padding:2px 5px;border-radius:3px;font-family:ui-monospace,monospace;font-size:9px;font-weight:600;white-space:nowrap">'+s.icon+' '+esc(loc.name)+'</div>',iconSize:[140,20],iconAnchor:[70,10]});
-const mk=L.marker([loc.lat,loc.lng],{icon:ic}).addTo(leafletMap);
-mk.bindPopup('<b>'+esc(loc.name)+'</b><br><span style="font-family:monospace;font-size:11px">'+loc.lat.toFixed(4)+', '+loc.lng.toFixed(4)+'</span><br>'+esc(loc.note));
-mk.on("click",()=>{info.innerHTML=`<div class="font-bold text-olive-dark">${esc(loc.name)}</div><div class="mono text-xs text-ink-soft mt-1">${loc.lat.toFixed(4)}°N, ${loc.lng.toFixed(4)}°E</div><p class="text-sm mt-2">${esc(loc.note)}</p>`;});
-});
-},0);
-}
-
-const TAG_META={"H-Hour":{icon:"🚦",cls:"chip-blue"},"Daily":{icon:"🔁",cls:"chip-olive"},"Continuous":{icon:"🔄",cls:"chip-amber"},"Immediate":{icon:"🚨",cls:"chip-red"}};
-
-/* ===== TIMELINE ===== */
-function rTimeline(m){
+/* ===== COMD'S VISIT ===== */
+function rVisit(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
-w.appendChild(el(`<div class="hero-banner mb-3"><h2>🕐 During Exercise Timeline</h2><p>05–14 Jul 2026 — tasks grouped by cadence</p></div>`));
-const groups={},order=[];
-TIMELINE_DURING.forEach(item=>{
-if(!groups[item.tag]){groups[item.tag]=[];order.push(item.tag);}
-groups[item.tag].push(item.e);
-});
-order.forEach(tag=>{
-const meta=TAG_META[tag]||{icon:"•",cls:"chip-olive"};
-const card=el(`<div class="card mb-4"><div class="p-3 border-b"><span class="chip ${meta.cls}">${meta.icon} ${esc(tag)}</span></div><div></div></div>`);
-const body=card.querySelector("div:last-child");
-groups[tag].forEach(e=>{
-body.appendChild(el(`<div class="ci"><div style="flex:1"><span class="itxt text-sm">${esc(e)}</span></div></div>`));
-});
+w.appendChild(el(`<div class="hero-banner mb-3"><h2>🎖️ Visit Program — Comd 33 Arty Bde</h2><p>ACS-2026 · 17 Fd Regt Artillery · 03–05 Aug 2026</p></div>`));
+VISIT_PROGRAM.forEach(day=>{
+const card=el(`<div class="card mb-4"><div class="p-3 border-b" style="background:var(--paper-dark)"><h3 class="font-bold text-sm uppercase tracking-widest text-olive-dark" style="margin:0">${esc(day.date)}</h3></div><div style="overflow-x:auto"><table><thead><tr><th>Ser</th><th>Activity</th><th>Time</th><th>Rmks</th></tr></thead><tbody></tbody></table></div></div>`);
+const tbody=card.querySelector("tbody");
+day.items.forEach(it=>{tbody.appendChild(el(`<tr><td>${it.ser}</td><td class="font-semibold">${esc(it.activity)}</td><td class="mono">${esc(it.time)}</td><td>${esc(it.rmks)}</td></tr>`));});
 w.appendChild(card);
 });
 m.appendChild(w);
 }
 
-/* ===== COMMS & RULES ===== */
-function rComms(m){
+/* ===== TEST & FIELD FIRE ===== */
+function rFiring(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
-w.innerHTML=`
-<div class="hero-banner"><h2>📡 Communications Plan</h2><p>Nets, code words, and frequencies — tap any chip or tile to copy</p></div>
-<section class="grid-4 mb-4">
-<div class="info-tile copyable" data-copy="${esc(COMMS.freqs)}"><div class="ic">📻</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Frequencies</div><div class="mono text-sm mt-1">${COMMS.freqs}</div></div>
-<div class="info-tile copyable" data-copy="${esc(COMMS.freqChange)}"><div class="ic">🔤</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Freq Change Word</div><div class="mono text-sm mt-1">${COMMS.freqChange}</div></div>
-<div class="info-tile copyable" data-copy="${esc(COMMS.commsBy)}"><div class="ic">⏱️</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Comms Established By</div><div class="mono text-sm mt-1">${COMMS.commsBy}</div></div>
-<div class="info-tile copyable" data-copy="${esc(COMMS.sds)}"><div class="ic">📶</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">SDS</div><div class="mono text-sm mt-1">${COMMS.sds}</div></div>
-</section>
-<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-2">🔗 Net Structure</h2>
-<div class="text-sm mb-3">HF: ${COMMS.hfLink}<br>VHF: ${COMMS.vhfLink}<br>Walkie-Talkies where available</div>
-<div class="text-xs uppercase tracking-widest text-ink-soft mb-2">Radio Silence Codes</div>
-<div style="display:flex;flex-wrap:wrap;gap:8px">${RADIO_SILENCE.map(r=>`<span class="chip copyable ${r[0]==='BIJLI'?'chip-red':'chip-olive'}" data-copy="${r[0]}" style="padding-right:22px">${r[0]} — ${r[1]}</span>`).join("")}</div>
-</section>
-<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-3">🔑 Code Words</h2>
-<div style="display:flex;flex-wrap:wrap;gap:8px">${CODE_WORDS.map(c=>`<span class="chip copyable ${c[0]==='BIJLI'?'chip-red':'chip-blue'}" data-copy="${c[0]}" style="padding-right:22px">${c[0]} — ${c[1]}</span>`).join("")}</div>
-</section>
-<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-3">✅ Do's (All Ranks)</h2>
-<div class="space-y-2">${DOS.map(d=>`<div class="rule-item ok"><span class="rule-badge ok">✓</span><span class="text-sm">${esc(d)}</span></div>`).join("")}</div>
-</section>
-<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-3">🚫 Don'ts (All Ranks)</h2>
-<div class="space-y-2">${DONTS.map(d=>`<div class="rule-item no"><span class="rule-badge no">✗</span><span class="text-sm">${esc(d)}</span></div>`).join("")}</div>
-</section>`;
-w.querySelectorAll("[data-copy]").forEach(elm=>elm.addEventListener("click",()=>copyText(elm.dataset.copy,elm)));
+w.appendChild(el(`<div class="hero-banner mb-3"><h2>💥 Test & Field Fire</h2><p>Moneyabad Test Fire · Field Fire Program — Holudia Gun Position</p></div>`));
+w.appendChild(el(`<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-1">Moneyabad Test Fire — ${esc(TEST_FIRE.date)}</h2>
+<div class="mono text-sm text-ink-soft mb-3">${esc(TEST_FIRE.ammo)}</div>
+<div style="overflow-x:auto"><table><thead><tr><th>Time</th><th>Type of Shoot</th><th>No of Shoots</th><th>Ammo</th></tr></thead><tbody>${TEST_FIRE.schedule.map(s=>`<tr><td class="mono">${esc(s.time)}</td><td>${esc(s.type)}</td><td class="text-center">${esc(s.shoots)}</td><td>${esc(s.ammo)}</td></tr>`).join("")}</tbody></table></div>
+</section>`));
+w.appendChild(el(`<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-3">Op Responsibility</h2>
+<div style="overflow-x:auto"><table><thead><tr><th>Name</th><th>Responsibility</th></tr></thead><tbody>${TEST_FIRE.opResp.map(o=>`<tr><td class="font-semibold">${esc(o.name)}</td><td>${esc(o.resp)}</td></tr>`).join("")}</tbody></table></div>
+<div class="text-xs text-ink-soft italic mt-2">Test-fire committee (chairman/members) and safety committee names in Doc 8 are typed in a legacy Bangla font — pending decode.</div>
+</section>`));
+w.appendChild(el(`<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-1">Field Fire Program — ${esc(FIELD_FIRE.window)}</h2>
+<p class="text-sm text-ink-soft mb-3">${esc(FIELD_FIRE.note)}</p>
+<div class="text-xs uppercase tracking-widest text-ink-soft mb-2">Sample Day — ${esc(FIELD_FIRE.sample.date)}</div>
+<div style="overflow-x:auto"><table><thead><tr><th>Time</th><th>Type of Shoot</th><th>No of Shoots</th><th>Ammo</th></tr></thead><tbody>${FIELD_FIRE.sample.schedule.map(s=>`<tr><td class="mono">${esc(s.time)}</td><td>${esc(s.type)}</td><td class="text-center">${esc(s.shoots)}</td><td>${esc(s.ammo)}</td></tr>`).join("")}</tbody></table></div>
+<div class="text-xs text-ink-soft mt-2">Total: ${esc(FIELD_FIRE.sample.total)}. Remaining days (01–03, 05–07 Aug) to be appended as they're filled in the source form.</div>
+</section>`));
 m.appendChild(w);
 }
 
-/* ===== DAILY OPS ===== */
-function rDailyOps(m){
+/* ===== PARADE STATE ===== */
+function rParade(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
-w.appendChild(el(`<div class="hero-banner mb-3"><h2>🎯 Daily Operations</h2><p>Maj Cmt taskings by sub-unit, newest day first — tap a grid to copy</p></div>`));
-const search=el(`<input type="search" class="ops-search" id="opsearch" placeholder="🔍 Filter serials — task, commander, grid, umpire, timing…" autocomplete="off"/>`);
-w.appendChild(search);
-const noRes=el(`<p class="card p-3 text-sm text-ink-soft text-center" id="opsNoResult" style="display:none">No serials match your filter.</p>`);
-[...DAILY_OPS].reverse().forEach((day,idx)=>{
-const det=el(`<details class="card mb-4" data-defopen="${idx===0?'1':'0'}" ${idx===0?'open':''}><summary><span class="text-lg font-bold">${esc(day.title)} — ${esc(day.date)}</span></summary><div class="border-t p-3"></div></details>`);
-const body=det.querySelector(":scope > div");
-day.subunits.forEach(su=>{
-const card=el(`<div class="card mb-3"><div class="p-3 border-b" style="background:var(--paper-dark)"><h3 class="font-bold text-sm uppercase tracking-widest text-olive-dark" style="margin:0">${esc(su.name)}</h3></div><div style="overflow-x:auto"><table><thead><tr><th>Ser</th><th>Task</th><th>Timing</th><th>Location</th><th>Ptl Brief</th><th>Comd</th><th>Str</th><th>Veh</th><th>Umpire</th></tr></thead><tbody></tbody></table></div><div id="basis_${day.date.replace(/\W/g,'')}_${su.name.replace(/\W/g,'')}"></div></div>`);
-const tbody=card.querySelector("tbody");
-const basisDiv=card.querySelector("div:last-child");
-su.tasks.forEach(t=>{
-const locReal=t.loc&&t.loc!=="—";
-tbody.appendChild(el(`<tr><td>${t.ser}</td><td class="font-semibold">${esc(t.task)}</td><td class="mono">${esc(t.timing)}</td><td class="mono ${locReal?'copy-cell':''}" ${locReal?`data-copy="${esc(t.loc)}" title="Tap to copy grid"`:''}>${esc(t.loc)}</td><td>${esc(t.brief)}</td><td>${esc(t.comd)}</td><td class="mono">${esc(t.str)}</td><td>${esc(t.veh)}</td><td>${esc(t.ump)}</td></tr>`));
-if(t.basis){
-const isWarn=t.basis.includes("⚠");
-basisDiv.appendChild(el(`<div class="${isWarn?'warn-box':'directive-box'} mb-2" style="margin:0 12px 8px"><strong>Ser ${t.ser} Basis:</strong> ${esc(t.basis)}</div>`));
-}
-});
-body.appendChild(card);
-});
-w.appendChild(det);
-});
-w.appendChild(noRes);
-w.appendChild(el(`<p class="card p-3 text-xs text-ink-soft italic">Future days' Maj Cmt will be appended here as new dated sections, newest first. Bornona narrative basis is cross-referenced to each serial above.</p>`));
-w.querySelectorAll(".copy-cell").forEach(c=>c.addEventListener("click",()=>copyText(c.dataset.copy,c)));
-function filterOps(){
-const q=search.value.trim().toLowerCase();
-let anyMatch=false;
-w.querySelectorAll("details").forEach(det=>{
-let dayMatch=false;
-det.querySelectorAll(".card.mb-3").forEach(su=>{
-let suMatch=false;
-su.querySelectorAll("tbody tr").forEach(tr=>{
-const hit=!q||tr.textContent.toLowerCase().includes(q);
-tr.classList.toggle("filtered-out",!hit);
-if(hit)suMatch=true;
-});
-su.style.display=(!q||suMatch)?"":"none";
-if(suMatch)dayMatch=true;
-});
-det.style.display=(!q||dayMatch)?"":"none";
-det.open=q?dayMatch:det.dataset.defopen==="1";
-if(dayMatch)anyMatch=true;
-});
-noRes.style.display=(q&&!anyMatch)?"":"none";
-}
-search.addEventListener("input",filterOps);
+w.appendChild(el(`<div class="hero-banner mb-3"><h2>📊 ACS Parade State</h2><p>${esc(PARADE_STATE.unit)} · DT: ${esc(PARADE_STATE.dt)}</p></div>`));
+w.appendChild(el(`<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-3">Manpower State</h2>
+<div style="overflow-x:auto"><table><thead><tr><th>Rank</th><th>CATT</th><th>17 FD</th><th>Total</th></tr></thead><tbody>${PARADE_STATE.manpower.map(r=>`<tr><td class="font-semibold">${esc(r.rank)}</td><td class="text-center">${r.catt}</td><td class="text-center">${r.fd17}</td><td class="text-center font-semibold">${r.total}</td></tr>`).join("")}<tr><td class="font-bold">G/TOTAL</td><td class="text-center font-bold">${PARADE_STATE.manpowerTotal.catt}</td><td class="text-center font-bold">${PARADE_STATE.manpowerTotal.fd17}</td><td class="text-center font-bold">${PARADE_STATE.manpowerTotal.total}</td></tr></tbody></table></div>
+</section>`));
+w.appendChild(el(`<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-3">Parade State of Attached Personnel</h2>
+<div style="overflow-x:auto"><table><thead><tr><th>Unit</th><th>Offr's</th><th>OR</th><th>Total</th></tr></thead><tbody>${PARADE_STATE.attPersonnel.map(r=>`<tr><td class="font-semibold">${esc(r.unit)}</td><td class="text-center">${r.offr}</td><td class="text-center">${r.or}</td><td class="text-center font-semibold">${r.total}</td></tr>`).join("")}<tr><td class="font-bold">TOTAL</td><td class="text-center font-bold">${PARADE_STATE.attPersonnelTotal.offr}</td><td class="text-center font-bold">${PARADE_STATE.attPersonnelTotal.or}</td><td class="text-center font-bold">${PARADE_STATE.attPersonnelTotal.total}</td></tr></tbody></table></div>
+</section>`));
+w.appendChild(el(`<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-3">Arms</h2>
+<div style="overflow-x:auto"><table><thead><tr><th>Type</th><th>CATT</th><th>Total</th></tr></thead><tbody>${PARADE_STATE.arms.map(r=>`<tr><td class="font-semibold">${esc(r.type)}</td><td class="text-center">${r.catt}</td><td class="text-center font-semibold">${r.total}</td></tr>`).join("")}<tr><td class="font-bold">TOTAL</td><td class="text-center font-bold">${PARADE_STATE.armsTotal.catt}</td><td class="text-center font-bold">${PARADE_STATE.armsTotal.total}</td></tr><tr><td class="font-bold">${esc(PARADE_STATE.gun.type)}</td><td class="text-center font-bold">${PARADE_STATE.gun.catt}</td><td class="text-center font-bold">${PARADE_STATE.gun.total}</td></tr></tbody></table></div>
+<div class="text-xs text-ink-soft italic mt-2">Extracted from the ACS Parade State PDF's summary tables. The main cross-tab grid (out-of-unit/rear/veh state breakdowns) uses a complex rotated-header layout not yet reliably parsed — ask if you need that level of detail pulled out too.</div>
+</section>`));
 m.appendChild(w);
 }
 
-/* ===== CO'S DIRECTIVES ===== */
-function rCoDirectives(m){
+/* ===== ROSTER, DUTY & MOVEMENT (PENDING) ===== */
+function rPending(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
-w.appendChild(el(`<div class="hero-banner mb-3"><h2>⚡ CO's Directives</h2><p>Command guidance currently in effect</p></div>`));
-CO_DIRECTIVES.forEach(d=>{
-w.appendChild(el(`<div class="directive-box mb-3"><strong>${esc(d.title)}</strong><span class="text-xs" style="margin-left:6px;opacity:.75">${esc(d.date)}</span><ul style="margin:6px 0 0;padding-left:18px">${d.points.map(p=>`<li>${esc(p)}</li>`).join("")}</ul></div>`));
-});
+w.appendChild(el(`<div class="hero-banner mb-3"><h2>📇 Roster, Duty & Movement</h2><p>Packet structure confirmed; personnel-level detail pending</p></div>`));
+w.appendChild(el(`<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-3">Packet Structure</h2>
+<div class="metric-row"><span class="text-sm text-ink-soft">Packet</span><span class="font-semibold">${esc(MOVEMENT.packet)}</span></div>
+<div class="metric-row"><span class="text-sm text-ink-soft">Unit</span><span class="font-semibold">${esc(MOVEMENT.unit)}</span></div>
+<div class="metric-row"><span class="text-sm text-ink-soft">Packet Comdr</span><span class="font-semibold">${esc(MOVEMENT.comdr)}</span></div>
+<div class="metric-row"><span class="text-sm text-ink-soft">Authority</span><span class="font-semibold">${esc(MOVEMENT.authority)}</span></div>
+</section>`));
+w.appendChild(el(`<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-3">Man Load — Movement to AC&S</h2>
+<div class="metric-row"><span class="text-sm text-ink-soft">Date / Time</span><span class="mono font-semibold">${esc(MOVEMENT.manLoad.date)} · ${esc(MOVEMENT.manLoad.time)}</span></div>
+<div class="metric-row"><span class="text-sm text-ink-soft">From</span><span class="font-semibold">${esc(MOVEMENT.manLoad.from)}</span></div>
+<div class="metric-row"><span class="text-sm text-ink-soft">To</span><span class="font-semibold">${esc(MOVEMENT.manLoad.to)}</span></div>
+</section>`));
+w.appendChild(el(`<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-2">⚠️ Pending — Legacy Bangla Font</h2>
+<p class="text-sm mb-3">The following content from the ACS 2026 Booklet is typed in a legacy Bangla font (<span class="mono">AdarshaLipiNormal</span>) that couldn't be safely auto-converted to Unicode — wrong guesses risk misnaming personnel or duties, so nothing below has been decoded yet.</p>
+<div style="overflow-x:auto"><table><thead><tr><th>Document</th><th>Content pending</th></tr></thead><tbody>${PENDING_DOCS.map(p=>`<tr><td class="font-semibold">${esc(p.doc)}</td><td>${esc(p.content)}</td></tr>`).join("")}</tbody></table></div>
+<div class="directive-box mt-3">To unblock: paste the Bangla text directly (renders correctly wherever you're viewing the source), or have someone with the AdarshaLipi font print/export these docs to PDF so the text can be read via OCR instead of by character code.</div>
+</section>`));
 m.appendChild(w);
-}
-
-/* ===== FLOOD WATCH ===== */
-const LAKSHMIPUR={lat:22.94,lng:90.84};
-const LAKSHMIPUR_RIVERS=[
-{name:"Meghna (Lower Meghna)",note:"Major river along the western & southern edge of the district; tidal / estuarine."},
-{name:"Dakatia River",note:"Flows through the north near Ramganj & Raipur upazilas."},
-{name:"Rahmatkhali Khal",note:"Principal drainage canal through Lakshmipur Sadar."},
-{name:"Bhulua River",note:"Runs along the Lakshmipur–Noakhali border area."},
-{name:"Katakhali",note:"Local channel feeding into the Meghna estuary."},
-];
-const LAKSHMIPUR_CONTACTS=[
-{role:"National Emergency (Police / Fire / Ambulance)",name:"24-hr hotline",phone:"999",verified:true},
-{role:"National Helpline → DC Office services",name:"Govt. info & services",phone:"333",verified:true},
-{role:"Flood & Disaster Early Warning (IVR)",name:"FFWC helpline",phone:"1090",verified:true},
-{role:"Deputy Commissioner (DC), Lakshmipur",name:"S M Mehedi Hasan",phone:"01788577701",verified:true},
-{role:"Deputy Director, Local Government",name:"Md. Jasim Uddin · Office: 02334442045",phone:"01332546002",verified:true},
-{role:"Superintendent of Police (SP), Lakshmipur",name:"Md. Abu Tarek · Office: 02334441479",phone:"01320111900",verified:true},
-{role:"Additional Superintendent of Police, Lakshmipur",name:"Hossain Mohammad Rayhan Kazemi, PPM Seba",phone:"01320111902",verified:true},
-{role:"UNO, Lakshmipur Sadar",name:"Md. Farooq Hossain",phone:"01710476132",verified:true},
-{role:"UNO, Ramganj",name:"Farashid Bin Enam",phone:"01788577712",verified:true},
-{role:"UNO, Raipur",name:"Mehedi Hasan Kauchar",phone:"01788577711",verified:true},
-{role:"UNO, Ramgati",name:"Nilufa Yeasmin Nipa",phone:"01788577713",verified:true},
-{role:"UNO, Kamalnagar",name:"Md. Rahat Uz Zaman",phone:"01788577714",verified:true},
-{role:"RAB-11, CPC-3",name:"Company Commander",phone:"01777-11133",verified:true},
-{role:"District Commandant, Ansar-VDP",name:"Md. Kamrul Islam",phone:"01730038081",verified:true},
-{role:"GSO-1, HQ 33 Inf Div",name:"Flood deployment reporting",phone:"01769032006",verified:true},
-{role:"GSO-2 (Ops), HQ 33 Inf Div",name:"Flood deployment reporting",phone:"01968062008",verified:true},
-];
-const LAKSHMIPUR_UPAZILAS=[
-{name:"Lakshmipur Sadar",lat:22.950,lng:90.825},
-{name:"Ramganj",lat:23.100,lng:90.850},
-{name:"Raipur",lat:22.975,lng:90.733},
-{name:"Ramgati",lat:22.606,lng:90.997},
-{name:"Kamalnagar",lat:22.750,lng:90.867},
-];
-function wmo(c){const t={0:["Clear sky","☀️"],1:["Mainly clear","🌤️"],2:["Partly cloudy","⛅"],3:["Overcast","☁️"],45:["Fog","🌫️"],48:["Rime fog","🌫️"],51:["Light drizzle","🌦️"],53:["Drizzle","🌦️"],55:["Dense drizzle","🌦️"],56:["Freezing drizzle","🌧️"],57:["Freezing drizzle","🌧️"],61:["Light rain","🌧️"],63:["Rain","🌧️"],65:["Heavy rain","🌧️"],66:["Freezing rain","🌧️"],67:["Freezing rain","🌧️"],71:["Light snow","🌨️"],73:["Snow","🌨️"],75:["Heavy snow","🌨️"],77:["Snow grains","🌨️"],80:["Light showers","🌦️"],81:["Showers","🌧️"],82:["Violent showers","⛈️"],85:["Snow showers","🌨️"],86:["Snow showers","🌨️"],95:["Thunderstorm","⛈️"],96:["Thunderstorm + hail","⛈️"],99:["Thunderstorm + hail","⛈️"]};return t[c]||["—","🌡️"];}
-function fmtDay(t){const d=new Date(t+"T00:00:00");return{wd:d.toLocaleDateString("en",{weekday:"short"}),dm:d.getDate()};}
-function rFlood(m){
-const w=el(`<div class="container" style="padding:20px 16px"></div>`);
-w.appendChild(el(`<div class="hero-banner mb-3"><h2>🌊 Lakshmipur Flood Watch</h2><p>Real-time rainfall, river & flood-risk intelligence for 33 Inf Div's AOR</p></div>`));
-const bar=el(`<div class="mb-3" style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px"><div class="text-xs text-ink-soft" id="floodUpdated">&nbsp;</div><button class="btn refresh-btn" id="floodRefresh">🔄 Refresh</button></div>`);
-w.appendChild(bar);
-const content=el(`<div id="floodContent"></div>`);
-w.appendChild(content);
-const info=el(`<div></div>`);
-info.innerHTML=`
-<section class="card p-5 mb-4 fade-in-up" style="animation-delay:240ms">
-<h2 class="text-lg font-bold mb-1" style="display:flex;align-items:center;gap:8px"><span class="icon-3d icon-3d-sm">🌊</span> Rivers & Major Water Bodies</h2>
-<div class="text-xs text-ink-soft mb-3">Lakshmipur District</div>
-<div style="overflow-x:auto"><table><thead><tr><th>River / Water Body</th><th>Notes</th></tr></thead><tbody>
-${LAKSHMIPUR_RIVERS.map(r=>`<tr><td class="font-semibold">${esc(r.name)}</td><td class="text-xs">${esc(r.note)}</td></tr>`).join("")}
-</tbody></table></div>
-<div class="mt-3" style="display:flex;gap:8px;flex-wrap:wrap">
-<a href="https://ffwc.gov.bd" target="_blank" rel="noopener" class="btn" style="text-decoration:none;font-size:12px">🔗 Live Water Levels — FFWC Portal ↗</a>
-</div>
-<div class="text-xs text-ink-soft italic mt-2">FFWC's official gauge API requires internal authentication we don't have — live readings can't be pulled automatically into this dashboard. Use the link above to check current levels directly.</div>
-</section>
-<section class="card p-5 mb-4 fade-in-up" style="animation-delay:300ms">
-<h2 class="text-lg font-bold mb-1" style="display:flex;align-items:center;gap:8px"><span class="icon-3d icon-3d-sm">☎️</span> Civil Administration & Emergency Contacts</h2>
-<div class="text-xs text-ink-soft mb-3">Tap a verified helpline to dial · confirm local office lines before relying on them</div>
-<div>
-${LAKSHMIPUR_CONTACTS.map(c=>`<div class="metric-row"><div style="padding-right:10px"><div class="font-semibold text-sm">${esc(c.role)}</div><div class="text-xs text-ink-soft">${esc(c.name)}</div></div><div style="flex-shrink:0">${c.verified?`<a href="tel:${esc(c.phone)}" class="chip chip-olive" style="text-decoration:none">📞 ${esc(c.phone)}</a>`:`<span class="chip chip-amber">Confirm locally</span>`}</div></div>`).join("")}
-</div>
-</section>
-<section class="card p-5 mb-4 fade-in-up" style="animation-delay:360ms">
-<h2 class="text-lg font-bold mb-1" style="display:flex;align-items:center;gap:8px"><span class="icon-3d icon-3d-sm">📜</span> Div Flood Directive — HQ 33 Inf Div</h2>
-<div class="directive-box mb-2"><strong>⚡ (a)</strong> Monitor flood situation in own AOR and maintain <strong>24/7 comms</strong> with local civil administration.</div>
-<div class="directive-box mb-2"><strong>⚡ (b)</strong> Conduct <strong>Recce</strong> of flood-prone areas in coordination with civil admin.</div>
-<div class="directive-box mb-2"><strong>⚡ (c)</strong> Keep <strong>manpower &amp; equipment</strong> ready for rescue and relief operations.</div>
-<div class="directive-box mb-2"><strong>⚡ (d)</strong> On civil admin request → <strong>deploy immediately</strong> and inform HQ (GSO-1: 01769032006, GSO-2 Ops: 01968062008).</div>
-<div class="directive-box mb-2"><strong>⚡ (e)</strong> If deployed → submit <strong>daily flood sitrep</strong> at <span class="chip chip-olive" style="font-size:11px">0800 hrs</span> (covering 1800–0600 period).</div>
-</section>`;
-w.appendChild(info);
-m.appendChild(w);
-const btn=bar.querySelector("#floodRefresh");
-btn.onclick=()=>loadFlood(content,btn);
-loadFlood(content,btn);
-}
-async function loadFlood(content,btn){
-content.innerHTML=`<div class="card p-5 text-center"><div class="spinner"></div><div class="text-sm text-ink-soft">Fetching live data for Lakshmipur…</div></div>`;
-if(btn)btn.disabled=true;
-try{
-const wxUrl=`https://api.open-meteo.com/v1/forecast?latitude=${LAKSHMIPUR.lat}&longitude=${LAKSHMIPUR.lng}&current=temperature_2m,relative_humidity_2m,apparent_temperature,precipitation,rain,weather_code,wind_speed_10m&daily=precipitation_sum,precipitation_probability_max,weather_code&timezone=Asia%2FDhaka&forecast_days=7`;
-const flUrl=`https://flood-api.open-meteo.com/v1/flood?latitude=${LAKSHMIPUR.lat}&longitude=${LAKSHMIPUR.lng}&daily=river_discharge&forecast_days=7`;
-const uziLat=LAKSHMIPUR_UPAZILAS.map(u=>u.lat).join(",");
-const uziLng=LAKSHMIPUR_UPAZILAS.map(u=>u.lng).join(",");
-const uziUrl=`https://api.open-meteo.com/v1/forecast?latitude=${uziLat}&longitude=${uziLng}&daily=precipitation_sum&past_days=1&forecast_days=5&timezone=Asia%2FDhaka`;
-const [wx,fl,uzi]=await Promise.all([
-fetch(wxUrl).then(r=>{if(!r.ok)throw new Error("weather "+r.status);return r.json();}),
-fetch(flUrl).then(r=>{if(!r.ok)throw new Error("flood "+r.status);return r.json();}),
-fetch(uziUrl).then(r=>{if(!r.ok)throw new Error("upazila "+r.status);return r.json();})
-]);
-renderFlood(content,wx,fl,uzi);
-const upd=document.getElementById("floodUpdated");
-if(upd)upd.innerHTML=`<span class="live-dot"></span>Last updated `+new Date().toLocaleString("en-GB",{hour:"2-digit",minute:"2-digit",day:"2-digit",month:"short"})+" · your local time";
-}catch(e){
-content.innerHTML=`<div class="card p-5 text-center"><div style="font-size:34px">⚠️</div><div class="font-bold mb-1 mt-2">Couldn't load live data</div><div class="text-sm text-ink-soft">Check your connection and tap Refresh.<br><span class="mono text-xs">(${esc(e.message||"network error")})</span></div></div>`;
-}finally{if(btn)btn.disabled=false;}
-}
-function riskGauge(pct,color){
-const rad=42,C=2*Math.PI*rad;
-const off=(C-(pct/100)*C).toFixed(1);
-return `<svg width="104" height="104" viewBox="0 0 104 104" style="display:block">
-<circle cx="52" cy="52" r="${rad}" fill="none" stroke="var(--paper-dark)" stroke-width="10"/>
-<circle class="gauge-arc" cx="52" cy="52" r="${rad}" fill="none" stroke="${color}" stroke-width="10" stroke-linecap="round" stroke-dasharray="${C.toFixed(1)}" stroke-dashoffset="${C.toFixed(1)}" data-target="${off}" transform="rotate(-90 52 52)"/>
-<text x="52" y="49" text-anchor="middle" font-size="21" font-weight="700" fill="var(--ink)" font-family="ui-monospace,monospace">${Math.round(pct)}%</text>
-<text x="52" y="65" text-anchor="middle" font-size="8" fill="var(--ink-soft)" letter-spacing="1">RISK</text>
-</svg>`;
-}
-function renderFlood(content,wx,fl,uzi){
-const cur=wx.current,d=wx.daily,wc=wmo(cur.weather_code);
-const today=d.precipitation_sum[0]||0,maxRain=Math.max(...d.precipitation_sum,1),peakRain=Math.max(...d.precipitation_sum);
-const disc=fl.daily.river_discharge,discMax=Math.max(...disc,1),discTrendUp=disc[disc.length-1]>disc[0];
-let risk,rcls,ricon,rtext,rcolor;
-if(peakRain>=50){risk="HIGH";rcls="risk-high";ricon="🔴";rcolor="var(--red)";rtext="⚠️ Heavy rain on the way — flood risk is HIGH. Monitor low-lying areas, drainage, and FB locations closely, and stay in lockstep with civil admin.";}
-else if(peakRain>=20){risk="MODERATE";rcls="risk-mod";ricon="🟠";rcolor="var(--amber)";rtext="Significant rain ahead — stay alert. Keep anti-flood and drainage measures ready to go.";}
-else{risk="LOW";rcls="risk-low";ricon="🟢";rcolor="var(--olive)";rtext="All clear for now — no major rainfall-driven flooding indicated in the forecast window.";}
-const gaugePct=Math.min(100,Math.round((peakRain/80)*100));
-const wxCardCls=cur.precipitation>0?"raining":(cur.weather_code<=1?"clearsky":"");
-content.innerHTML=`
-<section class="glance-strip fade-in-up" style="animation-delay:0ms">
-<div class="glance-tile"><div class="glance-icon icon-3d">${wc[1]}</div><div class="glance-val">${cur.temperature_2m}°C</div><div class="glance-label">Right Now</div></div>
-<div class="glance-tile"><div class="glance-icon icon-3d">🌧️</div><div class="glance-val">${today.toFixed(1)}mm</div><div class="glance-label">Rain Today</div></div>
-<div class="glance-tile"><div class="glance-icon icon-3d">📈</div><div class="glance-val">${peakRain.toFixed(1)}mm</div><div class="glance-label">Peak (7d)</div></div>
-<div class="glance-tile"><div class="glance-icon icon-3d">${discTrendUp?"↗️":"↘️"}</div><div class="glance-val">${discTrendUp?"Rising":"Falling"}</div><div class="glance-label">River Trend</div></div>
-<div class="glance-tile ${rcls}"><div class="glance-icon icon-3d">${ricon}</div><div class="glance-val">${risk}</div><div class="glance-label">Flood Risk</div></div>
-</section>
-<section class="grid-2 mb-4 fade-in-up" style="animation-delay:60ms">
-<div class="card p-5 wx-card ${wxCardCls}">
-<div class="wx-card-body">
-<div class="text-xs uppercase tracking-widest text-ink-soft mb-2">Current Conditions</div>
-<div style="display:flex;align-items:center;gap:14px">
-<div class="icon-3d icon-3d-lg">${wc[1]}</div>
-<div><div class="stat-big">${cur.temperature_2m}<span class="stat-unit">°C</span></div><div class="text-sm text-ink-soft">${wc[0]}</div></div>
-</div>
-<div class="mt-4">
-<div class="metric-row"><span class="text-sm text-ink-soft">🌧️ Rain now</span><span class="mono font-semibold">${cur.precipitation} mm</span></div>
-<div class="metric-row"><span class="text-sm text-ink-soft">💧 Humidity</span><span class="mono font-semibold">${cur.relative_humidity_2m}%</span></div>
-<div class="metric-row"><span class="text-sm text-ink-soft">🌡️ Feels like</span><span class="mono font-semibold">${cur.apparent_temperature}°C</span></div>
-<div class="metric-row"><span class="text-sm text-ink-soft">💨 Wind</span><span class="mono font-semibold">${cur.wind_speed_10m} km/h</span></div>
-</div>
-</div>
-</div>
-<div class="card p-5">
-<div class="text-xs uppercase tracking-widest text-ink-soft mb-2">Flood Risk (Indicative)</div>
-<div style="display:flex;align-items:center;gap:16px;margin-bottom:12px">
-${riskGauge(gaugePct,rcolor)}
-<div><span class="risk-badge ${rcls} ${risk!=="LOW"?"pulse":""}">${ricon} ${risk} RISK</span></div>
-</div>
-<p class="text-sm mb-3">${rtext}</p>
-<div class="metric-row"><span class="text-sm text-ink-soft">Rain today</span><span class="mono font-semibold">${today.toFixed(1)} mm</span></div>
-<div class="metric-row"><span class="text-sm text-ink-soft">Peak day (7-day)</span><span class="mono font-semibold">${peakRain.toFixed(1)} mm</span></div>
-<div class="metric-row"><span class="text-sm text-ink-soft">River trend</span><span class="mono font-semibold">${discTrendUp?"↗ Rising":"↘ Falling / steady"}</span></div>
-</div>
-</section>
-<section class="card p-5 mb-4 fade-in-up" style="animation-delay:120ms">
-<h2 class="text-lg font-bold mb-1" style="display:flex;align-items:center;gap:8px"><span class="icon-3d icon-3d-sm">🌦️</span> 7-Day Rainfall Outlook</h2>
-<div class="text-xs text-ink-soft mb-3">Daily total (mm) · max chance of rain</div>
-${d.time.map((t,i)=>{const f=fmtDay(t);const mm=d.precipitation_sum[i]||0;const pct=Math.round((mm/maxRain)*100);return `<div class="rainrow"><div class="text-xs"><strong>${f.wd}</strong> ${f.dm}</div><div class="rainbar-track"><div class="rainbar-fill" style="width:${pct}%"></div></div><div class="text-xs mono text-right">${mm.toFixed(1)}mm · ${d.precipitation_probability_max[i]}%</div></div>`;}).join("")}
-</section>
-<section class="card p-5 mb-4 fade-in-up" style="animation-delay:180ms">
-<h2 class="text-lg font-bold mb-1" style="display:flex;align-items:center;gap:8px"><span class="icon-3d icon-3d-sm">🌊</span> River Discharge — GloFAS Model</h2>
-<div class="text-xs text-ink-soft mb-3">Modeled flow near Lakshmipur · m³/s · 7-day outlook</div>
-<div class="spark">
-${disc.map((v,i)=>{const f=fmtDay(fl.daily.time[i]);const h=Math.max(Math.round((v/discMax)*80),4);return `<div class="spark-col"><div class="text-xs mono">${v.toFixed(0)}</div><div class="spark-bar" style="height:${h}px;animation-delay:${i*60}ms"></div><div class="text-xs text-ink-soft">${f.dm}</div></div>`;}).join("")}
-</div>
-</section>
-${renderUpazilaRainfall(uzi)}`;
-requestAnimationFrame(()=>requestAnimationFrame(()=>{
-content.querySelectorAll(".gauge-arc").forEach(a=>{a.style.strokeDashoffset=a.dataset.target;});
-}));
-}
-function uziSparkline(fc){
-const max=Math.max(...fc,0.1);
-const W=7,G=3,H=28;
-const bars=fc.map((v,i)=>{
-const h=Math.max(3,Math.round(((v||0)/max)*H));
-const y=H-h;
-const op=(0.35+0.65*((v||0)/max)).toFixed(2);
-return `<rect x="${i*(W+G)}" y="${y}" width="${W}" height="${h}" rx="1" fill="#4A87C8" fill-opacity="${op}"/>`;
-}).join('');
-return `<svg width="${fc.length*(W+G)-G}" height="${H}" style="display:block;overflow:visible">${bars}</svg>`;
-}
-function uziTrend(fc){
-if(!fc||fc.length<2)return'<span style="opacity:.5">—</span>';
-const h=Math.ceil(fc.length/2);
-const first=fc.slice(0,h).reduce((a,b)=>a+(b||0),0)/h;
-const last=fc.slice(-h).reduce((a,b)=>a+(b||0),0)/h;
-const d=last-first;
-if(d>1)return'<span style="color:var(--red);font-weight:600">↗ Rising</span>';
-if(d<-1)return'<span style="color:var(--olive);font-weight:600">↘ Easing</span>';
-return'<span style="color:var(--ink-soft)">→ Steady</span>';
-}
-function renderUpazilaRainfall(uzi){
-if(!Array.isArray(uzi)||!uzi.length)return"";
-const rows=LAKSHMIPUR_UPAZILAS.map((u,i)=>{
-const dd=uzi[i]&&uzi[i].daily;
-if(!dd)return{name:u.name,past24:0,fc:[0,0,0,0,0],fcTotal:0,peak:0};
-const past24=dd.precipitation_sum[0]||0;
-const fc=dd.precipitation_sum.slice(1).map(v=>v||0);
-const fcTotal=fc.reduce((a,b)=>a+b,0);
-const peak=fc.length?Math.max(...fc):0;
-return{name:u.name,past24,fc,fcTotal,peak};
-});
-return `<section class="card p-5 mb-4 fade-in-up" style="animation-delay:220ms">
-<h2 class="text-lg font-bold mb-1" style="display:flex;align-items:center;gap:8px"><span class="icon-3d icon-3d-sm">☔</span> Hyper-Local Rainfall — By Upazila</h2>
-<div class="text-xs text-ink-soft mb-3">Lakshmipur Sadar · Ramganj · Raipur · Ramgati · Kamalnagar — Open-Meteo model data, not official BMD observations</div>
-<div style="overflow-x:auto"><table><thead><tr><th>Upazila</th><th>Past 24h (mm)</th><th>5-Day Trend</th><th>5-Day Total (mm)</th><th>Peak Day (mm)</th></tr></thead><tbody>
-${rows.map(r=>`<tr><td class="font-semibold">${esc(r.name)}</td><td class="mono text-xs">${r.past24.toFixed(1)}</td><td><div style="display:flex;align-items:flex-end;gap:8px">${uziSparkline(r.fc)}<div class="text-xs" style="padding-bottom:2px">${uziTrend(r.fc)}</div></div></td><td class="mono text-xs">${r.fcTotal.toFixed(1)}</td><td class="mono text-xs">${r.peak.toFixed(1)}</td></tr>`).join("")}
-</tbody></table></div>
-</section>`;
 }
 
 applyTheme();
