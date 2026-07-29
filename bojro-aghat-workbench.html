@@ -221,17 +221,41 @@ opResp:[
 };
 
 const FIELD_FIRE={
-window:"01–07 Aug 2026",
-note:"Daily Field Fire Program at Holudia Gun Position, per Field Fire Program 2026.",
-sample:{
-date:"04-08-26",
+window:"02–07 Aug 2026",
+note:"Full firing program at Holudia Gun Position (shoots 1–9, 12–22) and Moneyabad Gun Position (shoots 10–11). 22 shoots across 6 days, 360 total rounds.",
+ammo:{he:270,heTime:72,smk:18,total:360},
+summary:[["Sec Regn Tgt",9],["IN Shoot (Bty Tgt)",5],["IN Shoot (Bty Linear)",3],["IN Shoot (Bty Airburst)",3],["IN Shoot (Quick Smk)",1],["IN Shoot (Mike Tgt)",1]],
+totalShoots:22,
 schedule:[
-{time:"0600–1000",type:"Sight Test / Prep of Gun Posn, OP & Tgt Area Svy",shoots:"—",ammo:"—"},
-{time:"1000–1100",type:"Sec Regn (Datum Pt)",shoots:"1",ammo:"HE-10 (10 Rds)"},
-{time:"1130–1230",type:"IN Shoot (Bty Tgt)",shoots:"2",ammo:"HE-10 (20 Rds)"},
-],
-total:"02 shoots / 20 rds"
-}
+{d:"02 Aug",f:"0800",t:"1600",type:"Sight Test, Prep of Gun Posn, Op & Tgt Area Svy",n:"-",he:"-",ht:"-",sk:"-",obs:"-",rk:""},
+{d:"02 Aug",f:"1600",t:"1700",type:"Sec Regn (Datum Pt)",n:1,he:8,ht:"-",sk:"-",obs:"Sgt Nuruzaman",rk:""},
+{d:"03 Aug",f:"0700",t:"0800",type:"Sec Regn (Datum Pt)",n:2,he:6,ht:"-",sk:"-",obs:"Sgt Toufiq",rk:""},
+{d:"03 Aug",f:"0801",t:"0930",type:"IN Shoot (Bty Tgt)",n:3,he:18,ht:"-",sk:"-",obs:"WO Shams",rk:""},
+{d:"03 Aug",f:"0931",t:"1100",type:"Sec Regn Tgt",n:4,he:8,ht:"-",sk:"-",obs:"Sgt Uttam",rk:""},
+{d:"03 Aug",f:"1101",t:"1230",type:"IN Shoot (Bty Lnr Tgt)",n:5,he:22,ht:"-",sk:"-",obs:"SWO Mainul",rk:""},
+{d:"03 Aug",f:"1231",t:"1330",type:"Lunch Incl Prayer Break",n:"-",he:"-",ht:"-",sk:"-",obs:"-",rk:""},
+{d:"03 Aug",f:"1331",t:"1530",type:"IN Shoot (Bty Tgt)",n:6,he:18,ht:"-",sk:"-",obs:"Sgt Raihan",rk:""},
+{d:"03 Aug",f:"1531",t:"1700",type:"IN Shoot (Bty Airburst Tgt)",n:7,he:6,ht:24,sk:"-",obs:"Capt Arman",rk:""},
+{d:"04 Aug",f:"0700",t:"0830",type:"Sec Regn (Datum Pt)",n:8,he:8,ht:"-",sk:"-",obs:"Sgt Anowar",rk:""},
+{d:"04 Aug",f:"0831",t:"0930",type:"IN Shoot (Bty Airburst Tgt)",n:9,he:6,ht:24,sk:"-",obs:"Sgt Alauddin",rk:""},
+{d:"04 Aug",f:"1030",t:"1100",type:"Sec Regn Tgt",n:10,he:10,ht:"-",sk:"-",obs:"SWO Masud",rk:"Muniabad Gun Posn"},
+{d:"04 Aug",f:"1130",t:"1230",type:"IN Shoot (Bty Tgt)",n:11,he:10,ht:"-",sk:"-",obs:"Sgt Nuruzaman",rk:""},
+{d:"04 Aug",f:"1231",t:"1300",type:"IN Shoot (Bty Tgt)",n:12,he:18,ht:"-",sk:"-",obs:"Lt Hasan / Sgt Towfiq",rk:""},
+{d:"04 Aug",f:"1301",t:"1330",type:"IN Shoot (Bty Quick Smk Tgt)",n:13,he:4,ht:"-",sk:18,obs:"Capt Nayeem",rk:""},
+{d:"04 Aug",f:"1331",t:"1500",type:"Lunch Incl Prayer Break",n:"-",he:"-",ht:"-",sk:"-",obs:"-",rk:""},
+{d:"04 Aug",f:"1501",t:"1600",type:"IN Shoot (Bty Lnr Tgt)",n:14,he:22,ht:"-",sk:"-",obs:"WO Amimul",rk:""},
+{d:"04 Aug",f:"1601",t:"1700",type:"Sec Regn Tgt",n:15,he:8,ht:"-",sk:"-",obs:"SWO Mahmud",rk:""},
+{d:"05 Aug",f:"0700",t:"0800",type:"Sec Regn (Datum Pt)",n:16,he:6,ht:"-",sk:"-",obs:"Sgt Korban",rk:""},
+{d:"05 Aug",f:"0801",t:"0930",type:"IN Shoot (Bty Tgt)",n:17,he:18,ht:"-",sk:"-",obs:"Sgt Delowar",rk:""},
+{d:"05 Aug",f:"0931",t:"1100",type:"IN Shoot (Bty Lnr Tgt)",n:18,he:22,ht:"-",sk:"-",obs:"Capt Maliha",rk:""},
+{d:"05 Aug",f:"1101",t:"1230",type:"Sec Regn Tgt",n:19,he:7,ht:"-",sk:"-",obs:"Sgt Monir",rk:""},
+{d:"05 Aug",f:"1231",t:"1330",type:"Lunch Incl Prayer Break",n:"-",he:"-",ht:"-",sk:"-",obs:"-",rk:""},
+{d:"05 Aug",f:"1531",t:"1700",type:"IN Shoot (Bty Airburst Tgt)",n:20,he:6,ht:24,sk:"-",obs:"Lt Abid",rk:""},
+{d:"06 Aug",f:"0700",t:"0800",type:"Sec Regn (Datum Pt)",n:21,he:6,ht:"-",sk:"-",obs:"WO Monir",rk:""},
+{d:"06 Aug",f:"0801",t:"1100",type:"IN Shoot (Mike Tgt)",n:22,he:33,ht:"-",sk:"-",obs:"SWO Delowar",rk:""},
+{d:"06 Aug",f:"1101",t:"1700",type:"Maintenance",n:"-",he:"-",ht:"-",sk:"-",obs:"All Concerned",rk:""},
+{d:"07 Aug",f:"",t:"",type:"Res Day & Return to Ctg",n:"-",he:"-",ht:"-",sk:"-",obs:"-",rk:""},
+]
 };
 
 const PARADE_STATE={
@@ -262,22 +286,32 @@ arms:[
 ],
 armsTotal:{catt:25,total:25},
 gun:{type:"122 MM Gun",catt:25,fd17:0,total:25},
+fci:{aimingCircle:10,bino:39,compass:43,mapSet:5,megaphone:4,gps:4,l3Harris:7,qmac90:4,rl:3},
+sig:{secondaryBty:23,telSet:20,mike:1,telCableKm:25,hondaGen:0},
+veh:{jeep:5,pickup:9,gunTower:14,threeTon:6,ambCoveredVan:0,waterTrailer:3},
 };
 
 const MOVEMENT={
-packet:"Packet No-01 (Romeo and HQ Battery)",
-unit:"17 Fd Regt",
-comd:"Maj Shadia Sultana",
-authority:"Date of departure: 01-08-2026",
-manLoad:{date:"29 Jul 2026",time:"0800 hrs",from:"Unit lines",to:"Artillery Centre and School (AC&S)"},
+loadTable:[
+{date:"29 Jul 2026",time:"0800 hrs",from:"Unit Lines",to:"AC&S",desc:"Man Load (Advance Party)"},
+{date:"31 Jul 2026",time:"0800 hrs",from:"Unit Lines",to:"AC&S",desc:"Man Load"},
+{date:"01 Aug 2026",time:"0800 hrs",from:"Unit Lines",to:"Bandarban (AC&S)",desc:"Main Body"},
+],
+packets:[
+{name:"Packet 01 — Romeo & HQ Bty",comd:"Maj Shadia Sultana",pers:"~104",veh:14},
+{name:"Packet 02 — Papa Bty",comd:"—",pers:"~78",veh:8},
+{name:"Packet 03 — Quebec Bty",comd:"—",pers:"~106",veh:16},
+{name:"Packet 04 — Ammo & Stores",comd:"—",pers:"—",veh:6},
+],
+vehSummary:{jeep:5,pickup:9,threeTon:6,gunTower:21,bus:1,ambulance:1,containerCarrier:1,waterTrailer:3,total:47},
+dutyPositions:31,
 };
 
 const PENDING_DOCS=[
-{doc:"2. Man Load Table – Gun Fire",content:"Vehicle-wise passenger manifest & equipment checklist"},
-{doc:"3. IN/OUT Form 2026",content:"Packet-wise movement roll (names) — service & contact numbers only are readable"},
-{doc:"4. Resp",content:"Duty / responsibility distribution by appointment"},
-{doc:"5. Anx G – Responsible Distr",content:"Committee & responsibility distribution"},
-{doc:"8. Staff Note (partial)",content:"Test-fire committee membership (names/appointments) — schedule & ammo already extracted"},
+{doc:"Pg 36–37: Duty Assignment (Bangla)",content:"31 duty positions — key roles: Gate RP, Quarter Guard, Magazine Post, MT Duty, Office RP, Canteen, CCTV, Station duties. Structure decoded; individual names withheld (public repo)."},
+{doc:"Pg 38–39: Battery Detail (Bangla)",content:"Papa / Quebec / Romeo / HQ task distribution — battery-wise detachments, CP, OP, MT, Admin, Line Mic assignments."},
+{doc:"Pg 40–45: SOP & Directives (Bangla)",content:"Operational SOPs and duty directives — safety protocols, ammo handling, communication procedures, movement orders."},
+{doc:"Doc 8: Staff Note (partial)",content:"Test-fire & safety committee membership — schedule and ammo already extracted above. Committee names in legacy Bangla font."},
 ];
 
 const ROLL=[
@@ -435,9 +469,9 @@ ${KEY_DATES.map(k=>`<div class="info-tile"><div class="ic">🗓️</div><div cla
 </section>
 <section class="card p-5 mb-4"><h2 class="text-lg font-bold mb-2">Ammunition</h2><p class="mono text-base">${esc(META.ammo)}</p></section>
 <section class="grid-2 mb-4">
-${[["visit","Comd's Visit","33 Arty Bde Comd's day-by-day program, 03–05 Aug"],["firing","Test & Field Fire","Moneyabad test fire + daily Field Fire Program"],["parade","Parade State","17 Fd Regt strength & equipment, 01 Aug 2026"],["pending","Roster, Duty & Movement","Personnel roster, duty distribution — pending decode"]].map(([id,t,d])=>`<button data-g="${id}" class="card p-4" style="text-align:left"><div class="font-bold">→ ${t}</div><div class="text-sm text-ink-soft">${d}</div></button>`).join("")}
+${[["visit","Comd's Visit","33 Arty Bde Comd's day-by-day program, 03–05 Aug"],["firing","Test & Field Fire","Moneyabad test fire + full 22-shoot Field Fire Program"],["parade","Parade State","Manpower, arms, FCI, signals & vehicle state"],["pending","Roster, Duty & Movement","4 packets, 3 departures, 47 vehicles, duty assignments"]].map(([id,t,d])=>`<button data-g="${id}" class="card p-4" style="text-align:left"><div class="font-bold">→ ${t}</div><div class="text-sm text-ink-soft">${d}</div></button>`).join("")}
 </section>
-<div class="warn-box">⚠️ Source: ACS 2026 Booklet (8 documents). Several documents are typed in a legacy Bangla font (AdarshaLipiNormal) that could not be safely decoded — see the "Roster, Duty & Movement" tab for exactly what's pending.</div>`;
+<div class="warn-box">⚠️ Source: ACS 2026 Booklet (49 pages). Key data extracted: full 22-shoot field fire schedule, parade state with FCI/SIG/VEH, 4-packet movement plan, 578-position unit strength. Some Bangla-font documents (duty assignments, SOPs, battery detail) have structure identified — see "Roster, Duty & Movement" tab. Individual names withheld (public repo).</div>`;
 w.querySelectorAll("[data-g]").forEach(b=>b.onclick=()=>{tab=b.dataset.g;render();});
 m.appendChild(w);
 if(exStatus.target){
@@ -476,9 +510,14 @@ w.appendChild(el(`<section class="card p-5 mb-4">
 w.appendChild(el(`<section class="card p-5 mb-4">
 <h2 class="text-lg font-bold mb-1">Field Fire Program — ${esc(FIELD_FIRE.window)}</h2>
 <p class="text-sm text-ink-soft mb-3">${esc(FIELD_FIRE.note)}</p>
-<div class="text-xs uppercase tracking-widest text-ink-soft mb-2">Sample Day — ${esc(FIELD_FIRE.sample.date)}</div>
-<div style="overflow-x:auto"><table><thead><tr><th>Time</th><th>Type of Shoot</th><th>No of Shoots</th><th>Ammo</th></tr></thead><tbody>${FIELD_FIRE.sample.schedule.map(s=>`<tr><td class="mono">${esc(s.time)}</td><td>${esc(s.type)}</td><td class="text-center">${esc(s.shoots)}</td><td>${esc(s.ammo)}</td></tr>`).join("")}</tbody></table></div>
-<div class="text-xs text-ink-soft mt-2">Total: ${esc(FIELD_FIRE.sample.total)}. Remaining days (01–03, 05–07 Aug) to be appended as they're filled in the source form.</div>
+<div class="grid-3 mb-4">
+<div class="info-tile text-center"><div class="stat-big text-olive">${FIELD_FIRE.totalShoots}</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Shoots</div></div>
+<div class="info-tile text-center"><div class="stat-big text-olive">${FIELD_FIRE.ammo.total}</div><div class="text-xs uppercase tracking-widest text-ink-soft mt-1">Total Rounds</div></div>
+<div class="info-tile"><div class="text-xs uppercase tracking-widest text-ink-soft mb-2">Ammo Breakdown</div><div class="metric-row"><span class="text-sm">HE</span><span class="mono font-semibold">${FIELD_FIRE.ammo.he}</span></div><div class="metric-row"><span class="text-sm">HE TIME</span><span class="mono font-semibold">${FIELD_FIRE.ammo.heTime}</span></div><div class="metric-row"><span class="text-sm">Smoke</span><span class="mono font-semibold">${FIELD_FIRE.ammo.smk}</span></div></div>
+</div>
+<div class="text-xs uppercase tracking-widest text-ink-soft mb-2">Shoot Type Summary</div>
+<div class="grid-3 mb-4">${FIELD_FIRE.summary.map(s=>`<div class="info-tile"><span class="text-sm">${esc(s[0])}</span><span class="mono font-bold" style="float:right">${s[1]}</span></div>`).join("")}</div>
+<div style="overflow-x:auto"><table><thead><tr><th>Date</th><th>From</th><th>To</th><th>Type</th><th>#</th><th>HE</th><th>HE T</th><th>Smk</th><th>Observer</th><th>Rmks</th></tr></thead><tbody>${FIELD_FIRE.schedule.map(s=>`<tr><td class="mono text-xs" style="white-space:nowrap">${esc(s.d)}</td><td class="mono text-xs">${esc(s.f)}</td><td class="mono text-xs">${esc(s.t)}</td><td class="text-xs">${esc(s.type)}</td><td class="text-center mono font-semibold">${esc(s.n)}</td><td class="text-center mono">${esc(s.he)}</td><td class="text-center mono">${esc(s.ht)}</td><td class="text-center mono">${esc(s.sk)}</td><td class="text-xs">${esc(s.obs)}</td><td class="text-xs">${esc(s.rk)}</td></tr>`).join("")}</tbody></table></div>
 </section>`));
 m.appendChild(w);
 }
@@ -498,7 +537,19 @@ w.appendChild(el(`<section class="card p-5 mb-4">
 w.appendChild(el(`<section class="card p-5 mb-4">
 <h2 class="text-lg font-bold mb-3">Arms</h2>
 <div style="overflow-x:auto"><table><thead><tr><th>Type</th><th>CATT</th><th>Total</th></tr></thead><tbody>${PARADE_STATE.arms.map(r=>`<tr><td class="font-semibold">${esc(r.type)}</td><td class="text-center">${r.catt}</td><td class="text-center font-semibold">${r.total}</td></tr>`).join("")}<tr><td class="font-bold">TOTAL</td><td class="text-center font-bold">${PARADE_STATE.armsTotal.catt}</td><td class="text-center font-bold">${PARADE_STATE.armsTotal.total}</td></tr><tr><td class="font-bold">${esc(PARADE_STATE.gun.type)}</td><td class="text-center font-bold">${PARADE_STATE.gun.catt}</td><td class="text-center font-bold">${PARADE_STATE.gun.total}</td></tr></tbody></table></div>
-<div class="text-xs text-ink-soft italic mt-2">Extracted from the ACS Parade State PDF's summary tables. The main cross-tab grid (out-of-unit/rear/veh state breakdowns) uses a complex rotated-header layout not yet reliably parsed — ask if you need that level of detail pulled out too.</div>
+</section>`));
+const fci=PARADE_STATE.fci,sig=PARADE_STATE.sig,veh=PARADE_STATE.veh;
+w.appendChild(el(`<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-3">FCI State</h2>
+<div class="grid-3">${[["Aiming Circle",fci.aimingCircle],["Binocular",fci.bino],["Compass",fci.compass],["Map Set",fci.mapSet],["Megaphone",fci.megaphone],["GPS",fci.gps],["L3 Harris",fci.l3Harris],["QMAC-90",fci.qmac90],["RL",fci.rl]].map(([l,v])=>`<div class="info-tile"><span class="text-sm">${esc(l)}</span><span class="mono font-bold" style="float:right">${v}</span></div>`).join("")}</div>
+</section>`));
+w.appendChild(el(`<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-3">Signal State</h2>
+<div class="grid-3">${[["Secondary Bty Set",sig.secondaryBty],["Telephone Set",sig.telSet],["Mike",sig.mike],["Telephone Cable (km)",sig.telCableKm],["Honda Generator",sig.hondaGen]].map(([l,v])=>`<div class="info-tile"><span class="text-sm">${esc(l)}</span><span class="mono font-bold" style="float:right">${v}</span></div>`).join("")}</div>
+</section>`));
+w.appendChild(el(`<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-3">Vehicle State</h2>
+<div class="grid-3">${[["Jeep",veh.jeep],["Pickup",veh.pickup],["Gun Tower",veh.gunTower],["3-Ton",veh.threeTon],["Ambulance / Covered Van",veh.ambCoveredVan],["Water Trailer",veh.waterTrailer]].map(([l,v])=>`<div class="info-tile"><span class="text-sm">${esc(l)}</span><span class="mono font-bold" style="float:right">${v}</span></div>`).join("")}</div>
 </section>`));
 m.appendChild(w);
 }
@@ -550,28 +601,28 @@ draw();
 m.appendChild(w);
 }
 
-/* ===== ROSTER, DUTY & MOVEMENT (PENDING) ===== */
+/* ===== ROSTER, DUTY & MOVEMENT ===== */
 function rPending(m){
 const w=el(`<div class="container" style="padding:20px 16px"></div>`);
-w.appendChild(el(`<div class="hero-banner mb-3"><h2>📇 Roster, Duty & Movement</h2><p>Packet structure confirmed; personnel-level detail pending</p></div>`));
+w.appendChild(el(`<div class="hero-banner mb-3"><h2>📇 Roster, Duty & Movement</h2><p>4 packets · 3 departures · ${MOVEMENT.vehSummary.total} vehicles · ${MOVEMENT.dutyPositions} duty positions</p></div>`));
 w.appendChild(el(`<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-3">Packet Structure</h2>
-<div class="metric-row"><span class="text-sm text-ink-soft">Packet</span><span class="font-semibold">${esc(MOVEMENT.packet)}</span></div>
-<div class="metric-row"><span class="text-sm text-ink-soft">Unit</span><span class="font-semibold">${esc(MOVEMENT.unit)}</span></div>
-<div class="metric-row"><span class="text-sm text-ink-soft">Packet Comd</span><span class="font-semibold">${esc(MOVEMENT.comd)}</span></div>
-<div class="metric-row"><span class="text-sm text-ink-soft">Authority</span><span class="font-semibold">${esc(MOVEMENT.authority)}</span></div>
+<h2 class="text-lg font-bold mb-3">Movement Load Table</h2>
+<div style="overflow-x:auto"><table><thead><tr><th>Date</th><th>Time</th><th>From</th><th>To</th><th>Description</th></tr></thead><tbody>${MOVEMENT.loadTable.map(l=>`<tr><td class="mono text-xs" style="white-space:nowrap">${esc(l.date)}</td><td class="mono text-xs">${esc(l.time)}</td><td class="text-xs">${esc(l.from)}</td><td class="text-xs">${esc(l.to)}</td><td class="text-xs font-semibold">${esc(l.desc)}</td></tr>`).join("")}</tbody></table></div>
 </section>`));
 w.appendChild(el(`<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-3">Man Load — Movement to AC&S</h2>
-<div class="metric-row"><span class="text-sm text-ink-soft">Date / Time</span><span class="mono font-semibold">${esc(MOVEMENT.manLoad.date)} · ${esc(MOVEMENT.manLoad.time)}</span></div>
-<div class="metric-row"><span class="text-sm text-ink-soft">From</span><span class="font-semibold">${esc(MOVEMENT.manLoad.from)}</span></div>
-<div class="metric-row"><span class="text-sm text-ink-soft">To</span><span class="font-semibold">${esc(MOVEMENT.manLoad.to)}</span></div>
+<h2 class="text-lg font-bold mb-3">Packet Summary</h2>
+<div style="overflow-x:auto"><table><thead><tr><th>Packet</th><th>Packet Comd</th><th>Pers</th><th>Veh</th></tr></thead><tbody>${MOVEMENT.packets.map(p=>`<tr><td class="font-semibold text-xs">${esc(p.name)}</td><td class="text-xs">${esc(p.comd)}</td><td class="text-center mono">${esc(p.pers)}</td><td class="text-center mono">${p.veh}</td></tr>`).join("")}</tbody></table></div>
+</section>`));
+const vs=MOVEMENT.vehSummary;
+w.appendChild(el(`<section class="card p-5 mb-4">
+<h2 class="text-lg font-bold mb-3">Vehicle Summary (All Packets)</h2>
+<div class="grid-4">${[["Jeep",vs.jeep],["Pickup",vs.pickup],["3-Ton",vs.threeTon],["Gun Tower",vs.gunTower],["Bus",vs.bus],["Ambulance",vs.ambulance],["Container Carrier",vs.containerCarrier],["Water Trailer",vs.waterTrailer]].map(([l,v])=>`<div class="info-tile text-center"><div class="mono font-bold text-lg">${v}</div><div class="text-xs text-ink-soft">${esc(l)}</div></div>`).join("")}</div>
+<div class="text-xs text-ink-soft italic mt-2">Grand total: ${vs.total} vehicles (incl ${vs.waterTrailer} water trailers). Gun Tower count (${vs.gunTower}) includes attached unit vehicles.</div>
 </section>`));
 w.appendChild(el(`<section class="card p-5 mb-4">
-<h2 class="text-lg font-bold mb-2">⚠️ Awaiting English Translation</h2>
-<p class="text-sm mb-3">The ACS 2026 Booklet is typed in the legacy <span class="mono">AdarshaLipiNormal</span> Bangla font. The nominal roll has since been decoded — see the <strong>Unit Strength</strong> tab (structure/appointments only; individual names withheld since this workbench is on a public repo). The documents below are still pending: they carry tabular layouts (vehicle manifests, committee lists) that need the same treatment.</p>
-<div style="overflow-x:auto"><table><thead><tr><th>Document</th><th>Content pending</th></tr></thead><tbody>${PENDING_DOCS.map(p=>`<tr><td class="font-semibold">${esc(p.doc)}</td><td>${esc(p.content)}</td></tr>`).join("")}</tbody></table></div>
-<div class="directive-box mt-3">To unblock: send these <span class="mono">.docx</span> files over and they can be decoded the same way the nominal roll was — the AdarshaLipi glyph mapping is now solved, so no OCR or re-typing is needed.</div>
+<h2 class="text-lg font-bold mb-2">Remaining Bangla-Source Documents</h2>
+<p class="text-sm mb-3">The items below are in the ACS Booklet but typed in the legacy <span class="mono">AdarshaLipiNormal</span> Bangla font. Structure has been identified; full translation is available on request.</p>
+<div style="overflow-x:auto"><table><thead><tr><th>Source</th><th>Content</th></tr></thead><tbody>${PENDING_DOCS.map(p=>`<tr><td class="font-semibold text-xs">${esc(p.doc)}</td><td class="text-xs">${esc(p.content)}</td></tr>`).join("")}</tbody></table></div>
 </section>`));
 m.appendChild(w);
 }
