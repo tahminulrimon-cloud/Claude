@@ -1,0 +1,63 @@
+.checklist {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1rem;
+}
+
+.checklist-group {
+  background: #ffffff;
+  border: 1px solid #e5e7eb;
+  border-radius: 10px;
+  padding: 1rem 1.1rem;
+}
+
+@media (prefers-color-scheme: dark) {
+  .checklist-group {
+    background: #1c1f26;
+    border-color: #2b2f38;
+  }
+}
+
+.checklist-group header {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 0.5rem;
+}
+
+.checklist-group h2 {
+  font-size: 0.95rem;
+  margin: 0;
+}
+
+.checklist-progress {
+  font-size: 0.75rem;
+  color: #6b7280;
+}
+
+.checklist-group ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.checklist-group label {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  font-size: 0.85rem;
+  cursor: pointer;
+}
+
+.checklist-group input {
+  margin-top: 0.2rem;
+  cursor: pointer;
+}
+
+.checklist-group .done {
+  text-decoration: line-through;
+  opacity: 0.55;
+}

@@ -1,0 +1,192 @@
+{
+  "exercise": {
+    "name": "EX BOJRO AGHAT",
+    "shortName": "ST-2026",
+    "fullName": "Summer Training 2026",
+    "startDate": "2026-07-05",
+    "endDate": "2026-07-14",
+    "role": "TF-A (Enemy Control)",
+    "unit": "17 Fd Regt Arty, 33 Arty Bde Gp"
+  },
+  "items": [
+    {
+      "id": "pre-01",
+      "phase": "pre-exercise",
+      "date": "2026-06-17",
+      "title": "Parade State to Brigade",
+      "description": "Forward Parade State to Bde in the prescribed format. COMPLAN due from Signal Bn around this time.",
+      "responsible": "Adjutant",
+      "sourceRef": "Gen Instr TF-A, para 7a; Officer Notebook Pt.2",
+      "done": false
+    },
+    {
+      "id": "pre-02",
+      "phase": "pre-exercise",
+      "date": "2026-06-18",
+      "title": "Prep Training Programme Submitted",
+      "description": "Submit unit's prep-training programme of events to Bde (GS Br).",
+      "responsible": "CO",
+      "sourceRef": "Gen Instr TF-A, para 4g(2)",
+      "done": false
+    },
+    {
+      "id": "pre-03",
+      "phase": "pre-exercise",
+      "date": "2026-06-21",
+      "title": "Plan Presentation to Brigade",
+      "description": "CO presents unit plan to Bde.",
+      "responsible": "CO",
+      "sourceRef": "Officer Notebook Pt.2",
+      "done": false
+    },
+    {
+      "id": "pre-04",
+      "phase": "pre-exercise",
+      "date": "2026-06-24",
+      "title": "Location State, Helipad Info & Vehicle Plan",
+      "description": "Forward final Location State, helipad information, and detailed vehicle plan to Bde (GS Br).",
+      "responsible": "Adjutant",
+      "sourceRef": "Gen Instr TF-A, para 7d/f/9c",
+      "done": false
+    },
+    {
+      "id": "pre-05",
+      "phase": "pre-exercise",
+      "date": "2026-06-25",
+      "title": "Recce Complete & Defence Layout Demo",
+      "description": "Complete recce of own defence/target locations (min 8 km from IB). Forward umpire names to Sta HQ Cumilla. Attend Bn Defence Layout demonstration.",
+      "responsible": "FB Commanders",
+      "sourceRef": "Gen Instr TF-A, para 4g(4); demo table",
+      "done": false
+    },
+    {
+      "id": "pre-06",
+      "phase": "pre-exercise",
+      "date": "2026-06-29",
+      "title": "Attend Raid Demonstration",
+      "responsible": "All Officers",
+      "sourceRef": "Gen Instr TF-A, demo table",
+      "done": false
+    },
+    {
+      "id": "pre-07",
+      "phase": "pre-exercise",
+      "date": "2026-06-30",
+      "title": "Dummy Targets Prepared & Red Vests Collected",
+      "description": "Prepare dummy version of assigned targets. Collect red vests from TF-B HQ.",
+      "responsible": "QM",
+      "sourceRef": "Gen Instr TF-A, para 4g(5); Dress table",
+      "done": false
+    },
+    {
+      "id": "pre-08",
+      "phase": "pre-exercise",
+      "date": "2026-07-01",
+      "title": "Target Completion Report, Vest Distribution & Ambush Demo",
+      "description": "Forward target completion report with photos. Distribute red vests to sub-units. Attend Ambush demonstration and Umpire Briefing. Be ready for TF-A Commander's target visit.",
+      "responsible": "2IC",
+      "sourceRef": "Gen Instr TF-A, para 4g(5); Officer Notebook Pt.2",
+      "done": false
+    },
+    {
+      "id": "pre-09",
+      "phase": "pre-exercise",
+      "date": "2026-07-03",
+      "title": "Thunder Arresters in Possession",
+      "description": "Every unit/location to be in possession of required thunder arresters.",
+      "responsible": "QM",
+      "sourceRef": "Gen Instr TF-A, para 6f",
+      "done": false
+    },
+    {
+      "id": "pre-10",
+      "phase": "pre-exercise",
+      "date": "2026-07-04",
+      "title": "Final Move Preparations",
+      "description": "Vehicle loading complete, drivers rested and briefed with route cards, packet markings done, EME fitness forms held. Dry ration, POL, water tablets, anti-snake kits issued; ammo segregated.",
+      "responsible": "MTO / QM",
+      "sourceRef": "Officer Notebook Pt.2",
+      "done": false
+    },
+    {
+      "id": "mov-01",
+      "phase": "movement-day",
+      "date": "2026-07-05",
+      "title": "Convoy Departure",
+      "description": "Convoy departs training ground in packets per Move Plan. Movement intimated to Div Comd Voice before departure.",
+      "responsible": "CO / MTO",
+      "sourceRef": "Admin Instr ST-2026, Anx A (Mov Plan)",
+      "done": false
+    },
+    {
+      "id": "mov-02",
+      "phase": "movement-day",
+      "date": "2026-07-05",
+      "title": "Debus & Occupy Defence",
+      "description": "Debus at designated points; occupy defence positions on foot following proper battle drill.",
+      "responsible": "FB Commanders",
+      "sourceRef": "Gen Instr TF-A, para 3h",
+      "done": false
+    },
+    {
+      "id": "mov-03",
+      "phase": "movement-day",
+      "date": "2026-07-05",
+      "title": "Deployment Complete (1800 hrs)",
+      "description": "All elements of TF-A to be fully deployed by 1800 hrs.",
+      "responsible": "All",
+      "sourceRef": "Gen Instr TF-A, para 3x",
+      "done": false
+    },
+    {
+      "id": "dur-01",
+      "phase": "during-exercise",
+      "date": "2026-07-06",
+      "title": "Radio Communications Established",
+      "description": "All wireless comms (HF to Bde, VHF internal) established by 061500 Jul.",
+      "responsible": "Signal Officer",
+      "sourceRef": "Gen Instr TF-A, para 8",
+      "done": false
+    },
+    {
+      "id": "dur-02",
+      "phase": "during-exercise",
+      "date": "2026-07-07",
+      "title": "Daily Routine Checks",
+      "description": "Daily password promulgation; Rear OC reports at 0700/2000 hrs; sentries, thunder arresters and anti-snake trenches checked. (Applies throughout 05-14 Jul.)",
+      "responsible": "Adjutant / Rear OC",
+      "sourceRef": "Officer Notebook Pt.2",
+      "done": false
+    },
+    {
+      "id": "dur-03",
+      "phase": "during-exercise",
+      "date": "2026-07-10",
+      "title": "Minor Ops & Target Depiction",
+      "description": "Continuous: realistic target depiction, night recce/execution, every soldier completes min 1 minor op, all engagements covered by 2 umpires.",
+      "responsible": "FB Commanders",
+      "sourceRef": "Gen Instr TF-A, para 3j-l, t, v",
+      "done": false
+    },
+    {
+      "id": "post-01",
+      "phase": "post-exercise",
+      "date": "2026-07-14",
+      "title": "Return to Cantonment",
+      "description": "Foot to embussing point, vehicle back to cantonment. Obtain NOC from local authority before leaving; settle crop compensation if applicable.",
+      "responsible": "CO / FB Commanders",
+      "sourceRef": "Admin Instr ST-2026, para 5g; Gen Instr TF-A, para 5a",
+      "done": false
+    },
+    {
+      "id": "post-02",
+      "phase": "post-exercise",
+      "date": "2026-07-22",
+      "title": "After Action Review (AAR) Due",
+      "description": "Forward AAR to Bde HQ per prescribed format (participation %, minor-op state, challenges, recommendations).",
+      "responsible": "2IC / CO",
+      "sourceRef": "Gen Instr TF-A, para 7g",
+      "done": false
+    }
+  ]
+}
